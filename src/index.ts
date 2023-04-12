@@ -13,10 +13,9 @@ const OID_CLIENT_SECRET = '7cb4d9a8-2580-4041-9ae8-d5803869183f' // Client Secre
 
 /**
  * Support non officiel de l'API de la nouvelle application mobile Skolengo.
- * Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API est définitivement clos.
+ * Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
  *
- * Si tu es intéressé par ce projet et son développement : **Tu es le bienvenu sur ce serveur Discord: https://discord.gg/9u69mxsFT6**
- *
+ * Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
  */
 export class Skolengo {
   public client: Axios
