@@ -97,7 +97,7 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
   const school = schools.data[0]
   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
-  console.log(oauthClient.authorizationUrl())
+  console.log(oid_client.authorizationUrl())
   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
 })
 ```

@@ -2,6 +2,10 @@
   "name": "scolengo-api",
   "version": "0.0.3",
   "types": "types/index.d.ts",
+  "homepage": "https://github.com/maelgangloff/scolengo-api#readme",
+  "bugs": {
+    "url": "https://github.com/maelgangloff/scolengo-api/issues"
+  },
   "description": "Unofficial API client of Skolengo",
   "main": "dist/index.js",
   "repository": {
