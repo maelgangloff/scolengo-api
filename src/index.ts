@@ -36,7 +36,7 @@ export class Skolengo {
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
-   * @example ```
+   * @example ```js
    * const {Skolengo, TokenSet} = require('scolengo-api')
    *
    * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {

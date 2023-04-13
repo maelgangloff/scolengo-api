@@ -41,7 +41,7 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 | tokenSet | <code>TokenSet</code> | Jetons d'authentification Open ID Connect |
 
 **Example**  
-```
+```js
 const {Skolengo, TokenSet} = require('scolengo-api')
 
 Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
