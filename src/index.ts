@@ -33,7 +33,7 @@ export class Skolengo {
   private tokenSet: TokenSet
 
   /**
-   * @param {Client} oidClient Le client OpenID Connect
+   * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
    * @param {TokenSet} tokenSet Jetons d'authentification Open ID Connect
    */
@@ -70,6 +70,15 @@ export class Skolengo {
         include: 'school,students,students.school'
       }
     })).data
+  }
+
+  /**
+   * Révoquer un jeton
+   * @param {Client} oidClient Un client OpenID Connect
+   * @param {string} token Un jeton
+   */
+  public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
+    return oidClient.revoke(token)
   }
 
   /**
@@ -123,8 +132,8 @@ export class Skolengo {
    * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
    *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
    *   const school = schools.data[0]
-   *   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
-   *   console.log(oid_client.authorizationUrl())
+   *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+   *   console.log(oidClient.authorizationUrl())
    *   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
    * })
    * ```
@@ -134,13 +143,13 @@ export class Skolengo {
    * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
    *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
    *   const school = schools.data[0]
-   *   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+   *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *
-   *   const params = oid_client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
-   *   const tokenSet = await oid_client.callback('skoapp-prod://sign-in-callback', params)
+   *   const params = oidClient.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+   *   const tokenSet = await oidClient.callback('skoapp-prod://sign-in-callback', params)
    *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
    *
-   *   const user = new Skolengo(oid_client, school, tokenSet)
+   *   const user = new Skolengo(oidClient, school, tokenSet)
    *   const infoUser = await user.getUserInfo()
    *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
    * })

@@ -22,6 +22,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
     * _static_
+        * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
         * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
         * [.getOIDClient(school)](#Skolengo.getOIDClient)
@@ -32,7 +33,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 
 | Param | Type | Description |
 | --- | --- | --- |
-| oidClient | <code>Client</code> | Le client OpenID Connect |
+| oidClient | <code>Client</code> | Un client OpenID Connect |
 | school | <code>School</code> | Etablissement |
 | tokenSet | <code>TokenSet</code> | Jetons d'authentification Open ID Connect |
 
@@ -42,6 +43,18 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+<a name="Skolengo.revokeToken"></a>
+
+### Skolengo.revokeToken(oidClient, token)
+Révoquer un jeton
+
+**Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| oidClient | <code>Client</code> | Un client OpenID Connect |
+| token | <code>string</code> | Un jeton |
+
 <a name="Skolengo.getAppCurrentConfig"></a>
 
 ### Skolengo.getAppCurrentConfig()
@@ -96,8 +109,8 @@ const {Skolengo} = require('scolengo-api')
 Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
   const school = schools.data[0]
-  const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
-  console.log(oid_client.authorizationUrl())
+  const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+  console.log(oidClient.authorizationUrl())
   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
 })
 ```
@@ -107,13 +120,13 @@ const {Skolengo} = require('scolengo-api')
 Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
   const school = schools.data[0]
-  const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+  const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
 
-  const params = oid_client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
-  const tokenSet = await oid_client.callback('skoapp-prod://sign-in-callback', params)
+  const params = oidClient.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+  const tokenSet = await oidClient.callback('skoapp-prod://sign-in-callback', params)
   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
 
-  const user = new Skolengo(oid_client, school, tokenSet)
+  const user = new Skolengo(oidClient, school, tokenSet)
   const infoUser = await user.getUserInfo()
   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
 })
