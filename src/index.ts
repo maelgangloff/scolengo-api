@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
 import jwtDecode from 'jwt-decode'
 import { CurrentConfig } from './models/CurrentConfig'
@@ -28,7 +28,7 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
  *  - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
  */
 export class Skolengo {
-  private httpClient: Axios
+  private httpClient: AxiosInstance
   private oidClient: Client
   private tokenSet: TokenSet
 
@@ -54,12 +54,12 @@ export class Skolengo {
   /**
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    */
-  public async getUserInfo (): Promise<SkolengoResponse<User, never, never, Included[]>> {
+  public async getUserInfo (params: object): Promise<SkolengoResponse<User, never, never, Included[]>> {
     const accessToken = jwtDecode<JWT_AT>(this.tokenSet.access_token as string)
     const id = accessToken.sub
     return (await this.request<SkolengoResponse<User, never, never, Included[]>>({
       url: `/users-info/${id}`,
-      params: {
+      params: params || {
         fields: {
           userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
           school: 'name,timeZone,subscribedServices',
