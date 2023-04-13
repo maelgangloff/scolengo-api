@@ -35,6 +35,7 @@ export class Skolengo {
 
   /**
    * Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
+   * @returns {Promise<SkolengoResponse<CurrentConfig>>} La configuration actuelle de l'app
    */
   public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
     return axios.request({
@@ -48,6 +49,7 @@ export class Skolengo {
    * @param {string} text Le nom partiel de l'établissement
    * @param {number} limit Nombre max d'éléments
    * @param {number} offset Offset
+   * @returns {Promise<SkolengoResponse<School[], Links, Meta>>} Les établissements cherchés
    */
   public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<School[], Links, Meta>> {
     return axios.request({
@@ -62,16 +64,17 @@ export class Skolengo {
   /**
    * Créer un client OAuth 2.0 permettant l'obtention des jetons (refresh token et access token)
    * @param {School} school L'établissement
+   * @returns {Promise<ClientOAuth2>} Le client OAuth 2.0
    */
-  public static async getOauth2Client (school: School): Promise<ClientOAuth2> {
+  public static async getOauth2Client (school: School, redirectUri = 'skoapp-prod://sign-in-callback', scopes = ['openid']): Promise<ClientOAuth2> {
     const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
     return new ClientOAuth2({
       clientId: OID_CLIENT_ID,
       clientSecret: OID_CLIENT_SECRET,
       accessTokenUri: skolengoIssuer.metadata.token_endpoint,
       authorizationUri: skolengoIssuer.metadata.authorization_endpoint,
-      redirectUri: 'skoapp-prod://sign-in-callback',
-      scopes: ['openid']
+      redirectUri,
+      scopes
     })
   }
 }
