@@ -9,17 +9,16 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 **Kind**: global class  
 
 * [Skolengo](#Skolengo)
-    * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig) ⇒ <code>Promise.&lt;SkolengoResponse.&lt;CurrentConfig&gt;&gt;</code>
-    * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool) ⇒ <code>Promise.&lt;SkolengoResponse.&lt;Array.&lt;School&gt;, Links, Meta&gt;&gt;</code>
-    * [.getOauth2Client(school)](#Skolengo.getOauth2Client) ⇒ <code>Promise.&lt;ClientOAuth2&gt;</code>
+    * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
+    * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
+    * [.getOauth2Client(school)](#Skolengo.getOauth2Client)
 
 <a name="Skolengo.getAppCurrentConfig"></a>
 
-### Skolengo.getAppCurrentConfig() ⇒ <code>Promise.&lt;SkolengoResponse.&lt;CurrentConfig&gt;&gt;</code>
+### Skolengo.getAppCurrentConfig()
 Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
-**Returns**: <code>Promise.&lt;SkolengoResponse.&lt;CurrentConfig&gt;&gt;</code> - La configuration actuelle de l'app  
 **Example**  
 ```js
 const {Skolengo} = require('scolengo-api')
@@ -31,11 +30,10 @@ Skolengo.getAppCurrentConfig().then(config => {
 ```
 <a name="Skolengo.searchSchool"></a>
 
-### Skolengo.searchSchool(text, limit, offset) ⇒ <code>Promise.&lt;SkolengoResponse.&lt;Array.&lt;School&gt;, Links, Meta&gt;&gt;</code>
+### Skolengo.searchSchool(text, limit, offset)
 Rechercher un établissement scolaire
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
-**Returns**: <code>Promise.&lt;SkolengoResponse.&lt;Array.&lt;School&gt;, Links, Meta&gt;&gt;</code> - Les établissements cherchés  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -53,11 +51,10 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
 ```
 <a name="Skolengo.getOauth2Client"></a>
 
-### Skolengo.getOauth2Client(school) ⇒ <code>Promise.&lt;ClientOAuth2&gt;</code>
+### Skolengo.getOauth2Client(school)
 Créer un client OAuth 2.0 permettant l'obtention des jetons (refresh token et access token)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
-**Returns**: <code>Promise.&lt;ClientOAuth2&gt;</code> - Le client OAuth 2.0  
 
 | Param | Type | Description |
 | --- | --- | --- |

@@ -60,7 +60,6 @@ export class Skolengo {
    *   console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
    * })
    * ```
-   * @returns {Promise<SkolengoResponse<CurrentConfig>>} La configuration actuelle de l'app
    */
   public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
     return (await axios.request<SkolengoResponse<CurrentConfig>>({
@@ -81,9 +80,8 @@ export class Skolengo {
    *   console.log(schools)
    * })
    * ```
-   * @returns {Promise<SkolengoResponse<School[], Links, Meta>>} Les établissements cherchés
    */
-  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<School[], Links, Meta>> {
+  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<Array<School>, Links, Meta>> {
     return (await axios.request<SkolengoResponse<School[], Links, Meta>>({
       baseURL: BASE_URL,
       url: '/schools',
@@ -109,7 +107,6 @@ export class Skolengo {
    *   })
    * })
    * ```
-   * @returns {Promise<ClientOAuth2>} Le client OAuth 2.0
    */
   public static async getOauth2Client (school: School, redirectUri = 'skoapp-prod://sign-in-callback', scopes = ['openid']): Promise<ClientOAuth2> {
     const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
