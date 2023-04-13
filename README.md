@@ -34,6 +34,14 @@ Rechercher un établissement scolaire
 | limit | <code>number</code> | <code>10</code> | Nombre max d'éléments |
 | offset | <code>number</code> | <code>0</code> | Offset |
 
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+  console.log(schools)
+})
+```
 <a name="Skolengo.getOauth2Client"></a>
 
 ### Skolengo.getOauth2Client(school) ⇒ <code>Promise.&lt;ClientOAuth2&gt;</code>
@@ -46,3 +54,16 @@ Créer un client OAuth 2.0 permettant l'obtention des jetons (refresh token et a
 | --- | --- | --- |
 | school | <code>School</code> | L'établissement |
 
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+  if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+  const school = schools.data[0]
+  Skolengo.getOauth2Client(school, 'skoapp-prod://sign-in-callback').then(oauthClient => {
+    console.log(code.getUri())
+    // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanisme OAuth 2.0)
+  })
+})
+```

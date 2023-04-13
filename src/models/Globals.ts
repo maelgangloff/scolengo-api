@@ -1,7 +1,8 @@
-export interface SkolengoResponse<Data, Links = never, Meta = never> {
+export interface SkolengoResponse<Data, Links = never, Meta = never, Included = never> {
     data: Data;
     links: Links;
     meta: Meta;
+    included: Included;
 }
 
 export interface Links {
