@@ -6,6 +6,8 @@ import { School } from './models/School'
 import { User, UserIncluded } from './models/User'
 import { EvaluationsIncluded, EvaluationsSettings } from './models/EvaluationsSettings'
 
+export { TokenSet } from 'openid-client'
+
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
 const OID_CLIENT_ID = 'U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0' // base64 du client ID de l'app mobile
@@ -33,6 +35,32 @@ export class Skolengo {
   private tokenSet: TokenSet
 
   /**
+   * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
+   * @example ```
+   * const {Skolengo, TokenSet} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+   *   const school = schools.data[0]
+   *   const oidClient = await Skolengo.getOIDClient(school)
+   *
+   *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+   *
+   *   const tokenSet = new TokenSet({
+   *     access_token: 'ACCESS_TOKEN',
+   *     id_token: 'ID_TOKEN',
+   *     refresh_token: 'REFRESH_TOKEN',
+   *     token_type: 'bearer',
+   *     expires_at: 1681486899,
+   *     scope: 'openid'
+   *   })
+   *
+   *   const user = new Skolengo(oidClient, school, tokenSet)
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   * })
+   *
+   * ```
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
    * @param {TokenSet} tokenSet Jetons d'authentification Open ID Connect
@@ -45,10 +73,10 @@ export class Skolengo {
       baseURL: BASE_URL,
       withCredentials: true,
       headers: {
+        Authorization: `Bearer ${tokenSet.access_token}`,
         'X-Skolengo-Date-Format': 'utc',
         'X-Skolengo-School-Id': school.id,
-        'X-Skolengo-Ems-Code': school.attributes.emsCode,
-        Authorization: `Bearer ${tokenSet.access_token}`
+        'X-Skolengo-Ems-Code': school.attributes.emsCode
       }
     })
   }

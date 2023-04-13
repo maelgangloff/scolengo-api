@@ -31,6 +31,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 <a name="new_Skolengo_new"></a>
 
 ### new Skolengo(oidClient, school, tokenSet)
+Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -38,6 +40,32 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 | school | <code>School</code> | Etablissement |
 | tokenSet | <code>TokenSet</code> | Jetons d'authentification Open ID Connect |
 
+**Example**  
+```
+const {Skolengo, TokenSet} = require('scolengo-api')
+
+Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+  if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+  const school = schools.data[0]
+  const oidClient = await Skolengo.getOIDClient(school)
+
+  // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+
+  const tokenSet = new TokenSet({
+    access_token: 'ACCESS_TOKEN',
+    id_token: 'ID_TOKEN',
+    refresh_token: 'REFRESH_TOKEN',
+    token_type: 'bearer',
+    expires_at: 1681486899,
+    scope: 'openid'
+  })
+
+  const user = new Skolengo(oidClient, school, tokenSet)
+  const infoUser = await user.getUserInfo()
+  console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+})
+
+```
 <a name="Skolengo+getUserInfo"></a>
 
 ### skolengo.getUserInfo()
