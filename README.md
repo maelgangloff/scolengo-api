@@ -21,6 +21,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * [new Skolengo(oidClient, school, tokenSet)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
+        * [.getEvaluationsSettings(studentId)](#Skolengo+getEvaluationsSettings)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -43,6 +44,17 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+<a name="Skolengo+getEvaluationsSettings"></a>
+
+### skolengo.getEvaluationsSettings(studentId)
+Statut des services d'évaluation
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+
 <a name="Skolengo.revokeToken"></a>
 
 ### Skolengo.revokeToken(oidClient, token)

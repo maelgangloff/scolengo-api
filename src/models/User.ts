@@ -1,11 +1,12 @@
+import { Included } from './Globals'
+
 export interface User {
     id: string;
     type: string;
     attributes: {
-        addressLines?: string[];
-        postalCode?: string;
-        city?: string;
-        country?: string;
+        className?: string;
+        dateOfBirth?: string;
+        regime?: string;
         lastName: string;
         firstName: string;
         photoUrl: string|null;
@@ -16,44 +17,42 @@ export interface User {
             service: string;
             permittedOperations: string[];
         }[];
-        className?: string;
-        dateOfBirth?: string;
-        regime?: string;
+        addressLines?: string[];
+        postalCode?: string;
+        city?: string;
+        country?: string;
     };
     relationships: {
-        students?: {
-            data: {
-                id: string;
-                type: string;
-        }[]};
         school?: {
             data: {
                 id: string;
                 type: string;
-        }};
-    }
-}
-
-export interface Included {
-    id: string;
-    type: string;
-    attributes: {
-        name?: string;
-        timeZone?: string;
-        subscribedServices?: string[];
-        lastName?: string;
-        firstName?: string;
-        photoUrl?: string| null;
-        className?: string;
-        dateOfBirth?: string;
-        regime?: string;
-    };
-    relationships?: {
-        school: {
+            };
+        };
+        students?: {
             data: {
                 id: string;
                 type: string;
-        }
+            }[];
         };
-    }
+    };
 }
+
+export type UserIncluded = Included<Partial<{
+    name: string;
+    timeZone: string;
+    subscribedServices: string[];
+    lastName: string;
+    firstName: string;
+    photoUrl: string|null;
+    className: string;
+    dateOfBirth: string;
+    regime: string;
+}>, {
+    school: {
+        data: {
+            id: string;
+            type: string;
+        };
+    };
+}>

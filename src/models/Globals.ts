@@ -1,16 +1,19 @@
-export interface SkolengoResponse<Data, Links = never, Meta = never, Included = never> {
+export interface Included<Attributes = never, Relationships = never> {
+    id: string;
+    type: string;
+    attributes: Attributes;
+    relationships?: Relationships
+}
+
+export interface SkolengoResponse<Data, Included = never> {
     data: Data;
-    links?: Links;
-    meta?: Meta;
-    included?: Included;
-}
-
-export interface Links {
-    first: string;
-    last: string;
-    next: string;
-}
-
-export interface Meta {
-    totalResourceCount: number;
+    links?: {
+        first: string;
+        last: string;
+        next?: string;
+    };
+    meta?: {
+        totalResourceCount: number;
+    };
+    included?: Included[];
 }

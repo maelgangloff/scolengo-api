@@ -1,11 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
-import jwtDecode from 'jwt-decode'
 import { CurrentConfig } from './models/CurrentConfig'
-import { Links, Meta, SkolengoResponse } from './models/Globals'
+import { SkolengoResponse } from './models/Globals'
 import { School } from './models/School'
-import { Included, User } from './models/User'
-import { JWT_AT } from './models/Auth'
+import { User, UserIncluded } from './models/User'
+import { EvaluationsIncluded, EvaluationsSettings } from './models/EvaluationsSettings'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -30,6 +29,7 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
 export class Skolengo {
   private httpClient: AxiosInstance
   private oidClient: Client
+  private school: School
   private tokenSet: TokenSet
 
   /**
@@ -39,14 +39,16 @@ export class Skolengo {
    */
   public constructor (oidClient: Client, school: School, tokenSet: TokenSet) {
     this.oidClient = oidClient
+    this.school = school
     this.tokenSet = tokenSet
     this.httpClient = axios.create({
       baseURL: BASE_URL,
       withCredentials: true,
       headers: {
         'X-Skolengo-Date-Format': 'utc',
-        Authorization: `Bearer ${tokenSet.access_token}`,
-        'X-Skolengo-Ems-Code': school.attributes.emsCode
+        'X-Skolengo-School-Id': school.id,
+        'X-Skolengo-Ems-Code': school.attributes.emsCode,
+        Authorization: `Bearer ${tokenSet.access_token}`
       }
     })
   }
@@ -54,20 +56,24 @@ export class Skolengo {
   /**
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    */
-  public async getUserInfo (params: object): Promise<SkolengoResponse<User, never, never, Included[]>> {
-    const accessToken = jwtDecode<JWT_AT>(this.tokenSet.access_token as string)
-    const id = accessToken.sub
-    return (await this.request<SkolengoResponse<User, never, never, Included[]>>({
-      url: `/users-info/${id}`,
-      params: params || {
-        fields: {
-          userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
-          school: 'name,timeZone,subscribedServices',
-          legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
-          studentUserInfo: 'className,dateOfBirth,regime,school',
-          student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
-        },
-        include: 'school,students,students.school'
+  public async getUserInfo (): Promise<SkolengoResponse<User, UserIncluded>> {
+    const id = this.tokenSet.claims().sub
+    return (await this.request<SkolengoResponse<User, UserIncluded>>({
+      url: `/users-info/${id}`
+    })).data
+  }
+
+  /**
+   * Statut des services d'évaluation
+   * @param {string} studentId Identifiant d'un étudiant
+   */
+  public async getEvaluationsSettings (studentId: string): Promise<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>> {
+    return (await this.request<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>>({
+      url: '/evaluations-settings',
+      params: {
+        filter: {
+          'student.id': studentId
+        }
       }
     })).data
   }
@@ -112,8 +118,8 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<Array<School>, Links, Meta>> {
-    return (await axios.request<SkolengoResponse<School[], Links, Meta>>({
+  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<Array<School>>> {
+    return (await axios.request<SkolengoResponse<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
       params: {
