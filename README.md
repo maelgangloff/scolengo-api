@@ -9,10 +9,29 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 **Kind**: global class  
 
 * [Skolengo](#Skolengo)
-    * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
-    * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
-    * [.getOauth2Client(school)](#Skolengo.getOauth2Client)
+    * [new Skolengo(auth, school)](#new_Skolengo_new)
+    * _instance_
+        * [.getUserInfo()](#Skolengo+getUserInfo)
+    * _static_
+        * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
+        * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
+        * [.getOauth2Client(school)](#Skolengo.getOauth2Client)
 
+<a name="new_Skolengo_new"></a>
+
+### new Skolengo(auth, school)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| auth | <code>ClientOAuth2.Token</code> | Informations d'authentification OAuth 2.0 |
+| school | <code>School</code> | Etablissement |
+
+<a name="Skolengo+getUserInfo"></a>
+
+### skolengo.getUserInfo()
+Informations sur l'utilisateur actuellement authentifié
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 <a name="Skolengo.getAppCurrentConfig"></a>
 
 ### Skolengo.getAppCurrentConfig()

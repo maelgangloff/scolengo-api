@@ -2,12 +2,13 @@ export interface User {
     id: string;
     type: string;
     attributes: {
-        className: string;
-        dateOfBirth: Date;
-        regime: string;
+        addressLines?: string[];
+        postalCode?: string;
+        city?: string;
+        country?: string;
         lastName: string;
         firstName: string;
-        photoUrl: null;
+        photoUrl: string|null;
         externalMail: string;
         mobilePhone: string;
         permissions: {
@@ -15,23 +16,44 @@ export interface User {
             service: string;
             permittedOperations: string[];
         }[];
+        className?: string;
+        dateOfBirth?: string;
+        regime?: string;
     };
     relationships: {
-        school: {
+        students?: {
             data: {
                 id: string;
                 type: string;
-            };
-        };
-    };
+        }[]};
+        school?: {
+            data: {
+                id: string;
+                type: string;
+        }};
+    }
 }
 
 export interface Included {
     id: string;
     type: string;
     attributes: {
-        name: string;
-        timeZone: string;
-        subscribedServices: string[];
+        name?: string;
+        timeZone?: string;
+        subscribedServices?: string[];
+        lastName?: string;
+        firstName?: string;
+        photoUrl?: string| null;
+        className?: string;
+        dateOfBirth?: string;
+        regime?: string;
     };
+    relationships?: {
+        school: {
+            data: {
+                id: string;
+                type: string;
+        }
+        };
+    }
 }

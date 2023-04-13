@@ -1,11 +1,12 @@
 import axios, { Axios } from 'axios'
+import ClientOAuth2 from 'client-oauth2'
+import { Issuer } from 'openid-client'
+import jwtDecode from 'jwt-decode'
 import { CurrentConfig } from './models/CurrentConfig'
 import { Links, Meta, SkolengoResponse } from './models/Globals'
 import { School } from './models/School'
-import ClientOAuth2 from 'client-oauth2'
-import { Issuer } from 'openid-client'
-import { Auth } from './models/Auth'
 import { Included, User } from './models/User'
+import { JWT_AT } from './models/Auth'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -19,23 +20,33 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
  * Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
  */
 export class Skolengo {
-  public client: Axios
-  private auth: Auth
+  private client: Axios
+  private auth: ClientOAuth2.Token
 
-  public constructor (auth: Auth) {
+  /**
+   * @param {ClientOAuth2.Token} auth Informations d'authentification OAuth 2.0
+   * @param {School} school Etablissement
+   */
+  public constructor (auth: ClientOAuth2.Token, school: School) {
     this.auth = auth
     this.client = axios.create({
       baseURL: BASE_URL,
       withCredentials: true,
       headers: {
         'X-Skolengo-Date-Format': 'utc',
-        Authorization: `Bearer ${auth.access_token}`
+        Authorization: `Bearer ${auth.accessToken}`,
+        'X-Skolengo-Ems-Code': school.attributes.emsCode
       }
     })
   }
 
-  public async getUserInfo (id: string): Promise<SkolengoResponse<User, never, never, Included>> {
-    return (await this.client.request<SkolengoResponse<User, never, never, Included>>({
+  /**
+   * Informations sur l'utilisateur actuellement authentifié
+   */
+  public async getUserInfo (): Promise<SkolengoResponse<User, never, never, Included[]>> {
+    const accessToken = jwtDecode<JWT_AT>(this.auth.accessToken)
+    const id = accessToken.sub
+    return (await this.client.request<SkolengoResponse<User, never, never, Included[]>>({
       url: `/users-info/${id}`,
       params: {
         fields: {
