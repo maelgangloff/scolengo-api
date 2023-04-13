@@ -104,7 +104,7 @@ export class Skolengo {
    *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
    *   const school = schools.data[0]
    *   Skolengo.getOauth2Client(school, 'skoapp-prod://sign-in-callback').then(oauthClient => {
-   *     console.log(code.getUri())
+   *     console.log(oauthClient.code.getUri())
    *     // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanisme OAuth 2.0)
    *   })
    * })
