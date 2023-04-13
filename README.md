@@ -3,6 +3,8 @@
 ## Skolengo
 Support non officiel de l'API de la nouvelle application mobile Skolengo.
 Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
+
+
 Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
 
 **Remarques importantes:**
