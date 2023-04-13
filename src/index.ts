@@ -1,6 +1,5 @@
 import axios, { Axios } from 'axios'
-import ClientOAuth2 from 'client-oauth2'
-import { Issuer } from 'openid-client'
+import { Client, Issuer, TokenSet } from 'openid-client'
 import jwtDecode from 'jwt-decode'
 import { CurrentConfig } from './models/CurrentConfig'
 import { Links, Meta, SkolengoResponse } from './models/Globals'
@@ -16,6 +15,7 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
 /**
  * Support non officiel de l'API de la nouvelle application mobile Skolengo.
  * Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
+ * Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
  *
  * **Remarques importantes:**
  *  - Il est clairement mentionné que cette librairie est n'est pas officielle.
@@ -26,35 +26,33 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
  *  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté le fichier de licence GPLv3 disponible publiquement [LICENSE](https://github.com/maelgangloff/scolengo-api/blob/master/LICENSE) ainsi que de ce présent fichier de présentation.
  *  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du code de ce projet avant toute utilisation.
  *  - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
- *
- * Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
  */
 export class Skolengo {
   private client: Axios
-  private auth: ClientOAuth2.Token
+  private tokenSet: TokenSet
 
   /**
-   * @param {ClientOAuth2.Token} auth Informations d'authentification OAuth 2.0
+   * @param {TokenSet} tokenSet Jetons d'authentification Open ID Connect
    * @param {School} school Etablissement
    */
-  public constructor (auth: ClientOAuth2.Token, school: School) {
-    this.auth = auth
+  public constructor (tokenSet: TokenSet, school: School) {
+    this.tokenSet = tokenSet
     this.client = axios.create({
       baseURL: BASE_URL,
       withCredentials: true,
       headers: {
         'X-Skolengo-Date-Format': 'utc',
-        Authorization: `Bearer ${auth.accessToken}`,
+        Authorization: `Bearer ${tokenSet.access_token}`,
         'X-Skolengo-Ems-Code': school.attributes.emsCode
       }
     })
   }
 
   /**
-   * Informations sur l'utilisateur actuellement authentifié
+   * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    */
   public async getUserInfo (): Promise<SkolengoResponse<User, never, never, Included[]>> {
-    const accessToken = jwtDecode<JWT_AT>(this.auth.accessToken)
+    const accessToken = jwtDecode<JWT_AT>(this.tokenSet.access_token as string)
     const id = accessToken.sub
     return (await this.client.request<SkolengoResponse<User, never, never, Included[]>>({
       url: `/users-info/${id}`,
@@ -114,30 +112,45 @@ export class Skolengo {
   }
 
   /**
-   * Créer un client OAuth 2.0 permettant l'obtention des jetons (refresh token et access token)
-   * @param {School} school L'établissement
+   * Créer un client Open ID Connect permettant l'obtention des jetons (refresh token et access token)
+   * @param {School} school L'établissement scolaire
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
    *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
    *   const school = schools.data[0]
-   *   Skolengo.getOauth2Client(school, 'skoapp-prod://sign-in-callback').then(oauthClient => {
-   *     console.log(oauthClient.code.getUri())
-   *     // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanisme OAuth 2.0)
-   *   })
+   *   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+   *   console.log(oauthClient.authorizationUrl())
+   *   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
+   * })
+   * ```
+   * ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+   *   const school = schools.data[0]
+   *   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+   *
+   *   const params = client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+   *   const tokenSet = await client.callback('skoapp-prod://sign-in-callback', params)
+   *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+   *
+   *   const user = new Skolengo(school, tokenSet)
+   *   const infoUser = user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
    * })
    * ```
    */
-  public static async getOauth2Client (school: School, redirectUri = 'skoapp-prod://sign-in-callback', scopes = ['openid']): Promise<ClientOAuth2> {
+  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
     const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
-    return new ClientOAuth2({
-      clientId: Buffer.from(OID_CLIENT_ID, 'base64').toString('ascii'),
-      clientSecret: Buffer.from(OID_CLIENT_SECRET, 'base64').toString('ascii'),
-      accessTokenUri: skolengoIssuer.metadata.token_endpoint,
-      authorizationUri: skolengoIssuer.metadata.authorization_endpoint,
-      redirectUri,
-      scopes
+    const client = new skolengoIssuer.Client({
+      client_id: Buffer.from(OID_CLIENT_ID, 'base64').toString('ascii'),
+      client_secret: Buffer.from(OID_CLIENT_SECRET, 'base64').toString('ascii'),
+      redirect_uris: [redirectUri],
+      response_types: ['code']
     })
+    return client
   }
 }

@@ -3,6 +3,7 @@
 ## Skolengo
 Support non officiel de l'API de la nouvelle application mobile Skolengo.
 Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
+Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
 
 **Remarques importantes:**
  - Il est clairement mentionné que cette librairie est n'est pas officielle.
@@ -14,32 +15,30 @@ Ce module est destiné à devenir le successeur de [kdecole-api](https://github.
  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du code de ce projet avant toute utilisation.
  - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
 
-Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
-
 **Kind**: global class  
 
 * [Skolengo](#Skolengo)
-    * [new Skolengo(auth, school)](#new_Skolengo_new)
+    * [new Skolengo(tokenSet, school)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
     * _static_
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
         * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
-        * [.getOauth2Client(school)](#Skolengo.getOauth2Client)
+        * [.getOIDClient(school)](#Skolengo.getOIDClient)
 
 <a name="new_Skolengo_new"></a>
 
-### new Skolengo(auth, school)
+### new Skolengo(tokenSet, school)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| auth | <code>ClientOAuth2.Token</code> | Informations d'authentification OAuth 2.0 |
+| tokenSet | <code>TokenSet</code> | Jetons d'authentification Open ID Connect |
 | school | <code>School</code> | Etablissement |
 
 <a name="Skolengo+getUserInfo"></a>
 
 ### skolengo.getUserInfo()
-Informations sur l'utilisateur actuellement authentifié
+Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 <a name="Skolengo.getAppCurrentConfig"></a>
@@ -78,27 +77,43 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
   console.log(schools)
 })
 ```
-<a name="Skolengo.getOauth2Client"></a>
+<a name="Skolengo.getOIDClient"></a>
 
-### Skolengo.getOauth2Client(school)
-Créer un client OAuth 2.0 permettant l'obtention des jetons (refresh token et access token)
+### Skolengo.getOIDClient(school)
+Créer un client Open ID Connect permettant l'obtention des jetons (refresh token et access token)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| school | <code>School</code> | L'établissement |
+| school | <code>School</code> | L'établissement scolaire |
 
 **Example**  
 ```js
 const {Skolengo} = require('scolengo-api')
 
-Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
   const school = schools.data[0]
-  Skolengo.getOauth2Client(school, 'skoapp-prod://sign-in-callback').then(oauthClient => {
-    console.log(oauthClient.code.getUri())
-    // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanisme OAuth 2.0)
-  })
+  const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+  console.log(oauthClient.authorizationUrl())
+  // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
+})
+```
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+  if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+  const school = schools.data[0]
+  const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+
+  const params = client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+  const tokenSet = await client.callback('skoapp-prod://sign-in-callback', params)
+  // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+
+  const user = new Skolengo(school, tokenSet)
+  const infoUser = user.getUserInfo()
+  console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
 })
 ```
