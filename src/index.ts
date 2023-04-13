@@ -1,4 +1,4 @@
-import axios, { Axios } from 'axios'
+import axios, { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
 import jwtDecode from 'jwt-decode'
 import { CurrentConfig } from './models/CurrentConfig'
@@ -28,16 +28,19 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
  *  - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
  */
 export class Skolengo {
-  private client: Axios
+  private httpClient: Axios
+  private oidClient: Client
   private tokenSet: TokenSet
 
   /**
-   * @param {TokenSet} tokenSet Jetons d'authentification Open ID Connect
+   * @param {Client} oidClient Le client OpenID Connect
    * @param {School} school Etablissement
+   * @param {TokenSet} tokenSet Jetons d'authentification Open ID Connect
    */
-  public constructor (tokenSet: TokenSet, school: School) {
+  public constructor (oidClient: Client, school: School, tokenSet: TokenSet) {
+    this.oidClient = oidClient
     this.tokenSet = tokenSet
-    this.client = axios.create({
+    this.httpClient = axios.create({
       baseURL: BASE_URL,
       withCredentials: true,
       headers: {
@@ -54,7 +57,7 @@ export class Skolengo {
   public async getUserInfo (): Promise<SkolengoResponse<User, never, never, Included[]>> {
     const accessToken = jwtDecode<JWT_AT>(this.tokenSet.access_token as string)
     const id = accessToken.sub
-    return (await this.client.request<SkolengoResponse<User, never, never, Included[]>>({
+    return (await this.request<SkolengoResponse<User, never, never, Included[]>>({
       url: `/users-info/${id}`,
       params: {
         fields: {
@@ -133,13 +136,13 @@ export class Skolengo {
    *   const school = schools.data[0]
    *   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *
-   *   const params = client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
-   *   const tokenSet = await client.callback('skoapp-prod://sign-in-callback', params)
+   *   const params = oid_client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+   *   const tokenSet = await oid_client.callback('skoapp-prod://sign-in-callback', params)
    *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
    *
-   *   const user = new Skolengo(school, tokenSet)
-   *   const infoUser = user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
+   *   const user = new Skolengo(oid_client, school, tokenSet)
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
    * })
    * ```
    */
@@ -152,5 +155,22 @@ export class Skolengo {
       response_types: ['code']
     })
     return client
+  }
+
+  /**
+   * Effectuer une requête authentifiée auprès de l'API.
+   * Si la requête échoue, on rafraichit le jeton et on retente.
+   * @param {AxiosRequestConfig} config
+   * @private
+   */
+  private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
+    try {
+      return this.httpClient.request<T, R, D>(config)
+    } catch {
+      const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
+      this.tokenSet = tokenSet
+      this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token}`
+      return this.httpClient.request<T, R, D>(config)
+    }
   }
 }

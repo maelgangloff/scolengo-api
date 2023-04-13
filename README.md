@@ -18,7 +18,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 **Kind**: global class  
 
 * [Skolengo](#Skolengo)
-    * [new Skolengo(tokenSet, school)](#new_Skolengo_new)
+    * [new Skolengo(oidClient, school, tokenSet)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
     * _static_
@@ -28,12 +28,13 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 
 <a name="new_Skolengo_new"></a>
 
-### new Skolengo(tokenSet, school)
+### new Skolengo(oidClient, school, tokenSet)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| tokenSet | <code>TokenSet</code> | Jetons d'authentification Open ID Connect |
+| oidClient | <code>Client</code> | Le client OpenID Connect |
 | school | <code>School</code> | Etablissement |
+| tokenSet | <code>TokenSet</code> | Jetons d'authentification Open ID Connect |
 
 <a name="Skolengo+getUserInfo"></a>
 
@@ -108,12 +109,12 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
   const school = schools.data[0]
   const oid_client = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
 
-  const params = client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
-  const tokenSet = await client.callback('skoapp-prod://sign-in-callback', params)
+  const params = oid_client.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+  const tokenSet = await oid_client.callback('skoapp-prod://sign-in-callback', params)
   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
 
-  const user = new Skolengo(school, tokenSet)
-  const infoUser = user.getUserInfo()
-  console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
+  const user = new Skolengo(oid_client, school, tokenSet)
+  const infoUser = await user.getUserInfo()
+  console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
 })
 ```
