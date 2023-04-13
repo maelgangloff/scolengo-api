@@ -20,6 +20,15 @@ Configuration actuelle de l'application mobile (dernière version déployée, de
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 **Returns**: <code>Promise.&lt;SkolengoResponse.&lt;CurrentConfig&gt;&gt;</code> - La configuration actuelle de l'app  
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.getAppCurrentConfig().then(config => {
+  console.log(`Dernière version déployée: ${config.data.attributes.latestDeployedSkoAppVersion}`)
+  console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
+})
+```
 <a name="Skolengo.searchSchool"></a>
 
 ### Skolengo.searchSchool(text, limit, offset) ⇒ <code>Promise.&lt;SkolengoResponse.&lt;Array.&lt;School&gt;, Links, Meta&gt;&gt;</code>

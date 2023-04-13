@@ -52,6 +52,14 @@ export class Skolengo {
 
   /**
    * Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.getAppCurrentConfig().then(config => {
+   *   console.log(`Dernière version déployée: ${config.data.attributes.latestDeployedSkoAppVersion}`)
+   *   console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
+   * })
+   * ```
    * @returns {Promise<SkolengoResponse<CurrentConfig>>} La configuration actuelle de l'app
    */
   public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {

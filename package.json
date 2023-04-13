@@ -1,6 +1,6 @@
 {
   "name": "scolengo-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "types": "types/index.d.ts",
   "description": "Unofficial API client of Skolengo",
   "main": "dist/index.js",
