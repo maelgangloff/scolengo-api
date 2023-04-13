@@ -9,8 +9,8 @@ import { Included, User } from './models/User'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
-const OID_CLIENT_ID = 'SkoApp.Prod.0d349217-9a4e-41ec-9af9-df9e69e09494' // Client ID de l'app mobile
-const OID_CLIENT_SECRET = '7cb4d9a8-2580-4041-9ae8-d5803869183f' // Client Secret de l'app mobile
+const OID_CLIENT_ID = 'U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0' // base64 du client ID de l'app mobile
+const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // base64 du client Secret de l'app mobile
 
 /**
  * Support non officiel de l'API de la nouvelle application mobile Skolengo.
@@ -106,8 +106,8 @@ export class Skolengo {
   public static async getOauth2Client (school: School, redirectUri = 'skoapp-prod://sign-in-callback', scopes = ['openid']): Promise<ClientOAuth2> {
     const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
     return new ClientOAuth2({
-      clientId: OID_CLIENT_ID,
-      clientSecret: OID_CLIENT_SECRET,
+      clientId: Buffer.from(OID_CLIENT_ID, 'base64').toString('ascii'),
+      clientSecret: Buffer.from(OID_CLIENT_SECRET, 'base64').toString('ascii'),
       accessTokenUri: skolengoIssuer.metadata.token_endpoint,
       authorizationUri: skolengoIssuer.metadata.authorization_endpoint,
       redirectUri,
