@@ -1,10 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { Client, Issuer, TokenSet } from 'openid-client'
+import { Client, Issuer, TokenSet, TokenSetParameters } from 'openid-client'
 import { CurrentConfig } from './models/CurrentConfig'
 import { SkolengoResponse } from './models/Globals'
 import { School } from './models/School'
 import { User, UserIncluded } from './models/User'
 import { EvaluationsIncluded, EvaluationsSettings } from './models/EvaluationsSettings'
+import { AuthConfig } from './models/Auth'
 
 export { TokenSet } from 'openid-client'
 
@@ -200,6 +201,54 @@ export class Skolengo {
       response_types: ['code']
     })
     return client
+  }
+
+
+  /**
+   * Créer un client Skolengo à partir d'un fichier/variable de configuration
+   * Ce fichier de configuration peut être généré à partir de l'utilitaire `scolengo-token` ([https://github.com/maelgangloff/scolengo-token](https://github.com/maelgangloff/scolengo-token))
+   * @param {SkolengoConfig} config
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   * const config = require('./config.json')
+   * const skolengo = await Skolengo.fromConfigFile(config)
+   * ```
+   * ```js
+   * const {Skolengo} = require('scolengo-api')
+   * const config = {
+   *   "tokenSet": {
+   *     "access_token": "<access_token_here>",
+   *     "id_token": "<id_token_here>",
+   *     "refresh_token": "RT-<refresh_token_here>",
+   *     "token_type": "bearer",
+   *     "expires_at": 1234567890,
+   *     "scope": "openid"
+   *   },
+   *   "school": {
+   *     "id": "SKO-E-<school_id>",
+   *     "type": "school",
+   *     "attributes": {
+   *       "name": "<school_name>",
+   *       "addressLine1": "<school_address>",
+   *       "addressLine2": null,
+   *       "addressLine3": null,
+   *       "zipCode": "<school_zip_code>",
+   *       "city": "<school_city>",
+   *       "country": "France",
+   *       "homePageUrl": "<cas_login_url>",
+   *       "emsCode": "<school_ems_code>",
+   *       "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
+   *     }
+   *   }
+   * }
+   * const skolengo = await Skolengo.fromConfigFile(config)
+   * ```
+   */
+  public static async fromConfigFile (config:AuthConfig): Promise<Skolengo> {
+
+    const oidClient = await Skolengo.getOIDClient(config.school)
+    const tokenSet = new TokenSet(config.tokenSet as TokenSetParameters)
+    return new Skolengo(oidClient, config.school, tokenSet)
   }
 
   /**
