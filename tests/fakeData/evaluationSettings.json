@@ -1,0 +1,20 @@
+{
+    "data": [
+      {
+        "id": "SKO-E-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "type": "evaluationsSetting",
+        "attributes": {
+          "periodicReportsEnabled": true,
+          "skillsEnabled": true,
+          "evaluationsDetailsAvailable": true
+        }
+      }
+    ],
+    "links": {
+      "first": "http://bff-prod-ha/api/v1/bff-sko-app/evaluations-settings?page[limit]=20&filter[student.id]=SKO-E-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "last": "http://bff-prod-ha/api/v1/bff-sko-app/evaluations-settings?page[limit]=20&filter[student.id]=SKO-E-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    },
+    "meta": {
+      "totalResourceCount": 1
+    }
+}
