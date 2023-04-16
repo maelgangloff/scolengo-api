@@ -1,4 +1,4 @@
-import { School } from "./School";
+import { School } from './School'
 
 export interface Auth {
     access_token: string;

@@ -203,15 +203,14 @@ export class Skolengo {
     return client
   }
 
-
   /**
    * Créer un client Skolengo à partir d'un fichier/variable de configuration
    * Ce fichier de configuration peut être généré à partir de l'utilitaire `scolengo-token` ([https://github.com/maelgangloff/scolengo-token](https://github.com/maelgangloff/scolengo-token))
-   * @param {SkolengoConfig} config
+   * @param {SkolengoConfig} config Variable de configuration (pouvant provenir d'un fichier JSON)
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    * const config = require('./config.json')
-   * const skolengo = await Skolengo.fromConfigFile(config)
+   * const skolengo = await Skolengo.fromConfigObject(config)
    * ```
    * ```js
    * const {Skolengo} = require('scolengo-api')
@@ -241,11 +240,10 @@ export class Skolengo {
    *     }
    *   }
    * }
-   * const skolengo = await Skolengo.fromConfigFile(config)
+   * const skolengo = await Skolengo.fromConfigObject(config)
    * ```
    */
-  public static async fromConfigFile (config:AuthConfig): Promise<Skolengo> {
-
+  public static async fromConfigObject (config:AuthConfig): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet as TokenSetParameters)
     return new Skolengo(oidClient, config.school, tokenSet)

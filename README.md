@@ -29,6 +29,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
         * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
         * [.getOIDClient(school)](#Skolengo.getOIDClient)
+        * [.fromConfigObject(config)](#Skolengo.fromConfigObject)
 
 <a name="new_Skolengo_new"></a>
 
@@ -172,4 +173,52 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
   const infoUser = await user.getUserInfo()
   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
 })
+```
+<a name="Skolengo.fromConfigObject"></a>
+
+### Skolengo.fromConfigObject(config)
+Créer un client Skolengo à partir d'un fichier/variable de configuration
+Ce fichier de configuration peut être généré à partir de l'utilitaire `scolengo-token` ([https://github.com/maelgangloff/scolengo-token](https://github.com/maelgangloff/scolengo-token))
+
+**Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>SkolengoConfig</code> | Variable de configuration (pouvant provenir d'un fichier JSON) |
+
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+const config = require('./config.json')
+const skolengo = await Skolengo.fromConfigObject(config)
+```
+```js
+const {Skolengo} = require('scolengo-api')
+const config = {
+  "tokenSet": {
+    "access_token": "<access_token_here>",
+    "id_token": "<id_token_here>",
+    "refresh_token": "RT-<refresh_token_here>",
+    "token_type": "bearer",
+    "expires_at": 1234567890,
+    "scope": "openid"
+  },
+  "school": {
+    "id": "SKO-E-<school_id>",
+    "type": "school",
+    "attributes": {
+      "name": "<school_name>",
+      "addressLine1": "<school_address>",
+      "addressLine2": null,
+      "addressLine3": null,
+      "zipCode": "<school_zip_code>",
+      "city": "<school_city>",
+      "country": "France",
+      "homePageUrl": "<cas_login_url>",
+      "emsCode": "<school_ems_code>",
+      "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
+    }
+  }
+}
+const skolengo = await Skolengo.fromConfigObject(config)
 ```
