@@ -177,20 +177,20 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
 <a name="Skolengo.fromConfigObject"></a>
 
 ### Skolengo.fromConfigObject(config)
-Créer un client Skolengo à partir d'un fichier/variable de configuration
-Ce fichier de configuration peut être généré à partir de l'utilitaire `scolengo-token` ([https://github.com/maelgangloff/scolengo-token](https://github.com/maelgangloff/scolengo-token))
+Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
+Cet objet de configuration peut être généré à partir de l'utilitaire [kdecole-token](https://github.com/maelgangloff/scolengo-token)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>SkolengoConfig</code> | Variable de configuration (pouvant provenir d'un fichier JSON) |
+| config | <code>AuthConfig</code> | Informations d'authentification |
 
 **Example**  
 ```js
 const {Skolengo} = require('scolengo-api')
 const config = require('./config.json')
-const skolengo = await Skolengo.fromConfigObject(config)
+const user = await Skolengo.fromConfigObject(config)
 ```
 ```js
 const {Skolengo} = require('scolengo-api')
@@ -220,5 +220,8 @@ const config = {
     }
   }
 }
-const skolengo = await Skolengo.fromConfigObject(config)
+Skolengo.fromConfigObject(config).then(async user => {
+  const infoUser = await user.getUserInfo()
+  console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+})
 ```

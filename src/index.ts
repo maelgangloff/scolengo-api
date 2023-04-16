@@ -208,13 +208,13 @@ export class Skolengo {
   }
 
   /**
-   * Créer un client Skolengo à partir d'un fichier/variable de configuration
-   * Ce fichier de configuration peut être généré à partir de l'utilitaire `scolengo-token` ([https://github.com/maelgangloff/scolengo-token](https://github.com/maelgangloff/scolengo-token))
-   * @param {SkolengoConfig} config Variable de configuration (pouvant provenir d'un fichier JSON)
+   * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
+   * Cet objet de configuration peut être généré à partir de l'utilitaire [kdecole-token](https://github.com/maelgangloff/scolengo-token)
+   * @param {AuthConfig} config Informations d'authentification
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    * const config = require('./config.json')
-   * const skolengo = await Skolengo.fromConfigObject(config)
+   * const user = await Skolengo.fromConfigObject(config)
    * ```
    * ```js
    * const {Skolengo} = require('scolengo-api')
@@ -244,10 +244,13 @@ export class Skolengo {
    *     }
    *   }
    * }
-   * const skolengo = await Skolengo.fromConfigObject(config)
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   * })
    * ```
    */
-  public static async fromConfigObject (config:AuthConfig): Promise<Skolengo> {
+  public static async fromConfigObject (config: AuthConfig): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet as TokenSetParameters)
     return new Skolengo(oidClient, config.school, tokenSet)
