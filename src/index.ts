@@ -131,7 +131,9 @@ export class Skolengo {
   public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
     return (await axios.request<SkolengoResponse<CurrentConfig>>({
       baseURL: BASE_URL,
-      url: '/sko-app-configs/current'
+      url: '/sko-app-configs/current',
+      method: 'get',
+      responseType: 'json'
     })).data
   }
 
@@ -152,6 +154,8 @@ export class Skolengo {
     return (await axios.request<SkolengoResponse<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
+      method: 'get',
+      responseType: 'json',
       params: {
         page: { limit, offset },
         filter: { text }
