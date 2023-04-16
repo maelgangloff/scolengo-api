@@ -9,9 +9,9 @@ export interface SchoolInfo {
         title: string;
         shortContent: string;
         content: string;
-        url: null; // no info for this line
-        linkedInfoUrl: null; // no info for this line
-        linkedWebSiteUrl: null; // no info for this line
+        url: any;
+        linkedInfoUrl: any;
+        linkedWebSiteUrl: any;
     };
     relationships: {
         attachments?: {

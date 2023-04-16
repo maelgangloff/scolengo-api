@@ -122,19 +122,39 @@ export class Skolengo {
   }
 
   /**
-     * Actualités de l'établissement
-     * @param {string} schoolId Identifiant de l'établissement
+     * Récupérer toutes les actualités de l'établissement
+     */
+  public async getSchoolInfos (): Promise<
+        SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>
+        > {
+    return (
+      await this.request<
+                SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>
+            >({
+              url: '/schools-info',
+              params: {
+                include:
+                        'illustration,school,author,author.person,author.technicalUser,attachments'
+              }
+            })
+    ).data
+  }
+
+  /**
+     * Récupérer une actualité de l'établissement
+     * @param {string} schoolInfoId Identifiant de l'actualité
      */
   public async getSchoolInfo (
-    schoolId: string
+    schoolInfoId: string
   ): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
     return (
       await this.request<
                 SkolengoResponse<SchoolInfo, SchoolInfoIncluded>
             >({
-              url: `/school-info/${schoolId}`,
+              url: `/schools-info/${schoolInfoId}`,
               params: {
-                include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+                include:
+                        'illustration,school,author,author.person,author.technicalUser,attachments'
               }
             })
     ).data
