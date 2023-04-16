@@ -90,10 +90,9 @@ export class Skolengo {
    */
   public async getUserInfo (): Promise<SkolengoResponse<User, UserIncluded>> {
     const id = this.tokenSet.claims().sub
-    return (
-      await this.request<SkolengoResponse<User, UserIncluded>>({
-        url: `/users-info/${id}`
-      })
+    return (await this.request<SkolengoResponse<User, UserIncluded>>({
+      url: `/users-info/${id}`
+    })
     ).data
   }
 
@@ -101,18 +100,15 @@ export class Skolengo {
    * Statut des services d'évaluation
    * @param {string} studentId Identifiant d'un étudiant
    */
-  public async getEvaluationsSettings (
-    studentId: string
-  ): Promise<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>> {
-    return (
-      await this.request<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>>({
-        url: '/evaluations-settings',
-        params: {
-          filter: {
-            'student.id': studentId
-          }
+  public async getEvaluationsSettings (studentId: string): Promise<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>> {
+    return (await this.request<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>>({
+      url: '/evaluations-settings',
+      params: {
+        filter: {
+          'student.id': studentId
         }
-      })
+      }
+    })
     ).data
   }
 
@@ -120,13 +116,12 @@ export class Skolengo {
    * Récupérer toutes les actualités de l'établissement
    */
   public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
-    return (
-      await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
-        url: '/schools-info',
-        params: {
-          include: 'illustration,school,author,author.person,author.technicalUser,attachments'
-        }
-      })
+    return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
+      url: '/schools-info',
+      params: {
+        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+      }
+    })
     ).data
   }
 
@@ -135,13 +130,12 @@ export class Skolengo {
    * @param {string} schoolInfoId Identifiant de l'actualité
    */
   public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
-    return (
-      await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
-        url: `/schools-info/${schoolInfoId}`,
-        params: {
-          include: 'illustration,school,author,author.person,author.technicalUser,attachments'
-        }
-      })
+    return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
+      url: `/schools-info/${schoolInfoId}`,
+      params: {
+        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+      }
+    })
     ).data
   }
 
@@ -150,10 +144,7 @@ export class Skolengo {
    * @param {Client} oidClient Un client OpenID Connect
    * @param {string} token Un jeton
    */
-  public static async revokeToken (
-    oidClient: Client,
-    token: string
-  ): Promise<undefined> {
+  public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
     return oidClient.revoke(token)
   }
 
@@ -235,18 +226,11 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async getOIDClient (
-    school: School,
-    redirectUri = 'skoapp-prod://sign-in-callback'
-  ): Promise<Client> {
-    const skolengoIssuer = await Issuer.discover(
-      school.attributes.emsOIDCWellKnownUrl
-    )
+  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
+    const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
     const client = new skolengoIssuer.Client({
       client_id: Buffer.from(OID_CLIENT_ID, 'base64').toString('ascii'),
-      client_secret: Buffer.from(OID_CLIENT_SECRET, 'base64').toString(
-        'ascii'
-      ),
+      client_secret: Buffer.from(OID_CLIENT_SECRET, 'base64').toString('ascii'),
       redirect_uris: [redirectUri],
       response_types: ['code']
     })
@@ -312,9 +296,7 @@ export class Skolengo {
     try {
       return this.httpClient.request<T, R, D>(config)
     } catch {
-      const tokenSet = await this.oidClient.refresh(
-                this.tokenSet.refresh_token as string
-      )
+      const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
       this.tokenSet = tokenSet
       this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token}`
       return this.httpClient.request<T, R, D>(config)
