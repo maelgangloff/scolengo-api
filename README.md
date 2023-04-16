@@ -24,6 +24,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
         * [.getEvaluationsSettings(studentId)](#Skolengo+getEvaluationsSettings)
+        * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
+        * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -85,6 +87,23 @@ Statut des services d'évaluation
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
+
+<a name="Skolengo+getSchoolInfos"></a>
+
+### skolengo.getSchoolInfos()
+Récupérer toutes les actualités de l'établissement
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+<a name="Skolengo+getSchoolInfo"></a>
+
+### skolengo.getSchoolInfo(schoolInfoId)
+Récupérer une actualité de l'établissement
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| schoolInfoId | <code>string</code> | Identifiant de l'actualité |
 
 <a name="Skolengo.revokeToken"></a>
 
