@@ -5,6 +5,7 @@ import { SkolengoResponse } from './models/Globals'
 import { School } from './models/School'
 import { User, UserIncluded } from './models/User'
 import { EvaluationsIncluded, EvaluationsSettings } from './models/EvaluationsSettings'
+import { SchoolInfo, SchoolInfoIncluded } from './models/SchoolInfo'
 import { AuthConfig } from './models/Auth'
 
 export { TokenSet } from 'openid-client'
@@ -91,7 +92,8 @@ export class Skolengo {
     const id = this.tokenSet.claims().sub
     return (await this.request<SkolengoResponse<User, UserIncluded>>({
       url: `/users-info/${id}`
-    })).data
+    })
+    ).data
   }
 
   /**
@@ -106,7 +108,35 @@ export class Skolengo {
           'student.id': studentId
         }
       }
-    })).data
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer toutes les actualités de l'établissement
+   */
+  public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
+    return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
+      url: '/schools-info',
+      params: {
+        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer une actualité de l'établissement
+   * @param {string} schoolInfoId Identifiant de l'actualité
+   */
+  public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
+    return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
+      url: `/schools-info/${schoolInfoId}`,
+      params: {
+        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+      }
+    })
+    ).data
   }
 
   /**
