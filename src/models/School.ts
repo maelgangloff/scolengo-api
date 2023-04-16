@@ -1,4 +1,4 @@
-export interface Attributes {
+export interface SchoolAttributes {
     name: string;
     addressLine1: string;
     addressLine2: null | string;
@@ -14,5 +14,5 @@ export interface Attributes {
 export interface School {
     id: string;
     type: string;
-    attributes: Attributes;
+    attributes: SchoolAttributes;
 }
