@@ -11,7 +11,7 @@
 # Checklist:
 - [ ] Mon code ne met pas en danger les données personnelles des utilisateurs
 - [ ] Les noms des commits suivent la convention [Conventional Commits](https://www.conventionalcommits.org/fr/v1.0.0/)
-- [ ] J'ai verifié l'entiereté du code avant de le soumettre
+- [ ] J'ai vérifié l'entiereté du code avant de le soumettre
 - [ ] J'ai mis à jour la documentation en lien avec mes commits
 - [ ] Mon code ne génère pas d'erreurs
 - [ ] J'ai ajouté les tests unitaires correspondants (dossier `tests`)
