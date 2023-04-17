@@ -197,7 +197,7 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
 
 ### Skolengo.fromConfigObject(config)
 Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
-Cet objet de configuration peut être généré à partir de l'utilitaire [kdecole-token](https://github.com/maelgangloff/scolengo-token)
+Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 

@@ -91,7 +91,18 @@ export class Skolengo {
   public async getUserInfo (): Promise<SkolengoResponse<User, UserIncluded>> {
     const id = this.tokenSet.claims().sub
     return (await this.request<SkolengoResponse<User, UserIncluded>>({
-      url: `/users-info/${id}`
+      url: `/users-info/${id}`,
+      responseType: 'json',
+      params: {
+        fields: {
+          userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
+          school: 'name,timeZone,subscribedServices',
+          legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
+          studentUserInfo: 'className,dateOfBirth,regime,school',
+          student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
+        },
+        include: 'school,students,students.school'
+      }
     })
     ).data
   }
@@ -103,6 +114,7 @@ export class Skolengo {
   public async getEvaluationsSettings (studentId: string): Promise<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>> {
     return (await this.request<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>>({
       url: '/evaluations-settings',
+      responseType: 'json',
       params: {
         filter: {
           'student.id': studentId
@@ -118,6 +130,7 @@ export class Skolengo {
   public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
     return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
       url: '/schools-info',
+      responseType: 'json',
       params: {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
@@ -132,6 +145,7 @@ export class Skolengo {
   public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
     return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
       url: `/schools-info/${schoolInfoId}`,
+      responseType: 'json',
       params: {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
@@ -239,7 +253,7 @@ export class Skolengo {
 
   /**
    * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
-   * Cet objet de configuration peut être généré à partir de l'utilitaire [kdecole-token](https://github.com/maelgangloff/scolengo-token)
+   * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token)
    * @param {AuthConfig} config Informations d'authentification
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
