@@ -1,6 +1,6 @@
 import { Included } from '../Globals'
 
-export interface Contacts {
+export type Contacts = {
     data: {
         id: string;
         type: string;
@@ -10,14 +10,10 @@ export interface Contacts {
     } | null;
 }
 
-export interface UsersMailSettings {
-    id: string;
-    type: string;
-    attributes: {
+export type UsersMailSettings = Included<{
         maxCharsInParticipationContent: number;
         maxCharsInCommunicationSubject: number;
-    };
-    relationships: {
+    }, {
         folders: Contacts;
         signature: {
             data: {
@@ -26,8 +22,7 @@ export interface UsersMailSettings {
             };
         };
         contacts: Contacts;
-    };
-}
+    }>
 
 export type UsersMailSettingsIncluded = Included<{
     content?: string;

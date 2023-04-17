@@ -1,4 +1,4 @@
-export interface CurrentConfig {
+export type CurrentConfig = {
     id: string;
     type: string;
     attributes: {

@@ -1,4 +1,4 @@
-export interface Attachment {
+export type Attachment = {
     name: string;
     mimeType: string;
     mimeTypeLabel: string;

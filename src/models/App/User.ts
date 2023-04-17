@@ -1,9 +1,6 @@
 import { Included } from '../Globals'
 
-export interface User {
-    id: string;
-    type: string;
-    attributes: {
+export type User = Included<{
         className?: string;
         dateOfBirth?: string;
         regime?: string;
@@ -21,8 +18,7 @@ export interface User {
         postalCode?: string;
         city?: string;
         country?: string;
-    };
-    relationships: {
+    }, {
         school?: {
             data: {
                 id: string;
@@ -35,8 +31,7 @@ export interface User {
                 type: string;
             }[];
         };
-    };
-}
+}>
 
 export type UserIncluded = Included<{
     name: string;

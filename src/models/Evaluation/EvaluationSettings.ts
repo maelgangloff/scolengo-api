@@ -21,15 +21,11 @@ export type EvaluationSettingsIncluded = Included<{
         };
     };
 }>
-export interface EvaluationSettings {
-    id: string;
-    type: string;
-    attributes: {
+export type EvaluationSettings = Included<{
         periodicReportsEnabled: boolean;
         skillsEnabled: boolean;
         evaluationsDetailsAvailable: boolean;
-    };
-    relationships?: {
+    }, {
         periods: {
             data: {
                 id: string;
@@ -42,5 +38,4 @@ export interface EvaluationSettings {
                 type: string;
             };
         };
-    }
-}
+    }>

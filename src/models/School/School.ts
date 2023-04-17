@@ -1,4 +1,6 @@
-export interface SchoolAttributes {
+import { Included } from '../Globals'
+
+export type SchoolAttributes = {
     name: string;
     addressLine1: string;
     addressLine2: null | string;
@@ -11,8 +13,4 @@ export interface SchoolAttributes {
     emsOIDCWellKnownUrl: string;
 }
 
-export interface School {
-    id: string;
-    type: string;
-    attributes: SchoolAttributes;
-}
+export type School = Included<SchoolAttributes>

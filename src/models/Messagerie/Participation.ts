@@ -1,14 +1,10 @@
 import { Included } from '../Globals'
 
-export interface Participation {
-    id: string;
-    type: string;
-    attributes: {
+export type Participation = Included<{
         dateTime: string;
         content: string;
         read: boolean;
-    };
-    relationships: {
+    }, {
         attachments: {
             data: any[] | {
                 id: string;
@@ -21,8 +17,7 @@ export interface Participation {
                 type: string;
             };
         };
-    };
-}
+}>
 
 export type ParticipationIncluded = Included<{
     category: string;

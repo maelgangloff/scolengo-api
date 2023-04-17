@@ -1,9 +1,6 @@
 import { Included } from '../Globals'
 
-export interface Communication {
-    id: string;
-    type: string;
-    attributes: {
+export type Communication = Included<{
         subject: string;
         participationsNumber: number;
         recipientsSummary: string;
@@ -12,16 +9,14 @@ export interface Communication {
         replyToSenderAllowed: boolean;
         readTrackingEnabled: boolean | null;
         firstParticipationContent: null;
-    };
-    relationships: {
+    }, {
         lastParticipation: {
             data: {
                 id: string;
                 type: string;
             } | null;
         };
-    };
-}
+}>
 
 export type CommunicationIncluded = Included<{
     label: string;

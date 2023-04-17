@@ -1,6 +1,6 @@
 import { School } from './School/School'
 
-export interface Auth {
+export type Auth = {
     access_token: string;
     id_token: string;
     refresh_token: string;
@@ -9,7 +9,7 @@ export interface Auth {
     scope: string;
 }
 
-export interface AuthConfig {
+export type AuthConfig = {
     tokenSet: Auth;
     school: School
 }

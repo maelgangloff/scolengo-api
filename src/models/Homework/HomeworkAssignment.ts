@@ -1,9 +1,6 @@
 import { Included } from '../Globals'
 
-export interface HomeworkAssignment {
-    id: string;
-    type: string;
-    attributes: {
+export type HomeworkAssignment = Included<{
         title: string;
         html: string;
         dueDateTime: string;
@@ -11,8 +8,7 @@ export interface HomeworkAssignment {
         done: boolean;
         deliverWorkOnline: boolean;
         onlineDeliveryUrl: null|string;
-    };
-    relationships: {
+    }, {
         teacher: {
             data: {
                 id: string;
@@ -46,8 +42,7 @@ export interface HomeworkAssignment {
         individualCorrectedWork: {
             data: any;
         };
-    }
-}
+}>
 
 type Subject = {
     label: string;

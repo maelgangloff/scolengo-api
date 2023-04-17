@@ -1,9 +1,6 @@
 import { Included } from '../Globals'
 
-export interface EvaluationDetail {
-    id: string;
-    type: string;
-    attributes: {
+export type EvaluationDetail = Included<{
         title: string|null;
         topic: string|null;
         dateTime: string|null;
@@ -12,8 +9,7 @@ export interface EvaluationDetail {
         max: number|null;
         average: number|null;
         scale: number|null;
-    };
-    relationships: {
+    }, {
         subSkills: {
             data: {
                 id: string;
@@ -38,8 +34,7 @@ export interface EvaluationDetail {
                 type: string;
             };
         };
-    };
-}
+}>
 
 export type EvaluationDetailIncluded = Included<{
     photoUrl: string|null

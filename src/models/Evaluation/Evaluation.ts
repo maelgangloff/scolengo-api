@@ -1,35 +1,30 @@
 import { Included } from '../Globals'
 
-export interface Evaluation {
-    id: string;
-    type: string;
-    attributes: {
+export type Evaluation = Included<{
         coefficient: number;
         average: number | null;
         scale: number;
         studentAverage: number | null;
+    }, {
+    evaluations: {
+        data: {
+            id: string;
+            type: string;
+        }[];
     };
-    relationships: {
-        evaluations: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+    subject: {
+        data: {
+            id: string;
+            type: string;
         };
-        subject: {
-            data: {
-                id: string;
-                type: string;
-            };
-        };
-        teachers: {
-            data: {
-                id: string;
-                type: string;
-            }[];
-        }
     };
-}
+    teachers: {
+        data: {
+            id: string;
+            type: string;
+        }[];
+    }
+}>
 
 export type EvaluationIncluded = Included<{
     title: string

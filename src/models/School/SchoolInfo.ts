@@ -1,10 +1,7 @@
 import { Attachment } from './Attachment'
 import { Included } from '../Globals'
 
-export interface SchoolInfo {
-    id: string;
-    type: string;
-    attributes: {
+export type SchoolInfo = Included<{
         publicationDateTime: string;
         title: string;
         shortContent: string;
@@ -12,8 +9,7 @@ export interface SchoolInfo {
         url?: string|null;
         linkedInfoUrl?: any;
         linkedWebSiteUrl?: any;
-    };
-    relationships: {
+    }, {
         school: {
             data: {
                 id: string;
@@ -35,8 +31,7 @@ export interface SchoolInfo {
         attachments?: {
             data: Attachment[] | null;
         }
-    };
-}
+}>
 
 export type SchoolInfoIncluded = Included<{
     title: string;
