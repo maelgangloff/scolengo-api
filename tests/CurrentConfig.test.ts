@@ -7,9 +7,7 @@ const testData: SkolengoResponse<CurrentConfig> = { data: { id: 'current', type:
 
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios> & jest.Mock<typeof axios>
-mockedAxios.request.mockResolvedValue({
-  data: testData
-})
+mockedAxios.request.mockResolvedValue({ data: testData })
 
 describe('Test getCurrentConfig', () => {
   beforeEach(() => mockedAxios.mockClear())

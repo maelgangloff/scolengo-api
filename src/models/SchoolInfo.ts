@@ -38,19 +38,23 @@ export interface SchoolInfo {
     };
 }
 
-export type SchoolInfoIncluded = Included<Partial<{
+export type SchoolInfoIncluded = Included<{
     title: string;
     firstName: string;
     lastName: string;
     photoUrl: string|null;
-    name: string;
-    additionalInfo: any|null;
+} | {
     mimeType: string;
     mimeTypeLabel: string;
     size: number;
+} | {
+    name: string;
+} | {
+    additionalInfo: any|null;
+} | {
     url: string;
     alternativeText: string;
-}>, {
+}, {
     technicalUser: {
         data: {
             id: string;
