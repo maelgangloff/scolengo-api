@@ -7,6 +7,8 @@ import { User, UserIncluded } from './models/User'
 import { EvaluationsIncluded, EvaluationsSettings } from './models/EvaluationsSettings'
 import { SchoolInfo, SchoolInfoIncluded } from './models/SchoolInfo'
 import { AuthConfig } from './models/Auth'
+import { Evaluation, EvaluationIncluded } from './models/Evaluation'
+import { EvaluationDetail, EvaluationDetailIncluded } from './models/EvaluationDetail'
 
 export { TokenSet } from 'openid-client'
 
@@ -94,6 +96,7 @@ export class Skolengo {
       url: `/users-info/${id}`,
       responseType: 'json',
       params: {
+        /*
         fields: {
           userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
           school: 'name,timeZone,subscribedServices',
@@ -101,6 +104,7 @@ export class Skolengo {
           studentUserInfo: 'className,dateOfBirth,regime,school',
           student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
         },
+        */
         include: 'school,students,students.school'
       }
     })
@@ -108,7 +112,7 @@ export class Skolengo {
   }
 
   /**
-   * Statut des services d'évaluation
+   * Statut des services d'évaluation (identifiant des périodes, ...)
    * @param {string} studentId Identifiant d'un étudiant
    */
   public async getEvaluationsSettings (studentId: string): Promise<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>> {
@@ -118,7 +122,78 @@ export class Skolengo {
       params: {
         filter: {
           'student.id': studentId
+        },
+        include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors'
+        /*
+        fields: {
+          evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
+          period: 'label,startDate,endDate',
+          skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
+          skillAcquisitionColors: 'colorLevelMappings'
         }
+        */
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les notes d'un étudiant sur une période
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {number} periodId Identifiant de la période de notation
+   */
+  public async getEvaluation (studentId: string, periodId: number): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
+    return (await this.request<SkolengoResponse<Evaluation[], EvaluationIncluded>>({
+      url: '/evaluation-services',
+      responseType: 'json',
+      params: {
+        filter: {
+          'student.id': studentId,
+          'period.id': periodId
+        },
+        include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers'
+        /*
+        fields: {
+          evaluationService: 'coefficient,average,studentAverage,scale',
+          subject: 'label,color',
+          evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
+          evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
+          subSkillEvaluationResult: 'level,subSkill',
+          teacher: 'firstName,lastName,title',
+          subSkill: 'shortLabel'
+        }
+        */
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer le détail d'une note d'un étudiant
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {number} markId Identifiant de la note
+   */
+  public async getEvaluationDetail (studentId: string, markId: number): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
+    return (await this.request<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>>({
+      url: `/evaluations/${markId}`,
+      responseType: 'json',
+      params: {
+        filter: {
+          'student.id': studentId
+        },
+        include: 'evaluationService,evaluationService.subject,evaluationService.teachers,subSubject,subSkills,evaluationResult,evaluationResult.subSkillsEvaluationResults,evaluationResult.subSkillsEvaluationResults.subSkill'
+        /*
+        fields: {
+          evaluationService: 'subject,teachers',
+          subject: 'label,color',
+          subSubject: 'label',
+          evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
+          evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
+          subSkill: 'shortLabel',
+          subSkillEvaluationResult: 'level,subSkill',
+          teacher: 'firstName,lastName,title'
+        }
+        */
       }
     })
     ).data
@@ -140,7 +215,7 @@ export class Skolengo {
 
   /**
    * Récupérer une actualité de l'établissement
-   * @param {string} schoolInfoId Identifiant de l'actualité
+   * @param {string} schoolInfoId Identifiant d'une actualité
    */
   public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
     return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({

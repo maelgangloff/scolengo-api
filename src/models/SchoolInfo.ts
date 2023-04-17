@@ -1,4 +1,5 @@
 import { Attachment } from './Attachment'
+import { Included } from './Globals'
 
 export interface SchoolInfo {
     id: string;
@@ -37,34 +38,29 @@ export interface SchoolInfo {
     };
 }
 
-export interface SchoolInfoIncluded {
-    id: string;
-    type: string;
-    attributes: Partial<{
-        title: string;
-        firstName: string;
-        lastName: string;
-        photoUrl: string|null;
-        name: string;
-        additionalInfo: any|null;
-        mimeType: string;
-        mimeTypeLabel: string;
-        size: number;
-        url: string;
-        alternativeText: string;
-    }>;
-    relationships?: {
-        technicalUser: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
-        };
-        person: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
-        };
+export type SchoolInfoIncluded = Included<Partial<{
+    title: string;
+    firstName: string;
+    lastName: string;
+    photoUrl: string|null;
+    name: string;
+    additionalInfo: any|null;
+    mimeType: string;
+    mimeTypeLabel: string;
+    size: number;
+    url: string;
+    alternativeText: string;
+}>, {
+    technicalUser: {
+        data: {
+            id: string;
+            type: string;
+        } | null;
     };
-}
+    person: {
+        data: {
+            id: string;
+            type: string;
+        } | null;
+    };
+}>

@@ -1,7 +1,7 @@
 export interface Included<Attributes = never, Relationships = never> {
     id: string;
     type: string;
-    attributes: Attributes;
+    attributes?: Attributes;
     relationships?: Relationships
 }
 

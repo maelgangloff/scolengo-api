@@ -24,6 +24,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
         * [.getEvaluationsSettings(studentId)](#Skolengo+getEvaluationsSettings)
+        * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
+        * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
     * _static_
@@ -80,13 +82,37 @@ Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de 
 <a name="Skolengo+getEvaluationsSettings"></a>
 
 ### skolengo.getEvaluationsSettings(studentId)
-Statut des services d'évaluation
+Statut des services d'évaluation (identifiant des périodes, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
+
+<a name="Skolengo+getEvaluation"></a>
+
+### skolengo.getEvaluation(studentId, periodId)
+Récupérer les notes d'un étudiant sur une période
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| periodId | <code>number</code> | Identifiant de la période de notation |
+
+<a name="Skolengo+getEvaluationDetail"></a>
+
+### skolengo.getEvaluationDetail(studentId, markId)
+Récupérer le détail d'une note d'un étudiant
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| markId | <code>number</code> | Identifiant de la note |
 
 <a name="Skolengo+getSchoolInfos"></a>
 
@@ -103,7 +129,7 @@ Récupérer une actualité de l'établissement
 
 | Param | Type | Description |
 | --- | --- | --- |
-| schoolInfoId | <code>string</code> | Identifiant de l'actualité |
+| schoolInfoId | <code>string</code> | Identifiant d'une actualité |
 
 <a name="Skolengo.revokeToken"></a>
 
