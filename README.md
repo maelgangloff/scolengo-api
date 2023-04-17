@@ -26,6 +26,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
+        * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
+        * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
     * _static_
@@ -113,6 +115,31 @@ Récupérer le détail d'une note d'un étudiant
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | markId | <code>number</code> | Identifiant de la note |
+
+<a name="Skolengo+getHomeworkAssignment"></a>
+
+### skolengo.getHomeworkAssignment(studentId, homeworkId)
+Récupérer les données d'un devoir
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| homeworkId | <code>string</code> | Identifiant du devoir |
+
+<a name="Skolengo+getHomeworkAssignments"></a>
+
+### skolengo.getHomeworkAssignments(studentId, startDate, endDate)
+Récupérer les devoirs d'un étudiant
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
+| endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
 
 <a name="Skolengo+getSchoolInfos"></a>
 
