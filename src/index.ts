@@ -12,6 +12,7 @@ import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluat
 import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
 import { Communication, CommunicationIncluded } from './models/Messagerie/Communication'
 import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
+import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/HomeworkAssignment'
 export { TokenSet } from 'openid-client'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -195,6 +196,49 @@ export class Skolengo {
           teacher: 'firstName,lastName,title'
         }
         */
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les données d'un devoir
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} homeworkId Identifiant du devoir
+   */
+  public async getHomeworkAssignment (studentId: string, homeworkId: string): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
+    return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
+      url: `/homework-assignments/${homeworkId}`,
+      responseType: 'json',
+      params: {
+        include: 'subject,teacher,pedagogicContent,individualCorrectedWork,individualCorrectedWork.attachments,individualCorrectedWork.audio,commonCorrectedWork,commonCorrectedWork.attachments,commonCorrectedWork.audio,commonCorrectedWork.pedagogicContent,attachments,audio,teacher.person',
+        filter: {
+          'student.id': studentId
+        }
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les devoirs d'un étudiant
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} startDate Date de début - Format : YYYY-MM-DD
+   * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+  */
+  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
+    return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
+      url: '/homework-assignments',
+      responseType: 'json',
+      params: {
+        include: 'subject,teacher,attachments,teacher.person',
+        filter: {
+          'student.id': studentId,
+          dueDate: {
+            GE: startDate,
+            LE: endDate
+          }
+        }
       }
     })
     ).data
@@ -445,12 +489,12 @@ export class Skolengo {
    */
   private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
     try {
-      return this.httpClient.request<T, R, D>(config)
+      return await this.httpClient.request<T, R, D>(config)
     } catch {
       const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
       this.tokenSet = tokenSet
       this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token}`
-      return this.httpClient.request<T, R, D>(config)
+      return await this.httpClient.request<T, R, D>(config)
     }
   }
 }
