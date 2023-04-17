@@ -1,5 +1,5 @@
 import { SkolengoResponse } from '../src/models/Globals'
-import { User, UserIncluded } from '../src/models/User'
+import { User, UserIncluded } from '../src/models/App/User'
 
 describe('Test UserInfo', () => {
   it('should be correct type', () => {

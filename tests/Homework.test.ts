@@ -1,5 +1,5 @@
-import { HomeworkAssignment, HomeworkAssignmentIncluded } from '../src/models/HomeworkAssignment'
-import { HomeworkAssignmentList, HomeworkAssignmentListIncluded } from '../src/models/HomeworkAssignmentList'
+import { HomeworkAssignment, HomeworkAssignmentIncluded } from '../src/models/Homework/HomeworkAssignment'
+import { HomeworkAssignmentList, HomeworkAssignmentListIncluded } from '../src/models/Homework/HomeworkAssignmentList'
 import { SkolengoResponse } from '../src/models/Globals'
 
 describe('Test HomeworkAssignment', () => {

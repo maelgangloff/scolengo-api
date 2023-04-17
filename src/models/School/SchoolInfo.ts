@@ -1,5 +1,5 @@
 import { Attachment } from './Attachment'
-import { Included } from './Globals'
+import { Included } from '../Globals'
 
 export interface SchoolInfo {
     id: string;

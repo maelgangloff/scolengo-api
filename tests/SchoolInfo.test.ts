@@ -1,5 +1,5 @@
 import { SkolengoResponse } from '../src/models/Globals'
-import { SchoolInfo, SchoolInfoIncluded } from '../src/models/SchoolInfo'
+import { SchoolInfo, SchoolInfoIncluded } from '../src/models/School/SchoolInfo'
 
 describe('Test EvaluationSettings', () => {
   it('should be correct type', () => {

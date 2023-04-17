@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Skolengo } from '../src/index'
 import { SkolengoResponse } from '../src/models/Globals'
-import { CurrentConfig } from '../src/models/CurrentConfig'
+import { CurrentConfig } from '../src/models/App/CurrentConfig'
 
 const testData: SkolengoResponse<CurrentConfig> = { data: { id: 'current', type: 'skoAppConfig', attributes: { latestDeployedSkoAppVersion: '1.1.1-1', latestSupportedSkoAppVersion: '1.1.1-1', apiCallRetryDelay: 500, apiCallMaxRetries: 5, skoAppDeploymentInfoUrl: 'https://www.skolengo-academy.org/deploiement-de-lapplication-mobile' } } }
 

@@ -1,4 +1,4 @@
-import { EvaluationSettings, EvaluationSettingsIncluded } from '../src/models/EvaluationSettings'
+import { EvaluationSettings, EvaluationSettingsIncluded } from '../src/models/Evaluation/EvaluationSettings'
 import { SkolengoResponse } from '../src/models/Globals'
 
 describe('Test EvaluationSettings', () => {

@@ -1,4 +1,4 @@
-import { Included } from './Globals'
+import { Included } from '../Globals'
 
 export type EvaluationSettingsIncluded = Included<{
     label?: string;

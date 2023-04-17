@@ -1,4 +1,4 @@
-import { Included } from './Globals'
+import { Included } from '../Globals'
 
 export interface Evaluation {
     id: string;
