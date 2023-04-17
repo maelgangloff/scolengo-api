@@ -34,15 +34,20 @@ export interface Evaluation {
 export type EvaluationIncluded = Included<Partial<{
     dateTime: string;
     coefficient: number;
-    average: number;
+    average: number | null;
     scale: number;
     mark: number | null;
     nonEvaluationReason: null | string;
+    comment: string|null
     label: string;
     color: null | string;
-    title: string;
+    title: string | null;
     firstName: string;
     lastName: string;
+    photoUrl:string|null
+    topic: string | null
+    min: number |null
+    max: number |null
 }>, {
     subSkills?: {
         data: {

@@ -9,7 +9,6 @@ import { SchoolInfo, SchoolInfoIncluded } from './models/SchoolInfo'
 import { AuthConfig } from './models/Auth'
 import { Evaluation, EvaluationIncluded } from './models/Evaluation'
 import { EvaluationDetail, EvaluationDetailIncluded } from './models/EvaluationDetail'
-
 export { TokenSet } from 'openid-client'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
