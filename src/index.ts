@@ -35,8 +35,8 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
 export class Skolengo {
   private httpClient: AxiosInstance
   private oidClient: Client
-  private school: School
-  private tokenSet: TokenSet
+  public school: School
+  public tokenSet: TokenSet
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0

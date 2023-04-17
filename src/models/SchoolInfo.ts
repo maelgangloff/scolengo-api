@@ -1,5 +1,4 @@
 import { Attachment } from './Attachment'
-import { Included } from './Globals'
 
 export interface SchoolInfo {
     id: string;
@@ -8,87 +7,64 @@ export interface SchoolInfo {
         publicationDateTime: string;
         title: string;
         shortContent: string;
-        content: string;
-        url: any;
-        linkedInfoUrl: any;
-        linkedWebSiteUrl: any;
+        content?: string;
+        url?: string|null;
+        linkedInfoUrl?: any;
+        linkedWebSiteUrl?: any;
     };
     relationships: {
+        school: {
+            data: {
+                id: string;
+                type: string;
+            } | null;
+        };
+        author: {
+            data: {
+                id: string;
+                type: string;
+            } | null;
+        };
+        illustration: {
+            data: {
+                id: string;
+                type: string;
+            } | null;
+        };
         attachments?: {
-            data: {
-                id: string;
-                type: string;
-            }[];
-        };
-        school?: {
-            data: {
-                id: string;
-                type: string;
-            };
-        };
-        author?: {
-            data: {
-                id: string;
-                type: string;
-            };
-        };
-        illustration?: {
-            data: {
-                id: string;
-                type: string;
-            };
-        };
+            data: Attachment[] | null;
+        }
     };
 }
 
-export type SchoolInfoIncluded = Included<
-    Partial<Attachment>,
-    {
-        attachments?: {
+export interface SchoolInfoIncluded {
+    id: string;
+    type: string;
+    attributes: Partial<{
+        title: string;
+        firstName: string;
+        lastName: string;
+        photoUrl: string|null;
+        name: string;
+        additionalInfo: any|null;
+        mimeType: string;
+        mimeTypeLabel: string;
+        size: number;
+        url: string;
+        alternativeText: string;
+    }>;
+    relationships?: {
+        technicalUser: {
             data: {
                 id: string;
                 type: string;
-            }[];
+            } | null;
         };
-    }
-> &
-    Included<
-        Partial<{
-            name: string;
-        }>,
-        {
-            school?: {
-                data: {
-                    id: string;
-                    type: string;
-                };
-            };
-        }
-    > &
-    Included<
-        Partial<{
-            title: string;
-            firstName: string;
-            lastName: string;
-            photoUrl: string | null;
-        }>,
-        {
-            author?: {
-                data: {
-                    id: string;
-                    type: string;
-                };
-            };
-        }
-    > &
-    Included<
-        Partial<Attachment>,
-        {
-            illustration?: {
-                data: {
-                    id: string;
-                    type: string;
-                };
-            };
-        }
-    >;
+        person: {
+            data: {
+                id: string;
+                type: string;
+            } | null;
+        };
+    };
+}
