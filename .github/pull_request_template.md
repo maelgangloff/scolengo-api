@@ -8,12 +8,6 @@
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-## Changelog proposé
-| Français `fr` |
-| --- |
-| Proposez un changelog en français ici... |
-
-
 # Checklist:
 - [ ] Mon code ne met pas en danger les données personnelles des utilisateurs
 - [ ] Les noms des commits suivent la convention [Conventional Commits](https://www.conventionalcommits.org/fr/v1.0.0/)
@@ -24,5 +18,5 @@
 - [ ] Les anciens et nouveaux tests unitaires sont validés en local
 
 ### Note
-Before merging this PR, you will need the approval of at least one of the following people:
-- @maelgangloff
+Avant de fusionner cette PR, elle devra reçevoir l'approbation d'au moins une des personnes suivantes :
+- [@maelgangloff](https://github.com/maelgangloff)
