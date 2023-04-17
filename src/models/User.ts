@@ -10,8 +10,8 @@ export interface User {
         lastName: string;
         firstName: string;
         photoUrl: string|null;
-        externalMail: string;
-        mobilePhone: string;
+        externalMail?: string;
+        mobilePhone?: string;
         permissions: {
             schoolId: string;
             service: string;
@@ -38,17 +38,18 @@ export interface User {
     };
 }
 
-export type UserIncluded = Included<Partial<{
+export type UserIncluded = Included<{
     name: string;
     timeZone: string;
     subscribedServices: string[];
+} | {
     lastName: string;
     firstName: string;
     photoUrl: string|null;
     className: string;
     dateOfBirth: string;
     regime: string;
-}>, {
+}, {
     school: {
         data: {
             id: string;

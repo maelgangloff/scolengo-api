@@ -41,21 +41,24 @@ export interface EvaluationDetail {
     };
 }
 
-export type EvaluationDetailIncluded = Included<Partial<{
+export type EvaluationDetailIncluded = Included<{
+    photoUrl: string|null
+    title: string;
+    firstName: string;
+    lastName: string;
+} | {
     mark: number|null;
     nonEvaluationReason: null;
     comment: null;
-    label: string;
+} | {
     coefficient: number|null
     average: number|null
     scale: number|null
     studentAverage: number|null
-    photoUrl: string|null
+} | {
     color: string;
-    title: string;
-    firstName: string;
-    lastName: string;
-}>, {
+    label: string
+}, {
     subSkillsEvaluationResults?: {
         data: {
             id: string;

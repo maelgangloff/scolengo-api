@@ -1,10 +1,14 @@
 import axios from 'axios'
 import { Skolengo } from '../src/index'
+import { SkolengoResponse } from '../src/models/Globals'
+import { CurrentConfig } from '../src/models/CurrentConfig'
+
+const testData: SkolengoResponse<CurrentConfig> = { data: { id: 'current', type: 'skoAppConfig', attributes: { latestDeployedSkoAppVersion: '1.1.1-1', latestSupportedSkoAppVersion: '1.1.1-1', apiCallRetryDelay: 500, apiCallMaxRetries: 5, skoAppDeploymentInfoUrl: 'https://www.skolengo-academy.org/deploiement-de-lapplication-mobile' } } }
 
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios> & jest.Mock<typeof axios>
 mockedAxios.request.mockResolvedValue({
-  data: require('./fakeData/currentConfig.json')
+  data: testData
 })
 
 describe('Test getCurrentConfig', () => {

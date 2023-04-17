@@ -31,24 +31,28 @@ export interface Evaluation {
     };
 }
 
-export type EvaluationIncluded = Included<Partial<{
-    dateTime: string;
-    coefficient: number;
-    average: number | null;
-    scale: number;
-    mark: number | null;
-    nonEvaluationReason: null | string;
-    comment: string|null
-    label: string;
-    color: null | string;
-    title: string | null;
+export type EvaluationIncluded = Included<{
+    title: string
     firstName: string;
     lastName: string;
     photoUrl:string|null
+} | {
+    title: string | null;
     topic: string | null
+    dateTime: string;
+    coefficient: number;
     min: number |null
     max: number |null
-}>, {
+    average: number | null;
+    scale: number;
+} | {
+    mark: number | null;
+    nonEvaluationReason: null | string;
+    comment: string|null
+} | {
+    label: string;
+    color: null | string;
+}, {
     subSkills?: {
         data: {
             id: string;

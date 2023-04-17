@@ -10,7 +10,6 @@ import { Evaluation, EvaluationIncluded } from './models/Evaluation'
 import { EvaluationDetail, EvaluationDetailIncluded } from './models/EvaluationDetail'
 import { EvaluationSettings, EvaluationSettingsIncluded } from './models/EvaluationSettings'
 export { TokenSet } from 'openid-client'
-
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
 const OID_CLIENT_ID = 'U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0' // base64 du client ID de l'app mobile
