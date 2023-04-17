@@ -1,5 +1,6 @@
-import { Attachment } from './Attachment'
+import { PublicAttachment } from './Attachment'
 import { Included } from '../Globals'
+import { SimpleUser } from '../App/User'
 
 export interface SchoolInfo {
     id: string;
@@ -9,7 +10,7 @@ export interface SchoolInfo {
         title: string;
         shortContent: string;
         content?: string;
-        url?: string|null;
+        url?: string | null;
         linkedInfoUrl?: any;
         linkedWebSiteUrl?: any;
     };
@@ -33,38 +34,46 @@ export interface SchoolInfo {
             } | null;
         };
         attachments?: {
-            data: Attachment[] | null;
-        }
+            data: {
+                id: string;
+                type: string;
+            }[];
+        };
     };
 }
 
-export type SchoolInfoIncluded = Included<{
-    title: string;
-    firstName: string;
-    lastName: string;
-    photoUrl: string|null;
-} | {
-    mimeType: string;
-    mimeTypeLabel: string;
-    size: number;
-} | {
+type SchoolInfoAuthor = {
+    additionalInfo: any;
+};
+
+type SchoolInfoSchool = {
     name: string;
-} | {
-    additionalInfo: any|null;
-} | {
-    url: string;
-    alternativeText: string;
-}, {
-    technicalUser: {
-        data: {
-            id: string;
-            type: string;
-        } | null;
-    };
-    person: {
-        data: {
-            id: string;
-            type: string;
-        } | null;
-    };
-}>
+    addressLine1?: null;
+    addressLine2?: null;
+    addressLine3?: null;
+    zipCode?: null;
+    city?: null;
+    country?: null;
+    homePageUrl?: null;
+    emsCode?: null;
+    emsOIDCWellKnownUrl?: null;
+    timeZone?: null;
+};
+
+export type SchoolInfoIncluded = Included<
+    SimpleUser | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor,
+    {
+        technicalUser: {
+            data: {
+                id: string;
+                type: string;
+            } | null;
+        };
+        person: {
+            data: {
+                id: string;
+                type: string;
+            } | null;
+        };
+    }
+>;

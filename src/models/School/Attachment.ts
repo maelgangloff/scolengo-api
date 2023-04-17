@@ -4,5 +4,8 @@ export interface Attachment {
     mimeTypeLabel: string;
     size: number;
     url: string;
-    alternativeText: string;
 }
+
+export type PublicAttachment = Attachment & {
+    alternativeText: string;
+};
