@@ -29,6 +29,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
+        * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
+        * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
@@ -149,6 +151,31 @@ Récupérer les devoirs d'un étudiant
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
 | endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
+
+<a name="Skolengo+getAgenda"></a>
+
+### skolengo.getAgenda(studentId, startDate, endDate)
+Récupérer l'agenda d'un étudiant
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
+| endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
+
+<a name="Skolengo+getLesson"></a>
+
+### skolengo.getLesson(studentId, lessonId)
+Récupérer les données d'un cours/leçon
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| lessonId | <code>string</code> | Identifiant d'un cours/leçon |
 
 <a name="Skolengo+getSchoolInfos"></a>
 

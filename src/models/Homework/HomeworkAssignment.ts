@@ -1,4 +1,18 @@
+import { Subject } from '../Agenda/Lesson'
+import { SimpleUser } from '../App/User'
 import { Included } from '../Globals'
+import { Attachment } from '../School/Attachment'
+
+export interface Homework {
+
+    title: string;
+    html: string;
+    dueDateTime: string;
+    dueDate: string|null;
+    done: boolean;
+    deliverWorkOnline: boolean;
+    onlineDeliveryUrl: null|string;
+}
 
 export type HomeworkAssignment = Included<{
         title: string;
@@ -44,32 +58,12 @@ export type HomeworkAssignment = Included<{
         };
 }>
 
-type Subject = {
-    label: string;
-    color: string;
-}
-
-type Teacher = {
-    title: string;
-    firstName: string;
-    lastName: string;
-    photoUrl: string|null;
-}
-
-type HomeworkAttachment = {
-    name: string;
-    mimeType: string;
-    mimeTypeLabel: string;
-    size: number;
-    url: string;
-}
-
 type CorrectionWork = {
     html: string;
     correctionDate: string;
 }
 
-export type HomeworkAssignmentIncluded = Included<Subject|Teacher|HomeworkAttachment|CorrectionWork, {
+export type HomeworkAssignmentIncluded = Included<Subject|SimpleUser|Attachment|CorrectionWork, {
     attachments?: {
         data: {
             id: string;
