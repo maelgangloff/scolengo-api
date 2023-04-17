@@ -11,12 +11,12 @@
 # Checklist:
 - [ ] Mon code ne met pas en danger les données personnelles des utilisateurs
 - [ ] Les noms des commits suivent la convention [Conventional Commits](https://www.conventionalcommits.org/fr/v1.0.0/)
-- [ ] J'ai vérifié l'entiereté du code avant de le soumettre
+- [ ] J'ai vérifié l'entièreté du code avant de le soumettre
 - [ ] J'ai mis à jour la documentation en lien avec mes commits
 - [ ] Mon code ne génère pas d'erreurs
 - [ ] J'ai ajouté les tests unitaires correspondants (dossier `tests`)
 - [ ] Les anciens et nouveaux tests unitaires sont validés en local
 
 ### Note
-Avant de fusionner cette PR, elle devra reçevoir l'approbation d'au moins une des personnes suivantes :
+Avant de fusionner cette PR, elle devra recevoir l'approbation d'au moins une des personnes suivantes :
 - [@maelgangloff](https://github.com/maelgangloff)
