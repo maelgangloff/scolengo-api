@@ -9,6 +9,9 @@ import { AuthConfig } from './models/Auth'
 import { Evaluation, EvaluationIncluded } from './models/Evaluation'
 import { EvaluationDetail, EvaluationDetailIncluded } from './models/EvaluationDetail'
 import { EvaluationSettings, EvaluationSettingsIncluded } from './models/EvaluationSettings'
+import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
+import { Communication, CommunicationIncluded } from './models/Messagerie/Communication'
+import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
 export { TokenSet } from 'openid-client'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -35,7 +38,7 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
 export class Skolengo {
   private httpClient: AxiosInstance
   private oidClient: Client
-  public school: School
+  public readonly school: School
   public tokenSet: TokenSet
 
   /**
@@ -87,11 +90,11 @@ export class Skolengo {
 
   /**
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
+   * @param {string|undefined} userId Identifiant de l'utilisateur
    */
-  public async getUserInfo (): Promise<SkolengoResponse<User, UserIncluded>> {
-    const id = this.tokenSet.claims().sub
+  public async getUserInfo (userId?: string): Promise<SkolengoResponse<User, UserIncluded>> {
     return (await this.request<SkolengoResponse<User, UserIncluded>>({
-      url: `/users-info/${id}`,
+      url: `/users-info/${userId ?? this.tokenSet.claims().sub}`,
       responseType: 'json',
       params: {
         /*
@@ -138,9 +141,9 @@ export class Skolengo {
   /**
    * Récupérer les notes d'un étudiant sur une période
    * @param {string} studentId Identifiant d'un étudiant
-   * @param {number} periodId Identifiant de la période de notation
+   * @param {string} periodId Identifiant de la période de notation
    */
-  public async getEvaluation (studentId: string, periodId: number): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
+  public async getEvaluation (studentId: string, periodId: string): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
     return (await this.request<SkolengoResponse<Evaluation[], EvaluationIncluded>>({
       url: '/evaluation-services',
       responseType: 'json',
@@ -169,9 +172,9 @@ export class Skolengo {
   /**
    * Récupérer le détail d'une note d'un étudiant
    * @param {string} studentId Identifiant d'un étudiant
-   * @param {number} markId Identifiant de la note
+   * @param {string} markId Identifiant de la note
    */
-  public async getEvaluationDetail (studentId: string, markId: number): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
+  public async getEvaluationDetail (studentId: string, markId: string): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
     return (await this.request<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>>({
       url: `/evaluations/${markId}`,
       responseType: 'json',
@@ -222,6 +225,67 @@ export class Skolengo {
       params: {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les communication d'un dossier
+   * @param {string} folderId Identifiant d'un dossier
+   * @param {number|undefined} limit Nombre max d'éléments
+   * @param {number|undefined} offset Offset
+   */
+  public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0): Promise<SkolengoResponse<Communication[], CommunicationIncluded>> {
+    return (await this.request<SkolengoResponse<Communication[], CommunicationIncluded>>({
+      url: '/communications',
+      responseType: 'json',
+      params: {
+        filter: {
+          'folders.id': folderId
+        },
+        include: 'lastParticipation,lastParticipation.sender,lastParticipation.sender.person,lastParticipation.sender.technicalUser',
+        page: { limit, offset }
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les participations d'un fil de discussion (communication)
+   * @param {string} communicationId Identifiant d'une communication
+   */
+  public async getCommunicationParticipations (communicationId: string): Promise<SkolengoResponse<Participation[], ParticipationIncluded>> {
+    return (await this.request<SkolengoResponse<Participation[], ParticipationIncluded>>({
+      url: `communications/${communicationId}/participations`,
+      responseType: 'json',
+      params: {
+        include: 'sender,sender.person,sender.technicalUser,attachments'
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les informations du service de communication (identifiants des dossiers, ...)
+   * @param {string|undefined} userId Identifiant d'un utilisateur
+   */
+  public async getUsersMailSettings (userId?: string): Promise<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>> {
+    return (await this.request<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>>({
+      url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
+      params: {
+        include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
+        /*
+        fields: {
+          personContact: 'person,linksWithUser',
+          groupContact: 'label,personContacts,linksWithUser',
+          person: 'firstName,lastName,title,photoUrl',
+          userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+          signature: 'content',
+          folder: 'name,position,type,parent'
+        }
+        */
+      },
+      responseType: 'json'
     })
     ).data
   }

@@ -22,12 +22,15 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 * [Skolengo](#Skolengo)
     * [new Skolengo(oidClient, school, tokenSet)](#new_Skolengo_new)
     * _instance_
-        * [.getUserInfo()](#Skolengo+getUserInfo)
+        * [.getUserInfo(userId)](#Skolengo+getUserInfo)
         * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
+        * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
+        * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
+        * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -75,10 +78,15 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
 ```
 <a name="Skolengo+getUserInfo"></a>
 
-### skolengo.getUserInfo()
+### skolengo.getUserInfo(userId)
 Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
+
 <a name="Skolengo+getEvaluationSettings"></a>
 
 ### skolengo.getEvaluationSettings(studentId)
@@ -100,7 +108,7 @@ Récupérer les notes d'un étudiant sur une période
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
-| periodId | <code>number</code> | Identifiant de la période de notation |
+| periodId | <code>string</code> | Identifiant de la période de notation |
 
 <a name="Skolengo+getEvaluationDetail"></a>
 
@@ -112,7 +120,7 @@ Récupérer le détail d'une note d'un étudiant
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
-| markId | <code>number</code> | Identifiant de la note |
+| markId | <code>string</code> | Identifiant de la note |
 
 <a name="Skolengo+getSchoolInfos"></a>
 
@@ -130,6 +138,41 @@ Récupérer une actualité de l'établissement
 | Param | Type | Description |
 | --- | --- | --- |
 | schoolInfoId | <code>string</code> | Identifiant d'une actualité |
+
+<a name="Skolengo+getCommunicationsFolder"></a>
+
+### skolengo.getCommunicationsFolder(folderId, limit, offset)
+Récupérer les communication d'un dossier
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| folderId | <code>string</code> |  | Identifiant d'un dossier |
+| limit | <code>number</code> \| <code>undefined</code> | <code>10</code> | Nombre max d'éléments |
+| offset | <code>number</code> \| <code>undefined</code> | <code>0</code> | Offset |
+
+<a name="Skolengo+getCommunicationParticipations"></a>
+
+### skolengo.getCommunicationParticipations(communicationId)
+Récupérer les participations d'un fil de discussion (communication)
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| communicationId | <code>string</code> | Identifiant d'une communication |
+
+<a name="Skolengo+getUsersMailSettings"></a>
+
+### skolengo.getUsersMailSettings(userId)
+Récupérer les informations du service de communication (identifiants des dossiers, ...)
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userId | <code>string</code> \| <code>undefined</code> | Identifiant d'un utilisateur |
 
 <a name="Skolengo.revokeToken"></a>
 
