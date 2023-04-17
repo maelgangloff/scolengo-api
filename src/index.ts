@@ -4,11 +4,11 @@ import { CurrentConfig } from './models/CurrentConfig'
 import { SkolengoResponse } from './models/Globals'
 import { School } from './models/School'
 import { User, UserIncluded } from './models/User'
-import { EvaluationsIncluded, EvaluationsSettings } from './models/EvaluationsSettings'
 import { SchoolInfo, SchoolInfoIncluded } from './models/SchoolInfo'
 import { AuthConfig } from './models/Auth'
 import { Evaluation, EvaluationIncluded } from './models/Evaluation'
 import { EvaluationDetail, EvaluationDetailIncluded } from './models/EvaluationDetail'
+import { EvaluationSettings, EvaluationSettingsIncluded } from './models/EvaluationSettings'
 export { TokenSet } from 'openid-client'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
@@ -114,8 +114,8 @@ export class Skolengo {
    * Statut des services d'évaluation (identifiant des périodes, ...)
    * @param {string} studentId Identifiant d'un étudiant
    */
-  public async getEvaluationsSettings (studentId: string): Promise<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>> {
-    return (await this.request<SkolengoResponse<EvaluationsSettings[], EvaluationsIncluded>>({
+  public async getEvaluationSettings (studentId: string): Promise<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>> {
+    return (await this.request<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>>({
       url: '/evaluations-settings',
       responseType: 'json',
       params: {

@@ -1,6 +1,6 @@
 import { Included } from './Globals'
 
-export type EvaluationsIncluded = Included<{
+export type EvaluationSettingsIncluded = Included<{
     label?: string;
     startDate?: string;
     endDate?: string;
@@ -21,7 +21,7 @@ export type EvaluationsIncluded = Included<{
         };
     };
 }>
-export interface EvaluationsSettings {
+export interface EvaluationSettings {
     id: string;
     type: string;
     attributes: {

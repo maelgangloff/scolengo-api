@@ -23,7 +23,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * [new Skolengo(oidClient, school, tokenSet)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo()](#Skolengo+getUserInfo)
-        * [.getEvaluationsSettings(studentId)](#Skolengo+getEvaluationsSettings)
+        * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
@@ -79,9 +79,9 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
 Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-<a name="Skolengo+getEvaluationsSettings"></a>
+<a name="Skolengo+getEvaluationSettings"></a>
 
-### skolengo.getEvaluationsSettings(studentId)
+### skolengo.getEvaluationSettings(studentId)
 Statut des services d'évaluation (identifiant des périodes, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
