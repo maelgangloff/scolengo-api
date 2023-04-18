@@ -28,6 +28,6 @@ jobs:
 
       - name: Build
         run: npx tsc
-      
+
       - name: Test
         run: npx jest
