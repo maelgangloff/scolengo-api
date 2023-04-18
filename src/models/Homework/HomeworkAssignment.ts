@@ -17,7 +17,7 @@ export type HomeworkAssignment = Included<Homework, {
         teacher: {
             data: {
                 id: string;
-                type: string;
+                type: 'teacher';
             };
         };
         attachments: {
@@ -35,7 +35,7 @@ export type HomeworkAssignment = Included<Homework, {
         subject: {
             data: {
                 id: string;
-                type: string;
+                type: 'subject';
             };
         };
         audio: {
