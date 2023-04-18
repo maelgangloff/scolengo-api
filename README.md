@@ -169,6 +169,19 @@ Récupérer les devoirs d'un étudiant
 | startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
 | endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
 
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+const user = await Skolengo.fromConfigObject(config)
+
+const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
+const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
+
+user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate).then(e => {
+ console.log("Voici les exercices à faire pour les 2 prochaines semaines :", e)
+})
+```
 <a name="Skolengo+getHomeworkAssignment"></a>
 
 ### skolengo.getHomeworkAssignment(studentId, homeworkId)
@@ -181,6 +194,19 @@ Récupérer les données d'un devoir
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant du devoir |
 
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+const user = await Skolengo.fromConfigObject(config)
+
+user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
+    console.log(`Pour le ${new Date(e.data.attributes.dueDateTime).toLocaleString()} :`)
+    console.log(`> ${e.data.attributes.title} (${e.included?.find(e => e.type === "subject")?.attributes.label})`)
+    console.log(e.data.attributes.html)
+})
+
+```
 <a name="Skolengo+patchHomeWorkAssignment"></a>
 
 ### skolengo.patchHomeWorkAssignment(studentId, homeworkId, attributes)
@@ -192,7 +218,7 @@ Modifier le statut d'un travail à faire
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant d'un devoir |
-| attributes | <code>Homework</code> | Attributs du devoir à modifier |
+| attributes | <code>Object</code> | Attributs du devoir à modifier |
 
 **Example**  
 ```js

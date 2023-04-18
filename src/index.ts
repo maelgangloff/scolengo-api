@@ -12,7 +12,7 @@ import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluat
 import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
 import { Communication, CommunicationIncluded } from './models/Messagerie/Communication'
 import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
-import { Homework, HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
+import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 export { TokenSet } from 'openid-client'
@@ -195,6 +195,18 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} startDate Date de début - Format : YYYY-MM-DD
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * const user = await Skolengo.fromConfigObject(config)
+   *
+   * const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
+   * const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
+   *
+   * user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate).then(e => {
+   *  console.log("Voici les exercices à faire pour les 2 prochaines semaines :", e)
+   * })
+   * ```
    * @async
   */
   public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
@@ -219,7 +231,20 @@ export class Skolengo {
    * Récupérer les données d'un devoir
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant du devoir
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * const user = await Skolengo.fromConfigObject(config)
+   *
+   * user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
+   *     console.log(`Pour le ${new Date(e.data.attributes.dueDateTime).toLocaleString()} :`)
+   *     console.log(`> ${e.data.attributes.title} (${e.included?.find(e => e.type === "subject")?.attributes.label})`)
+   *     console.log(e.data.attributes.html)
+   * })
+   *
+   * ```
    * @async
+   *
    */
   public async getHomeworkAssignment (studentId: string, homeworkId: string): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
@@ -239,7 +264,7 @@ export class Skolengo {
    * Modifier le statut d'un travail à faire
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant d'un devoir
-   * @param {Homework} attributes Attributs du devoir à modifier
+   * @param {{done: boolean}} attributes Attributs du devoir à modifier
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -250,7 +275,7 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async patchHomeWorkAssignment (studentId: string, homeworkId: string, attributes: Partial<Homework> & {done: boolean}): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
+  public async patchHomeWorkAssignment (studentId: string, homeworkId: string, attributes: {done: boolean}): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
       method: 'patch',
       url: `/homework-assignments/${homeworkId}`,
