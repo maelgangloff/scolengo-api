@@ -3,26 +3,17 @@ import { SimpleUser } from '../App/User'
 import { Included } from '../Globals'
 import { Attachment } from '../School/Attachment'
 
-export interface Homework {
-
+export type Homework = {
     title: string;
     html: string;
     dueDateTime: string;
-    dueDate: string|null;
+    dueDate?: string|null;
     done: boolean;
     deliverWorkOnline: boolean;
     onlineDeliveryUrl: null|string;
 }
 
-export type HomeworkAssignment = Included<{
-        title: string;
-        html: string;
-        dueDateTime: string;
-        dueDate: string|null;
-        done: boolean;
-        deliverWorkOnline: boolean;
-        onlineDeliveryUrl: null|string;
-    }, {
+export type HomeworkAssignment = Included<Homework, {
         teacher: {
             data: {
                 id: string;
@@ -76,4 +67,7 @@ export type HomeworkAssignmentIncluded = Included<Subject|SimpleUser|Attachment|
     pedagogicContent?: {
         data: any;
     };
+    school?: {
+        data: any
+    }
 }>

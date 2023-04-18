@@ -12,7 +12,7 @@ import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluat
 import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
 import { Communication, CommunicationIncluded } from './models/Messagerie/Communication'
 import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
-import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
+import { Homework, HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 export { TokenSet } from 'openid-client'
@@ -205,6 +205,30 @@ export class Skolengo {
   }
 
   /**
+   * Récupérer les devoirs d'un étudiant
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} startDate Date de début - Format : YYYY-MM-DD
+   * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+  */
+  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
+    return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
+      url: '/homework-assignments',
+      responseType: 'json',
+      params: {
+        include: 'subject,teacher,attachments,teacher.person',
+        filter: {
+          'student.id': studentId,
+          dueDate: {
+            GE: startDate,
+            LE: endDate
+          }
+        }
+      }
+    })
+    ).data
+  }
+
+  /**
    * Récupérer les données d'un devoir
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant du devoir
@@ -224,23 +248,27 @@ export class Skolengo {
   }
 
   /**
-   * Récupérer les devoirs d'un étudiant
+   * Modifier le statut d'un travail à faire
    * @param {string} studentId Identifiant d'un étudiant
-   * @param {string} startDate Date de début - Format : YYYY-MM-DD
-   * @param {string} endDate Date de fin - Format : YYYY-MM-DD
-  */
-  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
-    return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
-      url: '/homework-assignments',
+   * @param {string} homeworkId Identifiant d'un devoir
+   * @param {Homework} attributes Attributs du devoir à modifier
+   */
+  public async patchHomeWorkAssignment (studentId: string, homeworkId: string, attributes: Partial<Homework> & {done: boolean}): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
+    return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
+      method: 'patch',
+      url: `/homework-assignments/${homeworkId}`,
       responseType: 'json',
       params: {
-        include: 'subject,teacher,attachments,teacher.person',
+        include: 'subject,teacher,pedagogicContent,individualCorrectedWork,individualCorrectedWork.attachments,individualCorrectedWork.audio,commonCorrectedWork,commonCorrectedWork.attachments,commonCorrectedWork.audio,commonCorrectedWork.pedagogicContent,attachments,audio,teacher.person',
         filter: {
-          'student.id': studentId,
-          dueDate: {
-            GE: startDate,
-            LE: endDate
-          }
+          'student.id': studentId
+        }
+      },
+      data: {
+        data: {
+          type: 'homework',
+          id: homeworkId,
+          attributes
         }
       }
     })
@@ -320,6 +348,31 @@ export class Skolengo {
   }
 
   /**
+   * Récupérer les informations du service de communication (identifiants des dossiers, ...)
+   * @param {string|undefined} userId Identifiant d'un utilisateur
+   */
+  public async getUsersMailSettings (userId?: string): Promise<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>> {
+    return (await this.request<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>>({
+      url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
+      params: {
+        include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
+        /*
+        fields: {
+          personContact: 'person,linksWithUser',
+          groupContact: 'label,personContacts,linksWithUser',
+          person: 'firstName,lastName,title,photoUrl',
+          userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+          signature: 'content',
+          folder: 'name,position,type,parent'
+        }
+        */
+      },
+      responseType: 'json'
+    })
+    ).data
+  }
+
+  /**
    * Récupérer les communication d'un dossier
    * @param {string} folderId Identifiant d'un dossier
    * @param {number|undefined} limit Nombre max d'éléments
@@ -351,31 +404,6 @@ export class Skolengo {
       params: {
         include: 'sender,sender.person,sender.technicalUser,attachments'
       }
-    })
-    ).data
-  }
-
-  /**
-   * Récupérer les informations du service de communication (identifiants des dossiers, ...)
-   * @param {string|undefined} userId Identifiant d'un utilisateur
-   */
-  public async getUsersMailSettings (userId?: string): Promise<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>> {
-    return (await this.request<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>>({
-      url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
-      params: {
-        include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
-        /*
-        fields: {
-          personContact: 'person,linksWithUser',
-          groupContact: 'label,personContacts,linksWithUser',
-          person: 'firstName,lastName,title,photoUrl',
-          userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
-          signature: 'content',
-          folder: 'name,position,type,parent'
-        }
-        */
-      },
-      responseType: 'json'
     })
     ).data
   }

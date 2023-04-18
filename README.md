@@ -27,15 +27,16 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
-        * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
+        * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
+        * [.patchHomeWorkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeWorkAssignment)
         * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
         * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
+        * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
-        * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -127,18 +128,6 @@ Récupérer le détail d'une note d'un étudiant
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | markId | <code>string</code> | Identifiant de la note |
 
-<a name="Skolengo+getHomeworkAssignment"></a>
-
-### skolengo.getHomeworkAssignment(studentId, homeworkId)
-Récupérer les données d'un devoir
-
-**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
-| homeworkId | <code>string</code> | Identifiant du devoir |
-
 <a name="Skolengo+getHomeworkAssignments"></a>
 
 ### skolengo.getHomeworkAssignments(studentId, startDate, endDate)
@@ -151,6 +140,31 @@ Récupérer les devoirs d'un étudiant
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
 | endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
+
+<a name="Skolengo+getHomeworkAssignment"></a>
+
+### skolengo.getHomeworkAssignment(studentId, homeworkId)
+Récupérer les données d'un devoir
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| homeworkId | <code>string</code> | Identifiant du devoir |
+
+<a name="Skolengo+patchHomeWorkAssignment"></a>
+
+### skolengo.patchHomeWorkAssignment(studentId, homeworkId, attributes)
+Modifier le statut d'un travail à faire
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| homeworkId | <code>string</code> | Identifiant d'un devoir |
+| attributes | <code>Homework</code> | Attributs du devoir à modifier |
 
 <a name="Skolengo+getAgenda"></a>
 
@@ -194,6 +208,17 @@ Récupérer une actualité de l'établissement
 | --- | --- | --- |
 | schoolInfoId | <code>string</code> | Identifiant d'une actualité |
 
+<a name="Skolengo+getUsersMailSettings"></a>
+
+### skolengo.getUsersMailSettings(userId)
+Récupérer les informations du service de communication (identifiants des dossiers, ...)
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userId | <code>string</code> \| <code>undefined</code> | Identifiant d'un utilisateur |
+
 <a name="Skolengo+getCommunicationsFolder"></a>
 
 ### skolengo.getCommunicationsFolder(folderId, limit, offset)
@@ -217,17 +242,6 @@ Récupérer les participations d'un fil de discussion (communication)
 | Param | Type | Description |
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
-
-<a name="Skolengo+getUsersMailSettings"></a>
-
-### skolengo.getUsersMailSettings(userId)
-Récupérer les informations du service de communication (identifiants des dossiers, ...)
-
-**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| userId | <code>string</code> \| <code>undefined</code> | Identifiant d'un utilisateur |
 
 <a name="Skolengo.revokeToken"></a>
 
