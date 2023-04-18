@@ -13,3 +13,4 @@ CONTRIBUTING.md
 openapi
 jest.config.js
 Makefile
+docs/

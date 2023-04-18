@@ -18,49 +18,9 @@ import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 export { TokenSet } from 'openid-client'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
-const OID_CLIENT_ID = 'U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0' // base64 du client ID de l'app mobile
-const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // base64 du client Secret de l'app mobile
+const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
+const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
 
-/**
- * Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme.
- * Pour utiliser cette librairie, il est nécessaire de s'authentifier auprès des serveurs de Skolengo. Pour obtenir des jetons de connexion, vous pouvez utiliser [scolengo-token](https://github.com/maelgangloff/scolengo-token).
- * Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
- *
- *
- * Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
- *
- * **Remarques importantes:**
- *  - Il est clairement mentionné que cette librairie est n'est pas officielle.
- *  - Ce module n'est pas une contrefaçon car il n'existe pas de module similaire édité officiellement.
- *  - Les utilisateurs ne peuvent accéder qu'à leurs propres données. Ils sont soumis au même processus d'authentification que celui implémenté dans l'application.
- *  - Les données des utilisateurs ne sont pas davantage exposées puisqu'un utilisateur ne peut accéder qu'à ses propres données. Personne n'a le contrôle sur cette limitation qui est inhérente au fonctionnement de l'API des serveurs de Skolengo.
- *  - Cette librairie ne se suffit pas à elle-même pour fonctionner. Il est nécessaire de l'importer dans un projet et l'utilisateur est le seul responsable de son code et des éventuelles conséquences.
- *  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du fichier de licence GPLv3 disponible publiquement [LICENSE](https://github.com/maelgangloff/scolengo-api/blob/master/LICENSE) ainsi que de ce présent fichier de présentation.
- *  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du code de ce projet avant toute utilisation.
- *  - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
- *
- *
- * **Liste des ENT utilisant le CMS Skolengo :**
- * | Nom usuel de l'ENT           | Code ENT | URL OpenID Connect Discovery                               |
- * |------------------------------|----------|------------------------------------------------------------|
- * | Mon Bureau Numérique         | gdest    | https://sso.monbureaunumerique.fr/oidc/.well-known         |
- * | Mon ENT Occitanie            |          | https://sso.mon-ent-occitanie.fr/oidc/.well-known          |
- * | Arsène 76                    |          | https://sso.arsene76.fr/oidc/.well-known                   |
- * | ENT27                        |          | https://sso.ent27.fr/oidc/.well-known                      |
- * | ENT Creuse                   |          | https://sso.entcreuse.fr/oidc/.well-known                  |
- * | ENT Auvergne-Rhône-Alpes     | rra      | https://sso.ent.auvergnerhonealpes.fr/oidc/.well-known     |
- * | Agora 06                     |          | https://sso.agora06.fr/oidc/.well-known                    |
- * | CyberCollèges 42             | cg42     | https://sso.cybercolleges42.fr/oidc/.well-known            |
- * | eCollège 31 Haute-Garonne    |          | https://sso.ecollege.haute-garonne.fr/oidc/.well-known     |
- * | Mon collège en Val d'Oise    | cg95     | https://sso.moncollege.valdoise.fr/oidc/.well-known        |
- * | Webcollège Seine-Saint-Denis |          | https://sso.webcollege.seinesaintdenis.fr/oidc/.well-known |
- * | Eclat-BFC                    | bfc      | https://sso.eclat-bfc.fr/oidc/.well-known                  |
- * | @ucollège84                  |          | https://sso.aucollege84.vaucluse.fr/oidc/.well-known       |
- * | ENT Val de Marne             | cg94     | https://sso.entvaldemarne.skolengo.com/oidc/.well-known    |
- * | Skolengo 1                   | metab    | https://sso1.skolengo.com/oidc/.well-known                 |
- * | Skolengo 2                   | metabam  | https://sso2.skolengo.com/oidc/.well-known                 |
- * | Schulportal Ostbelgien       |          | https://sso.schulen.be/oidc/.well-known                    |
- */
 export class Skolengo {
   private httpClient: AxiosInstance
   private oidClient: Client
@@ -117,6 +77,7 @@ export class Skolengo {
   /**
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    * @param {string|undefined} userId Identifiant de l'utilisateur
+   * @async
    */
   public async getUserInfo (userId?: string): Promise<SkolengoResponse<User, UserIncluded>> {
     return (await this.request<SkolengoResponse<User, UserIncluded>>({
@@ -141,6 +102,7 @@ export class Skolengo {
   /**
    * Statut des services d'évaluation (identifiant des périodes, ...)
    * @param {string} studentId Identifiant d'un étudiant
+   * @async
    */
   public async getEvaluationSettings (studentId: string): Promise<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>> {
     return (await this.request<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>>({
@@ -168,6 +130,7 @@ export class Skolengo {
    * Récupérer les notes d'un étudiant sur une période
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} periodId Identifiant de la période de notation
+   * @async
    */
   public async getEvaluation (studentId: string, periodId: string): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
     return (await this.request<SkolengoResponse<Evaluation[], EvaluationIncluded>>({
@@ -199,6 +162,7 @@ export class Skolengo {
    * Récupérer le détail d'une note d'un étudiant
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} markId Identifiant de la note
+   * @async
    */
   public async getEvaluationDetail (studentId: string, markId: string): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
     return (await this.request<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>>({
@@ -231,6 +195,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} startDate Date de début - Format : YYYY-MM-DD
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+   * @async
   */
   public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
@@ -254,6 +219,7 @@ export class Skolengo {
    * Récupérer les données d'un devoir
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant du devoir
+   * @async
    */
   public async getHomeworkAssignment (studentId: string, homeworkId: string): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
@@ -282,6 +248,7 @@ export class Skolengo {
    *   console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
    * })
    * ```
+   * @async
    */
   public async patchHomeWorkAssignment (studentId: string, homeworkId: string, attributes: Partial<Homework> & {done: boolean}): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
@@ -310,6 +277,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} startDate Date de début - Format : YYYY-MM-DD
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+   * @async
    */
   public async getAgenda (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
     return (await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
@@ -333,6 +301,7 @@ export class Skolengo {
    * Récupérer les données d'un cours/leçon
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} lessonId Identifiant d'un cours/leçon
+   * @async
    */
   public async getLesson (studentId: string, lessonId: string): Promise<SkolengoResponse<Lesson, LessonIncluded>> {
     return (await this.request<SkolengoResponse<Lesson, LessonIncluded>>({
@@ -350,6 +319,7 @@ export class Skolengo {
 
   /**
    * Récupérer toutes les actualités de l'établissement
+   * @async
    */
   public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
     return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
@@ -365,6 +335,7 @@ export class Skolengo {
   /**
    * Récupérer une actualité de l'établissement
    * @param {string} schoolInfoId Identifiant d'une actualité
+   * @async
    */
   public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
     return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
@@ -380,6 +351,7 @@ export class Skolengo {
   /**
    * Récupérer les informations du service de communication (identifiants des dossiers, ...)
    * @param {string|undefined} userId Identifiant d'un utilisateur
+   * @async
    */
   public async getUsersMailSettings (userId?: string): Promise<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>> {
     return (await this.request<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>>({
@@ -405,8 +377,9 @@ export class Skolengo {
   /**
    * Récupérer les communication d'un dossier
    * @param {string} folderId Identifiant d'un dossier
-   * @param {number|undefined} limit Nombre max d'éléments
+   * @param {number|undefined} limit Limite
    * @param {number|undefined} offset Offset
+   * @async
    */
   public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0): Promise<SkolengoResponse<Communication[], CommunicationIncluded>> {
     return (await this.request<SkolengoResponse<Communication[], CommunicationIncluded>>({
@@ -426,6 +399,7 @@ export class Skolengo {
   /**
    * Récupérer les participations d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
+   * @async
    */
   public async getCommunicationParticipations (communicationId: string): Promise<SkolengoResponse<Participation[], ParticipationIncluded>> {
     return (await this.request<SkolengoResponse<Participation[], ParticipationIncluded>>({
@@ -442,6 +416,7 @@ export class Skolengo {
    * Révoquer un jeton
    * @param {Client} oidClient Un client OpenID Connect
    * @param {string} token Un jeton
+   * @async
    */
   public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
     return oidClient.revoke(token)
@@ -457,6 +432,7 @@ export class Skolengo {
    *   console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
    * })
    * ```
+   * @async
    */
   public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
     return (await axios.request<SkolengoResponse<CurrentConfig>>({
@@ -479,6 +455,7 @@ export class Skolengo {
    *   console.log(schools)
    * })
    * ```
+   * @async
    */
   public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<Array<School>>> {
     return (await axios.request<SkolengoResponse<School[]>>({
@@ -528,8 +505,8 @@ export class Skolengo {
   public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
     const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
     const client = new skolengoIssuer.Client({
-      client_id: Buffer.from(OID_CLIENT_ID, 'base64').toString('ascii'),
-      client_secret: Buffer.from(OID_CLIENT_SECRET, 'base64').toString('ascii'),
+      client_id: OID_CLIENT_ID,
+      client_secret: OID_CLIENT_SECRET,
       redirect_uris: [redirectUri],
       response_types: ['code']
     })
