@@ -22,7 +22,7 @@ const OID_CLIENT_ID = 'U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5Z
 const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // base64 du client Secret de l'app mobile
 
 /**
- * Support non officiel de l'API de la nouvelle application mobile Skolengo.
+ * Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme.
  * Pour utiliser cette librairie, il est nécessaire de s'authentifier auprès des serveurs de Skolengo. Pour obtenir des jetons de connexion, vous pouvez utiliser [scolengo-token](https://github.com/maelgangloff/scolengo-token).
  * Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
  *
@@ -38,6 +38,28 @@ const OID_CLIENT_SECRET = 'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm' // 
  *  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du fichier de licence GPLv3 disponible publiquement [LICENSE](https://github.com/maelgangloff/scolengo-api/blob/master/LICENSE) ainsi que de ce présent fichier de présentation.
  *  - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du code de ce projet avant toute utilisation.
  *  - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
+ *
+ *
+ * **Liste des ENT utilisant le CMS Skolengo :**
+ * | Nom usuel de l'ENT           | Code ENT | URL OpenID Connect Discovery                               |
+ * |------------------------------|----------|------------------------------------------------------------|
+ * | Mon Bureau Numérique         | gdest    | https://sso.monbureaunumerique.fr/oidc/.well-known         |
+ * | Mon ENT Occitanie            |          | https://sso.mon-ent-occitanie.fr/oidc/.well-known          |
+ * | Arsène 76                    |          | https://sso.arsene76.fr/oidc/.well-known                   |
+ * | ENT27                        |          | https://sso.ent27.fr/oidc/.well-known                      |
+ * | ENT Creuse                   |          | https://sso.entcreuse.fr/oidc/.well-known                  |
+ * | ENT Auvergne-Rhône-Alpes     | rra      | https://sso.ent.auvergnerhonealpes.fr/oidc/.well-known     |
+ * | Agora 06                     |          | https://sso.agora06.fr/oidc/.well-known                    |
+ * | CyberCollèges 42             | cg42     | https://sso.cybercolleges42.fr/oidc/.well-known            |
+ * | eCollège 31 Haute-Garonne    |          | https://sso.ecollege.haute-garonne.fr/oidc/.well-known     |
+ * | Mon collège en Val d'Oise    | cg95     | https://sso.moncollege.valdoise.fr/oidc/.well-known        |
+ * | Webcollège Seine-Saint-Denis |          | https://sso.webcollege.seinesaintdenis.fr/oidc/.well-known |
+ * | Eclat-BFC                    | bfc      | https://sso.eclat-bfc.fr/oidc/.well-known                  |
+ * | @ucollège84                  |          | https://sso.aucollege84.vaucluse.fr/oidc/.well-known       |
+ * | ENT Val de Marne             | cg94     | https://sso.entvaldemarne.skolengo.com/oidc/.well-known    |
+ * | Skolengo 1                   | metab    | https://sso1.skolengo.com/oidc/.well-known                 |
+ * | Skolengo 2                   | metabam  | https://sso2.skolengo.com/oidc/.well-known                 |
+ * | Schulportal Ostbelgien       |          | https://sso.schulen.be/oidc/.well-known                    |
  */
 export class Skolengo {
   private httpClient: AxiosInstance
@@ -74,7 +96,7 @@ export class Skolengo {
    * ```
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
-   * @param {TokenSet} tokenSet Jetons d'authentification Open ID Connect
+   * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
    */
   public constructor (oidClient: Client, school: School, tokenSet: TokenSet) {
     this.oidClient = oidClient
@@ -472,7 +494,7 @@ export class Skolengo {
   }
 
   /**
-   * Créer un client Open ID Connect permettant l'obtention des jetons (refresh token et access token)
+   * Créer un client OpenID Connect permettant l'obtention des jetons (refresh token et access token)
    * @param {School} school L'établissement scolaire
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -525,6 +547,8 @@ export class Skolengo {
    * ```
    * ```js
    * const {Skolengo} = require('scolengo-api')
+   *
+   * // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
    * const config = {
    *   "tokenSet": {
    *     "access_token": "<access_token_here>",
