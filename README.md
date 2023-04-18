@@ -1,7 +1,9 @@
 # scolengo-api
 
-[![view on npm](http://img.shields.io/npm/v/scolengo-api.svg)](https://www.npmjs.org/package/scolengo-api)
+[![view on npm](http://img.shields.io/npm/v/scolengo-api.svg?style=flat-square)](https://www.npmjs.org/package/scolengo-api)
 ![GitHub CI](https://github.com/maelgangloff/scolengo-api/actions/workflows/CI.yml/badge.svg)
+[![Discord](https://img.shields.io/discord/1095829734211977276?label=Discord&style=flat-square)](https://discord.gg/9u69mxsFT6)
+[![npm](https://img.shields.io/npm/dm/scolengo-api?style=flat-square)](https://npm-stat.com/charts.html?package=scolengo-api)
 
 Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme. Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.  
 Pour utiliser cette librairie, il est nécessaire de s'authentifier auprès des serveurs de Skolengo. Pour obtenir des jetons de connexion, vous pouvez utiliser [scolengo-token](https://github.com/maelgangloff/scolengo-token).  
