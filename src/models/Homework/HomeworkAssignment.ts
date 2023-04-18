@@ -7,7 +7,7 @@ export type Homework = {
     title: string;
     html: string;
     dueDateTime: string;
-    dueDate?: string|null;
+    dueDate: string|null;
     done: boolean;
     deliverWorkOnline: boolean;
     onlineDeliveryUrl: null|string;

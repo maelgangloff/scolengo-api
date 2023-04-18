@@ -8,8 +8,8 @@ export type SchoolInfo = BaseResponse<{
         shortContent: string;
         content?: string;
         url?: string | null;
-        linkedInfoUrl?: any;
-        linkedWebSiteUrl?: any;
+        linkedInfoUrl?: string|null;
+        linkedWebSiteUrl?: string|null;
     }, {
         school: {
             data: BaseObject | null;
@@ -31,16 +31,16 @@ type SchoolInfoAuthor = {
 
 type SchoolInfoSchool = {
     name: string;
-    addressLine1?: null;
-    addressLine2?: null;
-    addressLine3?: null;
-    zipCode?: null;
-    city?: null;
-    country?: null;
-    homePageUrl?: null;
-    emsCode?: null;
-    emsOIDCWellKnownUrl?: null;
-    timeZone?: null;
+    addressLine1?: string|null;
+    addressLine2?: string|null;
+    addressLine3?: string|null;
+    zipCode?: string|null;
+    city?: string|null;
+    country?: string|null;
+    homePageUrl?: string|null;
+    emsCode?: string|null;
+    emsOIDCWellKnownUrl?: string|null;
+    timeZone?: string|null;
 };
 
 export type SchoolInfoIncluded = BaseResponse<

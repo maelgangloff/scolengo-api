@@ -1,15 +1,8 @@
 import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { Homework } from './HomeworkAssignment'
 
-export type HomeworkAssignmentList = BaseResponse<{
-        title: string;
-        html: string;
-        dueDateTime: string;
-        dueDate: string|null;
-        done: boolean;
-        deliverWorkOnline: boolean;
-        onlineDeliveryUrl: null|string;
-    }, {
+export type HomeworkAssignmentList = BaseResponse<Homework, {
         teacher: {
             data: BaseObject
         };
