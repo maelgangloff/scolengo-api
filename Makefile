@@ -15,4 +15,4 @@ lint: node_modules .eslintrc .eslintignore ## Analyse statique du code
 	npx eslint src tests --ext .ts
 
 README.md: dist ## Construire le fichier de description du module
-	npx jsdoc2md -f dist/index.js > README.md
+	npx jsdoc2md --template docs/README.hbs -f dist/index.js > README.md
