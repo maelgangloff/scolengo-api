@@ -52,3 +52,10 @@ export type UserIncluded = Included<{
         };
     };
 }>
+
+export interface SimpleUser {
+    title: string;
+    firstName: string;
+    lastName: string;
+    photoUrl: string|null;
+}

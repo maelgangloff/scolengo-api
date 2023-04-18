@@ -13,6 +13,8 @@ import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messageri
 import { Communication, CommunicationIncluded } from './models/Messagerie/Communication'
 import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
 import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
+import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
+import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 export { TokenSet } from 'openid-client'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -239,6 +241,49 @@ export class Skolengo {
             GE: startDate,
             LE: endDate
           }
+        }
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer l'agenda d'un étudiant
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} startDate Date de début - Format : YYYY-MM-DD
+   * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+   */
+  public async getAgenda (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
+    return (await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
+      url: '/agendas',
+      responseType: 'json',
+      params: {
+        include: 'lessons,lessons.subject,lessons.teachers,homeworkAssignments,homeworkAssignments.subject',
+        filter: {
+          'student.id': studentId,
+          date: {
+            GE: startDate,
+            LE: endDate
+          }
+        }
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les données d'un cours/leçon
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} lessonId Identifiant d'un cours/leçon
+   */
+  public async getLesson (studentId: string, lessonId: string): Promise<SkolengoResponse<Lesson, LessonIncluded>> {
+    return (await this.request<SkolengoResponse<Lesson, LessonIncluded>>({
+      url: `/lessons/${lessonId}`,
+      responseType: 'json',
+      params: {
+        include: 'teachers,contents,contents.attachments,subject,toDoForTheLesson,toDoForTheLesson.subject,toDoAfterTheLesson,toDoAfterTheLesson.subject',
+        filter: {
+          'student.id': studentId
         }
       }
     })
