@@ -252,6 +252,14 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant d'un devoir
    * @param {Homework} attributes Attributs du devoir à modifier
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * const user = await Skolengo.fromConfigObject(config)
+   * user.patchHomeWorkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123456', { done: true }).then(hmw => {
+   *   console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
+   * })
+   * ```
    */
   public async patchHomeWorkAssignment (studentId: string, homeworkId: string, attributes: Partial<Homework> & {done: boolean}): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({

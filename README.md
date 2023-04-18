@@ -166,6 +166,15 @@ Modifier le statut d'un travail à faire
 | homeworkId | <code>string</code> | Identifiant d'un devoir |
 | attributes | <code>Homework</code> | Attributs du devoir à modifier |
 
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+const user = await Skolengo.fromConfigObject(config)
+user.patchHomeWorkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123456', { done: true }).then(hmw => {
+  console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
+})
+```
 <a name="Skolengo+getAgenda"></a>
 
 ### skolengo.getAgenda(studentId, startDate, endDate)
