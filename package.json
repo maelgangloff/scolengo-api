@@ -13,7 +13,7 @@
     "url": "https://github.com/maelgangloff/scolengo-api.git"
   },
   "author": "Maël Gangloff <contact@maelgangloff.fr>",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src/ tests/ --ext .ts",
