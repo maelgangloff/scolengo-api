@@ -11,10 +11,10 @@ export type Evaluation = BaseResponse<{
         data: BaseObject[];
     };
     subject: {
-        data: BaseObject
+        data: BaseObject<'subject'>
     };
     teachers: {
-        data: BaseObject[];
+        data: BaseObject<'teacher'>[];
     }
 }>
 

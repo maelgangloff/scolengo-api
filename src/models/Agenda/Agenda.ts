@@ -6,20 +6,20 @@ import { LessonAttributes, Subject } from './Lesson'
 export type Agenda = BaseResponse<{
     date: string;
 }, {
-        lessons: {
-            data: BaseObject[];
-        };
-        homeworkAssignments: {
-            data: BaseObject[];
-        };
+    lessons: {
+        data: BaseObject<'lesson'>[];
+    };
+    homeworkAssignments: {
+        data: BaseObject<'homework'>[];
+    };
 }
 >
 
 export type AgendaIncluded = BaseResponse<Homework|Subject|LessonAttributes|SimpleUser, {
     subject?: {
-        data: BaseObject;
+        data: BaseObject<'subject'>;
     };
     teachers?: {
-        data: BaseObject[];
+        data: BaseObject<'teacher'>[];
     };
 }>;

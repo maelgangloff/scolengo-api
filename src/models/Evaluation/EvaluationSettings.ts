@@ -24,7 +24,7 @@ export type EvaluationSettings = BaseResponse<{
         evaluationsDetailsAvailable: boolean;
     }, {
         periods: {
-            data: BaseObject[];
+            data: BaseObject<'period'>[];
         };
         skillsSetting: {
             data: BaseObject

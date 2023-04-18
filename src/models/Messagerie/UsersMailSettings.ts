@@ -11,7 +11,7 @@ export type UsersMailSettings = BaseResponse<{
     }, {
         folders: Contacts;
         signature: {
-            data: BaseObject
+            data: BaseObject<'signature'>
         };
         contacts: Contacts;
     }>

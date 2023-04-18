@@ -20,10 +20,10 @@ export type User = BaseResponse<{
         country?: string;
     }, {
         school?: {
-            data: BaseObject;
+            data: BaseObject<'school'>;
         };
         students?: {
-            data: BaseObject[];
+            data: BaseObject<'student'>[];
         };
 }>
 
@@ -40,7 +40,7 @@ export type UserIncluded = BaseResponse<{
     regime: string;
 }, {
     school: {
-        data: BaseObject;
+        data: BaseObject<'school'>;
     };
 }>
 

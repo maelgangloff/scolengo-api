@@ -4,13 +4,13 @@ import { Homework } from './HomeworkAssignment'
 
 export type HomeworkAssignmentList = BaseResponse<Homework, {
         teacher: {
-            data: BaseObject
+            data: BaseObject<'teacher'>
         };
         attachments: {
-            data: BaseObject[];
+            data: BaseObject<'attachment'>[];
         };
         subject: {
-            data: BaseObject
+            data: BaseObject<'subject'>
         };
     }>
 

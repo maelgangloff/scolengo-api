@@ -28,24 +28,24 @@ export type Lesson = BaseResponse<LessonAttributes, {
             data: BaseObject[];
         };
         teachers: {
-            data: BaseObject[];
+            data: BaseObject<'teacher'>[];
         };
         subject: {
-            data: BaseObject;
+            data: BaseObject<'subject'>;
         };
         toDoForTheLesson: {
-            data: BaseObject[];
+            data: BaseObject<'homework'>[];
         };
         toDoAfterTheLesson: {
-            data: BaseObject[];
+            data: BaseObject<'homework'>[];
         };
 }>
 
 export type LessonIncluded = BaseResponse<Attachment | Homework | Subject | SimpleUser | LessonContent, {
     subject?: {
-        data: BaseObject;
+        data: BaseObject<'subject'>;
     };
     attachments?: {
-        data: BaseObject[];
+        data: BaseObject<'attachment'>[];
     };
 }>;

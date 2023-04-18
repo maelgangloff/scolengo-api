@@ -12,7 +12,7 @@ export type SchoolInfo = BaseResponse<{
         linkedWebSiteUrl?: string|null;
     }, {
         school: {
-            data: BaseObject | null;
+            data: BaseObject<'school'> | null;
         };
         author: {
             data: BaseObject | null;
@@ -21,7 +21,7 @@ export type SchoolInfo = BaseResponse<{
             data: BaseObject | null;
         };
         attachments?: {
-            data: BaseObject[];
+            data: BaseObject<'attachment'>[];
         };
 }>
 

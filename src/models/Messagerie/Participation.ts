@@ -6,13 +6,10 @@ export type Participation = BaseResponse<{
         read: boolean;
     }, {
         attachments: {
-            data: any[] | BaseObject | null;
+            data: any[] | BaseObject<'attachment'> | null;
         };
         sender: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject;
         };
 }>
 

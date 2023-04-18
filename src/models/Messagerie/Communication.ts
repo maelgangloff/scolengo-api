@@ -33,7 +33,7 @@ export type CommunicationIncluded = BaseResponse<{
     fromGroup: boolean;
 }, {
     school?: {
-        data: BaseObject | null;
+        data: BaseObject<'school'> | null;
     };
     sender?: {
         data: BaseObject | null;

@@ -42,9 +42,9 @@ export type EvaluationDetailIncluded = BaseResponse<SimpleUser | {
         data: BaseObject[] | null;
     };
     subject?: {
-        data: BaseObject
+        data: BaseObject<'subject'>
     };
     teachers?: {
-        data: BaseObject[] | null;
+        data: BaseObject<'teacher'>[] | null;
     };
 }>

@@ -1,6 +1,6 @@
-export type BaseObject = {
+export type BaseObject<Type = string> = {
     id: string
-    type: string
+    type: Type
 }
 
 export type BaseResponse<Attributes = never, Relationships = never> = BaseObject & {

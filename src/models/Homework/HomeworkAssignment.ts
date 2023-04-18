@@ -15,16 +15,16 @@ export type Homework = {
 
 export type HomeworkAssignment = BaseResponse<Homework, {
         teacher: {
-            data: BaseObject
+            data: BaseObject<'teacher'>
         };
         attachments: {
-            data: BaseObject[];
+            data: BaseObject<'attachment'>[];
         };
         commonCorrectedWork: {
             data: BaseObject | null;
         };
         subject: {
-            data: BaseObject
+            data: BaseObject<'subject'>
         };
         audio: {
             data: any;
@@ -44,7 +44,7 @@ type CorrectionWork = {
 
 export type HomeworkAssignmentIncluded = BaseResponse<Subject|SimpleUser|Attachment|CorrectionWork, {
     attachments?: {
-        data: BaseObject[];
+        data: BaseObject<'attachment'>[];
     };
     audio?: {
         data: any;
