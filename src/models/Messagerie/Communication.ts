@@ -1,6 +1,6 @@
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type Communication = Included<{
+export type Communication = BaseResponse<{
         subject: string;
         participationsNumber: number;
         recipientsSummary: string;
@@ -11,14 +11,11 @@ export type Communication = Included<{
         firstParticipationContent: null;
     }, {
         lastParticipation: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
 }>
 
-export type CommunicationIncluded = Included<{
+export type CommunicationIncluded = BaseResponse<{
     label: string;
     logoUrl: string|null;
 } | {
@@ -36,27 +33,15 @@ export type CommunicationIncluded = Included<{
     fromGroup: boolean;
 }, {
     school?: {
-        data: {
-            id: string;
-            type: string;
-        } | null;
+        data: BaseObject | null;
     };
     sender?: {
-        data: {
-            id: string;
-            type: string;
-        } | null;
+        data: BaseObject | null;
     };
     technicalUser?: {
-        data: {
-            id: string;
-            type: string;
-        } | null;
+        data: BaseObject | null;
     };
     person?: {
-        data: {
-            id: string;
-            type: string;
-        } | null;
+        data: BaseObject | null;
     };
 }>

@@ -1,15 +1,12 @@
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type Participation = Included<{
+export type Participation = BaseResponse<{
         dateTime: string;
         content: string;
         read: boolean;
     }, {
         attachments: {
-            data: any[] | {
-                id: string;
-                type: string;
-            } | null;
+            data: any[] | BaseObject | null;
         };
         sender: {
             data: {
@@ -19,7 +16,7 @@ export type Participation = Included<{
         };
 }>
 
-export type ParticipationIncluded = Included<{
+export type ParticipationIncluded = BaseResponse<{
     category: string;
     additionalInfo: any|null;
     fromGroup: boolean;
@@ -28,15 +25,9 @@ export type ParticipationIncluded = Included<{
     logoUrl: any|null;
 }, {
     technicalUser: {
-        data: any[] | {
-            id: string;
-            type: string;
-        } | null;
+        data: any[] | BaseObject | null;
     };
     person: {
-        data: any[] | {
-            id: string;
-            type: string;
-        } | null;
+        data: any[] | BaseObject | null;
     };
 }>

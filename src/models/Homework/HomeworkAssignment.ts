@@ -1,6 +1,6 @@
 import { Subject } from '../Agenda/Lesson'
 import { SimpleUser } from '../App/User'
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 import { Attachment } from '../School/Attachment'
 
 export type Homework = {
@@ -13,30 +13,18 @@ export type Homework = {
     onlineDeliveryUrl: null|string;
 }
 
-export type HomeworkAssignment = Included<Homework, {
+export type HomeworkAssignment = BaseResponse<Homework, {
         teacher: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
         attachments: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
         commonCorrectedWork: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
         subject: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
         audio: {
             data: any;
@@ -54,12 +42,9 @@ type CorrectionWork = {
     correctionDate: string;
 }
 
-export type HomeworkAssignmentIncluded = Included<Subject|SimpleUser|Attachment|CorrectionWork, {
+export type HomeworkAssignmentIncluded = BaseResponse<Subject|SimpleUser|Attachment|CorrectionWork, {
     attachments?: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     };
     audio?: {
         data: any;

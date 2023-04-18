@@ -1,6 +1,7 @@
-import { Included } from '../Globals'
+import { SimpleUser } from '../App/User'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type EvaluationDetail = Included<{
+export type EvaluationDetail = BaseResponse<{
         title: string|null;
         topic: string|null;
         dateTime: string|null;
@@ -11,37 +12,20 @@ export type EvaluationDetail = Included<{
         scale: number|null;
     }, {
         subSkills: {
-            data: {
-                id: string;
-                type: string;
-            }[] | null;
+            data: BaseObject[] | null;
         };
         subSubject: {
-            data: {
-                id: string;
-                type: string;
-            }[] | null;
+            data: BaseObject[] | null;
         };
         evaluationService: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
         evaluationResult: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
 }>
 
-export type EvaluationDetailIncluded = Included<{
-    photoUrl: string|null
-    title: string;
-    firstName: string;
-    lastName: string;
-} | {
+export type EvaluationDetailIncluded = BaseResponse<SimpleUser | {
     mark: number|null;
     nonEvaluationReason: null;
     comment: null;
@@ -55,21 +39,12 @@ export type EvaluationDetailIncluded = Included<{
     label: string
 }, {
     subSkillsEvaluationResults?: {
-        data: {
-            id: string;
-            type: string;
-        }[] | null;
+        data: BaseObject[] | null;
     };
     subject?: {
-        data: {
-            id: string;
-            type: string;
-        };
+        data: BaseObject
     };
     teachers?: {
-        data: {
-            id: string;
-            type: string;
-        }[] | null;
+        data: BaseObject[] | null;
     };
 }>

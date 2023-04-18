@@ -1,6 +1,7 @@
-import { Included } from '../Globals'
+import { SimpleUser } from '../App/User'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type HomeworkAssignmentList = Included<{
+export type HomeworkAssignmentList = BaseResponse<{
         title: string;
         html: string;
         dueDateTime: string;
@@ -10,22 +11,13 @@ export type HomeworkAssignmentList = Included<{
         onlineDeliveryUrl: null|string;
     }, {
         teacher: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
         attachments: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
         subject: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
     }>
 
@@ -34,11 +26,4 @@ type Subject = {
     color: string;
 }
 
-type Teacher = {
-    title: string;
-    firstName: string;
-    lastName: string;
-    photoUrl: string|null;
-}
-
-export type HomeworkAssignmentListIncluded = Included<Subject|Teacher>
+export type HomeworkAssignmentListIncluded = BaseResponse<Subject|SimpleUser>

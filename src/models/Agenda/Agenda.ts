@@ -1,41 +1,25 @@
 import { SimpleUser } from '../App/User'
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 import { Homework } from '../Homework/HomeworkAssignment'
 import { LessonAttributes, Subject } from './Lesson'
 
-export interface Agenda {
-    id: string;
-    type: string;
-    attributes: {
-        date: string;
-    };
-    relationships: {
+export type Agenda = BaseResponse<{
+    date: string;
+}, {
         lessons: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
         homeworkAssignments: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
-    };
 }
+>
 
-export type AgendaIncluded = Included<Homework|Subject|LessonAttributes|SimpleUser, {
+export type AgendaIncluded = BaseResponse<Homework|Subject|LessonAttributes|SimpleUser, {
     subject?: {
-        data: {
-            id: string;
-            type: string;
-        };
+        data: BaseObject;
     };
     teachers?: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     };
 }>;

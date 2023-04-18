@@ -1,30 +1,22 @@
-import { Included } from '../Globals'
+import { SimpleUser } from '../App/User'
+import { BaseResponse, BaseObject } from '../Globals'
 
 export type Contacts = {
-    data: {
-        id: string;
-        type: string;
-    }[] | {
-        id: string;
-        type: string;
-    } | null;
+    data: BaseObject[] | BaseObject | null;
 }
 
-export type UsersMailSettings = Included<{
+export type UsersMailSettings = BaseResponse<{
         maxCharsInParticipationContent: number;
         maxCharsInCommunicationSubject: number;
     }, {
         folders: Contacts;
         signature: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
         contacts: Contacts;
     }>
 
-export type UsersMailSettingsIncluded = Included<{
+export type UsersMailSettingsIncluded = BaseResponse<{
     content?: string;
 } | {
     name: string;
@@ -39,12 +31,7 @@ export type UsersMailSettingsIncluded = Included<{
         studentId?: string;
         schoolId?: string;
     }[] | null;
-} | {
-    title: string;
-    firstName: string;
-    lastName: string;
-    photoUrl: string|null;
-}, {
+} | SimpleUser, {
     parent?: Contacts;
     personContacts?: Contacts;
     person?: Contacts;

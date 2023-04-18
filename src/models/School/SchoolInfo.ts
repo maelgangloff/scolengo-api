@@ -1,8 +1,8 @@
 import { PublicAttachment } from './Attachment'
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 import { SimpleUser } from '../App/User'
 
-export type SchoolInfo = Included<{
+export type SchoolInfo = BaseResponse<{
         publicationDateTime: string;
         title: string;
         shortContent: string;
@@ -12,28 +12,16 @@ export type SchoolInfo = Included<{
         linkedWebSiteUrl?: any;
     }, {
         school: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
         author: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
         illustration: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
         attachments?: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
 }>
 
@@ -55,20 +43,14 @@ type SchoolInfoSchool = {
     timeZone?: null;
 };
 
-export type SchoolInfoIncluded = Included<
+export type SchoolInfoIncluded = BaseResponse<
     SimpleUser | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor,
     {
         technicalUser: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
         person: {
-            data: {
-                id: string;
-                type: string;
-            } | null;
+            data: BaseObject | null;
         };
     }
 >;

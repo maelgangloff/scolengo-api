@@ -1,37 +1,24 @@
-import { Included } from '../Globals'
+import { SimpleUser } from '../App/User'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type Evaluation = Included<{
+export type Evaluation = BaseResponse<{
         coefficient: number;
         average: number | null;
         scale: number;
         studentAverage: number | null;
     }, {
     evaluations: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     };
     subject: {
-        data: {
-            id: string;
-            type: string;
-        };
+        data: BaseObject
     };
     teachers: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     }
 }>
 
-export type EvaluationIncluded = Included<{
-    title: string
-    firstName: string;
-    lastName: string;
-    photoUrl:string|null
-} | {
+export type EvaluationIncluded = BaseResponse<SimpleUser | {
     title: string | null;
     topic: string | null
     dateTime: string;
@@ -49,21 +36,12 @@ export type EvaluationIncluded = Included<{
     color: null | string;
 }, {
     subSkills?: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     };
     evaluationResult?: {
-        data: {
-            id: string;
-            type: string;
-        };
+        data: BaseObject
     };
     subSkillsEvaluationResults?: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     }
 }>

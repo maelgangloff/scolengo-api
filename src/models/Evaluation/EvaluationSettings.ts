@@ -1,6 +1,6 @@
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type EvaluationSettingsIncluded = Included<{
+export type EvaluationSettingsIncluded = BaseResponse<{
     label?: string;
     startDate?: string;
     endDate?: string;
@@ -15,27 +15,18 @@ export type EvaluationSettingsIncluded = Included<{
     }[];
 }, {
     skillAcquisitionColors: {
-        data: {
-            id: string;
-            type: string;
-        };
+        data: BaseObject
     };
 }>
-export type EvaluationSettings = Included<{
+export type EvaluationSettings = BaseResponse<{
         periodicReportsEnabled: boolean;
         skillsEnabled: boolean;
         evaluationsDetailsAvailable: boolean;
     }, {
         periods: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
         skillsSetting: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject
         };
     }>

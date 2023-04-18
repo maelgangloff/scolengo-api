@@ -1,4 +1,4 @@
-import { Included } from '../Globals'
+import { BaseResponse } from '../Globals'
 
 export type SchoolAttributes = {
     name: string;
@@ -13,4 +13,4 @@ export type SchoolAttributes = {
     emsOIDCWellKnownUrl: string;
 }
 
-export type School = Included<SchoolAttributes>
+export type School = BaseResponse<SchoolAttributes>

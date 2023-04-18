@@ -1,5 +1,5 @@
 import { SimpleUser } from '../App/User'
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 import { Homework } from '../Homework/HomeworkAssignment'
 import { Attachment } from '../School/Attachment'
 
@@ -11,7 +11,7 @@ export type Subject = {
 export type LessonContent = {
     html: string;
     title: string;
-    url: any;
+    url: string|null;
 }
 
 export type LessonAttributes = {
@@ -20,57 +20,32 @@ export type LessonAttributes = {
     title: string;
     location: string;
     locationComplement: any;
-    canceled: boolean;}
-
-export interface Lesson {
-    id: string;
-    type: string;
-    attributes: LessonAttributes;
-    relationships: {
-        contents: {
-            data: {
-                id: string;
-                type: string;
-            }[];
-        };
-        teachers: {
-            data: {
-                id: string;
-                type: string;
-            }[];
-        };
-        subject: {
-            data: {
-                id: string;
-                type: string;
-            };
-        };
-        toDoForTheLesson: {
-            data: {
-                id: string;
-                type: string;
-            }[];
-        };
-        toDoAfterTheLesson: {
-            data: {
-                id: string;
-                type: string;
-            }[];
-        };
-    }
+    canceled: boolean
 }
 
-export type LessonIncluded = Included<Attachment | Homework | Subject | SimpleUser | LessonContent, {
-    subject?: {
-        data: {
-            id: string;
-            type: string;
+export type Lesson = BaseResponse<LessonAttributes, {
+        contents: {
+            data: BaseObject[];
         };
+        teachers: {
+            data: BaseObject[];
+        };
+        subject: {
+            data: BaseObject;
+        };
+        toDoForTheLesson: {
+            data: BaseObject[];
+        };
+        toDoAfterTheLesson: {
+            data: BaseObject[];
+        };
+}>
+
+export type LessonIncluded = BaseResponse<Attachment | Homework | Subject | SimpleUser | LessonContent, {
+    subject?: {
+        data: BaseObject;
     };
     attachments?: {
-        data: {
-            id: string;
-            type: string;
-        }[];
+        data: BaseObject[];
     };
 }>;

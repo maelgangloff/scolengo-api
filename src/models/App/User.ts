@@ -1,6 +1,6 @@
-import { Included } from '../Globals'
+import { BaseResponse, BaseObject } from '../Globals'
 
-export type User = Included<{
+export type User = BaseResponse<{
         className?: string;
         dateOfBirth?: string;
         regime?: string;
@@ -20,20 +20,14 @@ export type User = Included<{
         country?: string;
     }, {
         school?: {
-            data: {
-                id: string;
-                type: string;
-            };
+            data: BaseObject;
         };
         students?: {
-            data: {
-                id: string;
-                type: string;
-            }[];
+            data: BaseObject[];
         };
 }>
 
-export type UserIncluded = Included<{
+export type UserIncluded = BaseResponse<{
     name: string;
     timeZone: string;
     subscribedServices: string[];
@@ -46,14 +40,11 @@ export type UserIncluded = Included<{
     regime: string;
 }, {
     school: {
-        data: {
-            id: string;
-            type: string;
-        };
+        data: BaseObject;
     };
 }>
 
-export interface SimpleUser {
+export type SimpleUser = {
     title: string;
     firstName: string;
     lastName: string;

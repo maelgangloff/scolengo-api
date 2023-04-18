@@ -1,11 +1,14 @@
-export interface Included<Attributes = never, Relationships = never> {
-    id: string;
-    type: string;
+export type BaseObject = {
+    id: string
+    type: string
+}
+
+export type BaseResponse<Attributes = never, Relationships = never> = BaseObject & {
     attributes: Attributes;
     relationships?: Relationships
 }
 
-export interface SkolengoResponse<Data, Included = never> {
+export type SkolengoResponse<Data, Included = never> = {
     data: Data;
     links?: {
         first: string;
