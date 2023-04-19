@@ -15,6 +15,7 @@ import { Participation, ParticipationIncluded } from './models/Messagerie/Partic
 import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
+import { PeriodicReportsFiles } from './models/Evaluation/PeriodicReportsFiles'
 export { TokenSet } from 'openid-client'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -185,6 +186,26 @@ export class Skolengo {
           teacher: 'firstName,lastName,title'
         }
         */
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer la liste des bilans périodiques disponibles pour un étudiant.
+   * Pour chaque bulletin, une adresse est disponible pour le téléchargement.
+   * @param {string} studentId Identifiant d'un étudiant
+   * @async
+   */
+  public async getPeriodicReportsFiles (studentId: string): Promise<SkolengoResponse<PeriodicReportsFiles[]>> {
+    return (await this.request<SkolengoResponse<PeriodicReportsFiles[]>>({
+      url: '/periodic-reports-files',
+      responseType: 'json',
+      params: {
+        filter: {
+          'student.id': studentId
+        },
+        include: 'period&fields[periodicReportFile]=name,mimeType,size,url,mimeTypeLabel'
       }
     })
     ).data

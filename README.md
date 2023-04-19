@@ -55,6 +55,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
+        * [.getPeriodicReportsFiles(studentId)](#Skolengo+getPeriodicReportsFiles)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
@@ -155,6 +156,18 @@ Récupérer le détail d'une note d'un étudiant
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | markId | <code>string</code> | Identifiant de la note |
+
+<a name="Skolengo+getPeriodicReportsFiles"></a>
+
+### skolengo.getPeriodicReportsFiles(studentId)
+Récupérer la liste des bilans périodiques disponibles pour un étudiant.
+Pour chaque bulletin, une adresse est disponible pour le téléchargement.
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
 
 <a name="Skolengo+getHomeworkAssignments"></a>
 
