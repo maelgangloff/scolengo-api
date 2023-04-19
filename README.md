@@ -70,6 +70,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
         * [.postCommunication(attributes)](#Skolengo+postCommunication)
         * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
+        * [.getAbsenceReasons()](#Skolengo+getAbsenceReasons)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -395,6 +396,21 @@ Récupérer les absences et retards d'un étudiant
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 
+<a name="Skolengo+getAbsenceReasons"></a>
+
+### skolengo.getAbsenceReasons()
+Récupérer la liste des motifs d'absence de l'établissement
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+const user = await Skolengo.fromConfigObject(config)
+user.getAbsenceReasons().then(response => {
+  console.log(`Liste des motifs: ${response.data.map(r => r.attributes.longLabel).join(';')}`)
+})
+```
 <a name="Skolengo.revokeToken"></a>
 
 ### Skolengo.revokeToken(oidClient, token)

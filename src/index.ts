@@ -19,6 +19,7 @@ import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
 import { AbsenceFile, AbsenceFileIncluded } from './models/Assiduite/AbsenceFile'
+import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 
 export { TokenSet } from 'openid-client'
 
@@ -305,7 +306,6 @@ export class Skolengo {
    *
    * ```
    * @async
-   *
    */
   public async getHomeworkAssignment (studentId: string, homeworkId: string): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
@@ -552,6 +552,28 @@ export class Skolengo {
         },
         include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence'
       }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer la liste des motifs d'absence de l'établissement
+   * @async
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   user.getAbsenceReasons().then(response => {
+   *     console.log(`Liste des motifs: ${response.data.map(r => r.attributes?.longLabel).join(';')}`)
+   *   })
+   * })
+
+   * ```
+   */
+  public async getAbsenceReasons (): Promise<SkolengoResponse<AbsenceReason[]>> {
+    return (await this.request<SkolengoResponse<AbsenceReason[]>>({
+      url: '/absence-reasons',
+      responseType: 'json'
     })
     ).data
   }

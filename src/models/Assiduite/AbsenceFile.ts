@@ -1,4 +1,5 @@
 import { BaseObject, BaseResponse } from '../Globals'
+import { SupportedAbsenceType } from './AbsenceReasons'
 
 export type AbsenceFileRelationships = {
     currentState: {
@@ -12,7 +13,7 @@ export type AbsenceFileIncludedAttributes = {
     creationDateTime: string;
     absenceStartDateTime: string;
     absenceEndDateTime: string;
-    absenceType: 'ABSENCE' | 'LATENESS' | 'DEPARTURE' | string;
+    absenceType: SupportedAbsenceType | string;
     absenceFileStatus: 'IN_PROGRESS' | 'LOCKED' | string;
     comment: string;
 } | {
