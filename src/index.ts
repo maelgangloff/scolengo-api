@@ -15,7 +15,9 @@ import { Participation, ParticipationIncluded } from './models/Messagerie/Partic
 import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
-import { PeriodicReportsFiles } from './models/Evaluation/PeriodicReportsFiles'
+import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
+import { Stream } from 'stream'
+import { createWriteStream } from 'fs'
 export { TokenSet } from 'openid-client'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
@@ -196,17 +198,47 @@ export class Skolengo {
    * Pour chaque bulletin, une adresse est disponible pour le téléchargement.
    * @param {string} studentId Identifiant d'un étudiant
    * @async
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const bulletins = await getPeriodicReportsFiles('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx');
+   *   console.log(bulletins)
+   * })
+   * ```
    */
-  public async getPeriodicReportsFiles (studentId: string): Promise<SkolengoResponse<PeriodicReportsFiles[]>> {
-    return (await this.request<SkolengoResponse<PeriodicReportsFiles[]>>({
+  public async getPeriodicReportsFiles (studentId: string): Promise<SkolengoResponse<PeriodicReportsFile[]>> {
+    return (await this.request<SkolengoResponse<PeriodicReportsFile[]>>({
       url: '/periodic-reports-files',
       responseType: 'json',
       params: {
         filter: {
           'student.id': studentId
         },
-        include: 'period&fields[periodicReportFile]=name,mimeType,size,url,mimeTypeLabel'
+        include: 'period'
       }
+    })
+    ).data
+  }
+
+  /**
+   * Télécharger le bilan périodique PDF (bulletin)
+   * @param {string} url L'URL du document
+   * @async
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const url = 'https://cite-val-argent.monbureaunumerique.fr/dl.do?TYPE_RESSOURCE=PUBLIPOSTAGE&ARCHIVE_NAME=bulletin_periodique__doe_john__premier_trimestre&RESSOURCES=123456&student.id=AAP05567';
+   *   const bulletin = await user.downloadPeriodicReportsFiles(url);
+   *   bulletin.pipe(createWriteStream('document.pdf'));
+   * })
+   * ```
+   */
+  public async downloadPeriodicReportsFiles (url: string): Promise<Stream> {
+    return (await this.request<Stream>({
+      url,
+      responseType: 'stream'
     })
     ).data
   }
@@ -219,13 +251,12 @@ export class Skolengo {
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
-   * const user = await Skolengo.fromConfigObject(config)
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
+   *   const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
+   *   const homework = await user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate)
    *
-   * const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
-   * const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
-   *
-   * user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate).then(e => {
-   *  console.log("Voici les exercices à faire pour les 2 prochaines semaines :", e)
+   *   console.log("Voici les exercices à faire pour les 2 prochaines semaines :", homework)
    * })
    * ```
    * @async

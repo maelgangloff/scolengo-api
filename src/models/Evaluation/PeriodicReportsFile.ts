@@ -1,10 +1,14 @@
 import { BaseResponse } from '../Globals'
 
-export type PeriodicReportsFiles = BaseResponse<{
+export type PeriodicReportsFile = BaseResponse<{
     name: string
     mimeType: string
     mimeTypeLabel: string
     size: number
     url: string
     alternativeText: string|null
-}, never, 'periodicSchoolReportFile'>
+}, {
+    period: {
+        data :any
+    }
+}, 'periodicSchoolReportFile'>

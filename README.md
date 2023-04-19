@@ -56,6 +56,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getPeriodicReportsFiles(studentId)](#Skolengo+getPeriodicReportsFiles)
+        * [.downloadPeriodicReportsFiles(url)](#Skolengo+downloadPeriodicReportsFiles)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
@@ -169,6 +170,36 @@ Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.fromConfigObject(config).then(async user => {
+  const bulletins = await getPeriodicReportsFiles('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx');
+  console.log(bulletins)
+})
+```
+<a name="Skolengo+downloadPeriodicReportsFiles"></a>
+
+### skolengo.downloadPeriodicReportsFiles(url)
+Télécharger le bilan périodique PDF (bulletin)
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| url | <code>string</code> | L'URL du document |
+
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.fromConfigObject(config).then(async user => {
+  const url = 'https://cite-val-argent.monbureaunumerique.fr/dl.do?TYPE_RESSOURCE=PUBLIPOSTAGE&ARCHIVE_NAME=bulletin_periodique__doe_john__premier_trimestre&RESSOURCES=123456&student.id=AAP05567';
+  const bulletin = await user.downloadPeriodicReportsFiles(url);
+  bulletin.pipe(createWriteStream('document.pdf'));
+})
+```
 <a name="Skolengo+getHomeworkAssignments"></a>
 
 ### skolengo.getHomeworkAssignments(studentId, startDate, endDate)
@@ -186,13 +217,12 @@ Récupérer les devoirs d'un étudiant
 ```js
 const {Skolengo} = require('scolengo-api')
 
-const user = await Skolengo.fromConfigObject(config)
+Skolengo.fromConfigObject(config).then(async user => {
+  const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
+  const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
+  const homework = await user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate)
 
-const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
-const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
-
-user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate).then(e => {
- console.log("Voici les exercices à faire pour les 2 prochaines semaines :", e)
+  console.log("Voici les exercices à faire pour les 2 prochaines semaines :", homework)
 })
 ```
 <a name="Skolengo+getHomeworkAssignment"></a>
