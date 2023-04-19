@@ -20,7 +20,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 - Tout utilisateur de cette librairie a *a priori* lu l'entièreté du code de ce projet avant toute utilisation.
 - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.  
 
-## Liste des ENT utilisant le CMS Skolengo :
+## Liste des ENT utilisant Skolengo :
 | Nom usuel de l'ENT           | Code ENT | URL OpenID Connect Discovery                               |
 |------------------------------|----------|------------------------------------------------------------|
 | Mon Bureau Numérique         | gdest    | https://sso.monbureaunumerique.fr/oidc/.well-known         |

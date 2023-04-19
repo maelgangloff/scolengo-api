@@ -11,9 +11,10 @@ export type BaseResponse<Attributes = never, Relationships = never, Type = strin
 export type SkolengoResponse<Data, Included = never> = {
     data: Data;
     links?: {
-        first: string;
-        last: string;
-        next?: string;
+        first: string
+        last: string
+        next?: string
+        prev?: string
     };
     meta?: {
         totalResourceCount: number;

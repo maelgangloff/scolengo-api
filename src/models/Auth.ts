@@ -1,4 +1,5 @@
 import { School } from './School/School'
+import { TokenSetParameters } from 'openid-client'
 
 export type Auth = {
     access_token: string;
@@ -10,6 +11,6 @@ export type Auth = {
 }
 
 export type AuthConfig = {
-    tokenSet: Auth;
+    tokenSet: TokenSetParameters;
     school: School
 }
