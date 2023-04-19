@@ -1,19 +1,19 @@
 import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
-export type Contacts = {
-    data: BaseObject[] | BaseObject | null;
-}
-
 export type UsersMailSettings = BaseResponse<{
         maxCharsInParticipationContent: number;
         maxCharsInCommunicationSubject: number;
     }, {
-        folders: Contacts;
+        folders: {
+            data: BaseObject[] | BaseObject | null;
+        };
         signature: {
             data: BaseObject<'signature'>
         };
-        contacts: Contacts;
+        contacts: {
+            data: BaseObject[] | BaseObject | null;
+        };
 }, 'userMailSetting'>
 
 export type UsersMailSettingsIncluded = BaseResponse<{
@@ -32,7 +32,13 @@ export type UsersMailSettingsIncluded = BaseResponse<{
         schoolId?: string;
     }[] | null;
 } | SimpleUser, {
-    parent?: Contacts;
-    personContacts?: Contacts;
-    person?: Contacts;
+    parent?: {
+        data: BaseObject[] | BaseObject | null;
+    };
+    personContacts?: {
+        data: BaseObject[] | BaseObject | null;
+    };
+    person?: {
+        data: BaseObject[] | BaseObject | null;
+    };
 }>

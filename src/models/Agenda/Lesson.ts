@@ -1,6 +1,6 @@
 import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
-import { Homework } from '../Homework/HomeworkAssignment'
+import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { Attachment } from '../School/Attachment'
 
 export type Subject = {
@@ -23,29 +23,33 @@ export type LessonAttributes = {
     canceled: boolean
 }
 
-export type Lesson = BaseResponse<LessonAttributes, {
-        contents: {
-            data: BaseObject[];
-        };
-        teachers: {
-            data: BaseObject<'teacher'>[];
-        };
-        subject: {
-            data: BaseObject<'subject'>;
-        };
-        toDoForTheLesson: {
-            data: BaseObject<'homework'>[];
-        };
-        toDoAfterTheLesson: {
-            data: BaseObject<'homework'>[];
-        };
-}, 'lesson'>
+export type LessonRelationships = {
+    contents: {
+        data: BaseObject[];
+    };
+    teachers: {
+        data: BaseObject<'teacher'>[];
+    };
+    subject: {
+        data: BaseObject<'subject'>;
+    };
+    toDoForTheLesson: {
+        data: BaseObject<'homework'>[];
+    };
+    toDoAfterTheLesson: {
+        data: BaseObject<'homework'>[];
+    };
+}
 
-export type LessonIncluded = BaseResponse<Attachment | Homework | Subject | SimpleUser | LessonContent, {
+export type Lesson = BaseResponse<LessonAttributes, LessonRelationships, 'lesson'>
+
+export type LessonIncludedRelationships = {
     subject?: {
         data: BaseObject<'subject'>;
     };
     attachments?: {
         data: BaseObject<'attachment'>[];
     };
-}>;
+}
+
+export type LessonIncluded = BaseResponse<Attachment | HomeworkAttributes | Subject | SimpleUser | LessonContent, LessonIncludedRelationships>;

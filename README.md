@@ -67,6 +67,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
+        * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
+        * [.postCommunication(attributes)](#Skolengo+postCommunication)
         * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
@@ -265,8 +267,8 @@ Modifier le statut d'un travail à faire
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
-| homeworkId | <code>string</code> | Identifiant d'un devoir |
-| attributes | <code>Object</code> | Attributs du devoir à modifier |
+| homeworkId | <code>string</code> | Identifiant d'un devoir à modifier |
+| attributes | <code>Partial.&lt;HomeworkAttributes&gt;</code> | Devoir modifié |
 
 **Example**  
 ```js
@@ -353,6 +355,30 @@ Récupérer les participations d'un fil de discussion (communication)
 | Param | Type | Description |
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
+
+<a name="Skolengo+patchCommunicationFolders"></a>
+
+### skolengo.patchCommunicationFolders(communicationId, folders, userId)
+Déplacer une communication dans un dossier
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| communicationId | <code>string</code> | Identifiant d'une communication |
+| folders |  | Liste contenant l'identifiant du dossier |
+| userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
+
+<a name="Skolengo+postCommunication"></a>
+
+### skolengo.postCommunication(attributes)
+Envoyer un message dans un nouveau fil de discussion
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| attributes | <code>NewCommunication</code> | Les attributs de la nouvelle communication |
 
 <a name="Skolengo+getAbsenceFiles"></a>
 

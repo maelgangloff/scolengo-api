@@ -1,6 +1,6 @@
 import { BaseResponse, BaseObject } from '../Globals'
 
-export type EvaluationSettingsIncluded = BaseResponse<{
+export type EvaluationSettingsIncludedAttributes = {
     label?: string;
     startDate?: string;
     endDate?: string;
@@ -13,20 +13,29 @@ export type EvaluationSettingsIncluded = BaseResponse<{
         shortLabel: string;
         level: string;
     }[];
-}, {
+}
+
+export type EvaluationSettingsIncludedRelationships = {
     skillAcquisitionColors: {
         data: BaseObject
     };
-}>
-export type EvaluationSettings = BaseResponse<{
-        periodicReportsEnabled: boolean;
-        skillsEnabled: boolean;
-        evaluationsDetailsAvailable: boolean;
-    }, {
-        periods: {
-            data: BaseObject<'period'>[];
-        };
-        skillsSetting: {
-            data: BaseObject
-        };
-}, 'evaluationsSetting'>
+}
+
+export type EvaluationSettingsIncluded = BaseResponse<EvaluationSettingsIncludedAttributes, EvaluationSettingsIncludedRelationships>
+
+export type EvaluationSettingsAttributes = {
+    periodicReportsEnabled: boolean;
+    skillsEnabled: boolean;
+    evaluationsDetailsAvailable: boolean;
+}
+
+export type EvaluationSettingsRelationships = {
+    periods: {
+        data: BaseObject<'period'>[];
+    };
+    skillsSetting: {
+        data: BaseObject
+    };
+}
+
+export type EvaluationSettings = BaseResponse<EvaluationSettingsAttributes, EvaluationSettingsRelationships, 'evaluationsSetting'>

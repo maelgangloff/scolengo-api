@@ -1,12 +1,14 @@
 import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
-export type Evaluation = BaseResponse<{
-        coefficient: number;
-        average: number | null;
-        scale: number;
-        studentAverage: number | null;
-    }, {
+export type EvaluationAttributes = {
+    coefficient: number;
+    average: number | null;
+    scale: number;
+    studentAverage: number | null;
+}
+
+export type EvaluationRelationships = {
     evaluations: {
         data: BaseObject[];
     };
@@ -16,9 +18,11 @@ export type Evaluation = BaseResponse<{
     teachers: {
         data: BaseObject<'teacher'>[];
     }
-}, 'evaluationService'>
+    }
 
-export type EvaluationIncluded = BaseResponse<SimpleUser | {
+export type Evaluation = BaseResponse<EvaluationAttributes, EvaluationRelationships, 'evaluationService'>
+
+export type EvaluationIncludedAttributes = SimpleUser | {
     title: string | null;
     topic: string | null
     dateTime: string;
@@ -34,7 +38,9 @@ export type EvaluationIncluded = BaseResponse<SimpleUser | {
 } | {
     label: string;
     color: null | string;
-}, {
+}
+
+export type EvaluationIncludedRelationships = {
     subSkills?: {
         data: BaseObject[];
     };
@@ -44,4 +50,6 @@ export type EvaluationIncluded = BaseResponse<SimpleUser | {
     subSkillsEvaluationResults?: {
         data: BaseObject[];
     }
-}>
+}
+
+export type EvaluationIncluded = BaseResponse<EvaluationIncludedAttributes, EvaluationIncludedRelationships>

@@ -1,10 +1,11 @@
 import { BaseResponse } from '../Globals'
 
-export type CurrentConfig = BaseResponse<
-{
+export type CurrentConfigAttributes = {
         latestDeployedSkoAppVersion: string;
         latestSupportedSkoAppVersion: string;
         apiCallRetryDelay: number;
         apiCallMaxRetries: number;
         skoAppDeploymentInfoUrl: string;
-}, never>
+}
+
+export type CurrentConfig = BaseResponse<CurrentConfigAttributes, never>

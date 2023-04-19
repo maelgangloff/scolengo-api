@@ -1,12 +1,14 @@
 import { BaseObject, BaseResponse } from '../Globals'
 
-export type AbsenceFile = BaseResponse<never, {
+export type AbsenceFileRelationships = {
     currentState: {
         data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
     };
-}, 'absenceFileState' | 'absenceFile' | 'absenceReason'>
+}
 
-export type AbsenceFileIncluded = BaseResponse<{
+export type AbsenceFile = BaseResponse<never, AbsenceFileRelationships, 'absenceFileState' | 'absenceFile' | 'absenceReason'>
+
+export type AbsenceFileIncludedAttributes = {
     creationDateTime: string;
     absenceStartDateTime: string;
     absenceEndDateTime: string;
@@ -17,7 +19,9 @@ export type AbsenceFileIncluded = BaseResponse<{
     code: string;
     longLabel: string;
     supportedAbsenceTypes: string[];
-}, {
+}
+
+export type AbsenceFileIncludedRelationships = {
     creator: {
         data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
     };
@@ -30,4 +34,6 @@ export type AbsenceFileIncluded = BaseResponse<{
     absenceFile: {
         data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
     };
-}>
+}
+
+export type AbsenceFileIncluded = BaseResponse<AbsenceFileIncludedAttributes, AbsenceFileIncludedRelationships>

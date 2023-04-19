@@ -22,9 +22,9 @@ export type ParticipationIncluded = BaseResponse<{
     logoUrl: any|null;
 }, {
     technicalUser: {
-        data: any[] | BaseObject | null;
+        data: BaseObject[] | BaseObject | null;
     };
     person: {
-        data: any[] | BaseObject | null;
+        data: BaseObject[] | BaseObject | null;
     };
 }>

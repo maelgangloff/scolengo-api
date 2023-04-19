@@ -3,7 +3,7 @@ import { Client, Issuer, TokenSet, TokenSetParameters } from 'openid-client'
 import { Stream } from 'node:stream'
 
 import { CurrentConfig } from './models/App/CurrentConfig'
-import { SkolengoResponse } from './models/Globals'
+import { BaseObject, SkolengoResponse } from './models/Globals'
 import { School } from './models/School/School'
 import { User, UserIncluded } from './models/App/User'
 import { SchoolInfo, SchoolInfoIncluded } from './models/School/SchoolInfo'
@@ -12,9 +12,9 @@ import { Evaluation, EvaluationIncluded } from './models/Evaluation/Evaluation'
 import { EvaluationDetail, EvaluationDetailIncluded } from './models/Evaluation/EvaluationDetail'
 import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluation/EvaluationSettings'
 import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
-import { Communication, CommunicationIncluded } from './models/Messagerie/Communication'
+import { Communication, CommunicationIncluded, NewCommunication } from './models/Messagerie/Communication'
 import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
-import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homework/HomeworkAssignment'
+import { HomeworkAssignment, HomeworkAssignmentIncluded, HomeworkAttributes } from './models/Homework/HomeworkAssignment'
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
@@ -321,8 +321,8 @@ export class Skolengo {
   /**
    * Modifier le statut d'un travail à faire
    * @param {string} studentId Identifiant d'un étudiant
-   * @param {string} homeworkId Identifiant d'un devoir
-   * @param {{done: boolean}} attributes Attributs du devoir à modifier
+   * @param {string} homeworkId Identifiant d'un devoir à modifier
+   * @param {Partial<HomeworkAttributes>} attributes Devoir modifié
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -333,7 +333,7 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async patchHomeworkAssignment (studentId: string, homeworkId: string, attributes: {done: boolean}): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
+  public async patchHomeworkAssignment (studentId: string, homeworkId: string, attributes: Partial<HomeworkAttributes>): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
       method: 'patch',
       url: `/homework-assignments/${homeworkId}`,
@@ -490,6 +490,45 @@ export class Skolengo {
       responseType: 'json',
       params: {
         include: 'sender,sender.person,sender.technicalUser,attachments'
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Déplacer une communication dans un dossier
+   * @param {string} communicationId Identifiant d'une communication
+   * @param folders Liste contenant l'identifiant du dossier
+   * @param {string|undefined} userId Identifiant de l'utilisateur
+   * @async
+   */
+  public async patchCommunicationFolders (communicationId: string, folders: BaseObject<'folders'>[], userId?: string): Promise<void> {
+    return (await this.request({
+      url: `communications/${communicationId}/relationships/folders`,
+      method: 'patch',
+      responseType: 'json',
+      params: {
+        filter: {
+          'user.id': userId ?? this.tokenSet.claims().sub
+        }
+      },
+      data: { data: folders }
+    })
+    ).data
+  }
+
+  /**
+   * Envoyer un message dans un nouveau fil de discussion
+   * @param {NewCommunication} attributes Les attributs de la nouvelle communication
+   * @async
+   */
+  public async postCommunication (attributes: NewCommunication): Promise<SkolengoResponse<NewCommunication & {id: string}>> {
+    return (await this.request<SkolengoResponse<NewCommunication & {id: string}>>({
+      url: 'communications',
+      method: 'post',
+      responseType: 'json',
+      data: {
+        data: attributes
       }
     })
     ).data

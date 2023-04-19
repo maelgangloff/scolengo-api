@@ -3,7 +3,7 @@ import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { Attachment } from '../School/Attachment'
 
-export type Homework = {
+export type HomeworkAttributes = {
     title: string;
     html: string;
     dueDateTime: string;
@@ -13,36 +13,40 @@ export type Homework = {
     onlineDeliveryUrl: null|string;
 }
 
-export type HomeworkAssignment = BaseResponse<Homework, {
-        teacher: {
-            data: BaseObject<'teacher'>
-        };
-        attachments: {
-            data: BaseObject<'attachment'>[];
-        };
-        commonCorrectedWork?: {
-            data: BaseObject | null;
-        };
-        subject: {
-            data: BaseObject<'subject'>
-        };
-        audio?: {
-            data: any;
-        };
-        pedagogicContent?: {
-            data: any;
-        };
-        individualCorrectedWork?: {
-            data: any;
-        };
-}, 'homework'>
+export type HomeworkRelationships = {
+    teacher: {
+        data: BaseObject<'teacher'>
+    };
+    attachments: {
+        data: BaseObject<'attachment'>[];
+    };
+    commonCorrectedWork?: {
+        data: BaseObject | null;
+    };
+    subject: {
+        data: BaseObject<'subject'>
+    };
+    audio?: {
+        data: any;
+    };
+    pedagogicContent?: {
+        data: any;
+    };
+    individualCorrectedWork?: {
+        data: any;
+    };
+}
+
+export type HomeworkAssignment = BaseResponse<HomeworkAttributes, HomeworkRelationships, 'homework'>
 
 type CorrectionWork = {
     html: string;
     correctionDate: string;
 }
 
-export type HomeworkAssignmentIncluded = BaseResponse<Subject|SimpleUser|Attachment|CorrectionWork, {
+export type HomeworkAssignmentIncludedAttributes = Subject|SimpleUser|Attachment|CorrectionWork
+
+export type HomeworkAssignmentIncludedRelationships = {
     attachments?: {
         data: BaseObject<'attachment'>[];
     };
@@ -55,4 +59,6 @@ export type HomeworkAssignmentIncluded = BaseResponse<Subject|SimpleUser|Attachm
     school?: {
         data: any
     }
-}>
+}
+
+export type HomeworkAssignmentIncluded = BaseResponse<HomeworkAssignmentIncludedAttributes, HomeworkAssignmentIncludedRelationships>
