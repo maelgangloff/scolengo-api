@@ -192,12 +192,16 @@ Télécharger le bilan périodique PDF (bulletin)
 
 **Example**  
 ```js
+const {createWriteStream} = require('node:fs')
 const {Skolengo} = require('scolengo-api')
 
 Skolengo.fromConfigObject(config).then(async user => {
-  const url = 'https://cite-val-argent.monbureaunumerique.fr/dl.do?TYPE_RESSOURCE=PUBLIPOSTAGE&ARCHIVE_NAME=bulletin_periodique__doe_john__premier_trimestre&RESSOURCES=123456&student.id=AAP05567';
-  const bulletin = await user.downloadPeriodicReportsFiles(url);
-  bulletin.pipe(createWriteStream('document.pdf'));
+  const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
+  const bulletins = await user.getPeriodicReportsFiles(student)
+  for(const bulletin of bulletins.data) {
+    console.log(bulletin.attributes.name)
+    (await user.downloadPeriodicReportsFiles(bulletin.attributes.url)).pipe(createWriteStream(bulletin.attributes.name));
+  }
 })
 ```
 <a name="Skolengo+getHomeworkAssignments"></a>
