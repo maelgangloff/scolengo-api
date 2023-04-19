@@ -11,6 +11,7 @@ export type SchoolAttributes = {
     homePageUrl: string;
     emsCode: string;
     emsOIDCWellKnownUrl: string;
+    distance?: number
 }
 
 export type School = BaseResponse<SchoolAttributes, never, 'school'>

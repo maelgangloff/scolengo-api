@@ -590,7 +590,7 @@ export class Skolengo {
   /**
    * Rechercher un établissement scolaire
    * @param {string} text Le nom partiel de l'établissement
-   * @param {number} limit Nombre max d'éléments
+   * @param {number} limit Limite
    * @param {number} offset Offset
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -610,6 +610,34 @@ export class Skolengo {
       params: {
         page: { limit, offset },
         filter: { text }
+      }
+    })).data
+  }
+
+  /**
+   * Rechercher un établissement scolaire à partir de coordonnées GPS
+   * @param {number} lat Latitude
+   * @param {number} lon Longitude
+   * @param {number} limit Limite
+   * @param {number} offset Offset
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool(48.0, 7.0).then(schools => {
+   *   console.log(schools)
+   * })
+   * ```
+   * @async
+   */
+  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 10): Promise<SkolengoResponse<School[]>> {
+    return (await axios.request<SkolengoResponse<School[]>>({
+      baseURL: BASE_URL,
+      url: '/schools',
+      method: 'get',
+      responseType: 'json',
+      params: {
+        page: { limit, offset },
+        filter: { lat, lon }
       }
     })).data
   }

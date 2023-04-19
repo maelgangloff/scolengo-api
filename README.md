@@ -74,6 +74,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
         * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
+        * [.searchSchoolGPS(lat, lon, limit, offset)](#Skolengo.searchSchoolGPS)
         * [.getOIDClient(school)](#Skolengo.getOIDClient)
         * [.fromConfigObject(config)](#Skolengo.fromConfigObject)
 
@@ -431,7 +432,7 @@ Rechercher un établissement scolaire
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | text | <code>string</code> |  | Le nom partiel de l'établissement |
-| limit | <code>number</code> | <code>10</code> | Nombre max d'éléments |
+| limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 
 **Example**  
@@ -439,6 +440,28 @@ Rechercher un établissement scolaire
 const {Skolengo} = require('scolengo-api')
 
 Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+  console.log(schools)
+})
+```
+<a name="Skolengo.searchSchoolGPS"></a>
+
+### Skolengo.searchSchoolGPS(lat, lon, limit, offset)
+Rechercher un établissement scolaire à partir de coordonnées GPS
+
+**Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| lat | <code>number</code> |  | Latitude |
+| lon | <code>number</code> |  | Longitude |
+| limit | <code>number</code> | <code>10</code> | Limite |
+| offset | <code>number</code> | <code>10</code> | Offset |
+
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.searchSchool(48.0, 7.0).then(schools => {
   console.log(schools)
 })
 ```
