@@ -52,4 +52,6 @@ export type LessonIncludedRelationships = {
     };
 }
 
-export type LessonIncluded = BaseResponse<Attachment | HomeworkAttributes | Subject | SimpleUser | LessonContent, LessonIncludedRelationships>;
+export type LessonIncludedAttributes = Attachment | HomeworkAttributes | Subject | SimpleUser | LessonContent
+
+export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships>;
