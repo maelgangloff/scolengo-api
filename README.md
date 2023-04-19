@@ -185,7 +185,8 @@ Skolengo.fromConfigObject(config).then(async user => {
 <a name="Skolengo+downloadPeriodicReportsFiles"></a>
 
 ### skolengo.downloadPeriodicReportsFiles(url)
-Télécharger le bilan périodique PDF (bulletin)
+Télécharger le bilan périodique PDF (bulletin).
+🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL donnée en paramètre. Assurez-vous que l'URL provient de votre établissement.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
