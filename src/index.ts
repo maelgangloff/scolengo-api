@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet, TokenSetParameters } from 'openid-client'
+import { Stream } from 'node:stream'
+
 import { CurrentConfig } from './models/App/CurrentConfig'
 import { SkolengoResponse } from './models/Globals'
 import { School } from './models/School/School'
@@ -16,11 +18,10 @@ import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homewor
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
-import { Stream } from 'stream'
-import { createWriteStream } from 'fs'
-export { TokenSet } from 'openid-client'
-const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 
+export { TokenSet } from 'openid-client'
+
+const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
 const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
 
