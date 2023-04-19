@@ -4,7 +4,7 @@ export type BaseObject<Type = string> = {
 }
 
 export type BaseResponse<Attributes = never, Relationships = never, Type = string> = BaseObject<Type> & {
-    attributes: Attributes;
+    attributes?: Attributes;
     relationships?: Relationships
 }
 

@@ -67,6 +67,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
+        * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -352,6 +353,17 @@ Récupérer les participations d'un fil de discussion (communication)
 | Param | Type | Description |
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
+
+<a name="Skolengo+getAbsenceFiles"></a>
+
+### skolengo.getAbsenceFiles(studentId)
+Récupérer les absences et retards d'un étudiant
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
 
 <a name="Skolengo.revokeToken"></a>
 

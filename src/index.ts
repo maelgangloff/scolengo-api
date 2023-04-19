@@ -18,6 +18,7 @@ import { HomeworkAssignment, HomeworkAssignmentIncluded } from './models/Homewor
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
+import { AbsenceFile, AbsenceFileIncluded } from './models/Assiduite/AbsenceFile'
 
 export { TokenSet } from 'openid-client'
 
@@ -73,7 +74,7 @@ export class Skolengo {
         Authorization: `Bearer ${tokenSet.access_token}`,
         'X-Skolengo-Date-Format': 'utc',
         'X-Skolengo-School-Id': school.id,
-        'X-Skolengo-Ems-Code': school.attributes.emsCode
+        'X-Skolengo-Ems-Code': school.attributes?.emsCode as string
       }
     })
   }
@@ -495,6 +496,25 @@ export class Skolengo {
   }
 
   /**
+   * Récupérer les absences et retards d'un étudiant
+   * @param {string} studentId Identifiant d'un étudiant
+   * @async
+   */
+  public async getAbsenceFiles (studentId: string): Promise<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>> {
+    return (await this.request<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>>({
+      url: '/absence-files',
+      responseType: 'json',
+      params: {
+        filter: {
+          'student.id': studentId
+        },
+        include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence'
+      }
+    })
+    ).data
+  }
+
+  /**
    * Révoquer un jeton
    * @param {Client} oidClient Un client OpenID Connect
    * @param {string} token Un jeton
@@ -585,7 +605,7 @@ export class Skolengo {
    * ```
    */
   public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
-    const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
+    const skolengoIssuer = await Issuer.discover(school.attributes?.emsOIDCWellKnownUrl as string)
     const client = new skolengoIssuer.Client({
       client_id: OID_CLIENT_ID,
       client_secret: OID_CLIENT_SECRET,
