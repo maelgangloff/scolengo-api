@@ -1,3 +1,4 @@
+import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
 export type CommunicationAttributes = {
@@ -17,14 +18,9 @@ export type Communication = BaseResponse<CommunicationAttributes, {
         };
 }, 'communication'>
 
-export type CommunicationIncluded = BaseResponse<{
+export type CommunicationIncluded = BaseResponse<SimpleUser | {
     label: string;
     logoUrl: string|null;
-} | {
-    title: string;
-    lastName: string;
-    firstName: string;
-    photoUrl: string|null;
 } | {
     dateTime: string;
     content: string;
@@ -48,17 +44,21 @@ export type CommunicationIncluded = BaseResponse<{
     };
 }>
 
-export type NewCommunication = Omit<BaseResponse<Partial<CommunicationAttributes> & {
-        subject: string;
-        firstParticipationContent: string;
-    }, {
-        toRecipients: {
-            data: BaseObject[];
-        };
-        ccRecipients?: {
-            data: BaseObject[];
-        };
-        bccRecipients?: {
-            data: BaseObject[];
-        };
-}, 'communication'>, 'id'>
+export type NewCommunicationAttributes = Partial<CommunicationAttributes> & {
+    subject: string;
+    firstParticipationContent: string;
+}
+
+export type NewCommunicationRelationship = {
+    toRecipients: {
+        data: BaseObject[];
+    };
+    ccRecipients?: {
+        data: BaseObject[];
+    };
+    bccRecipients?: {
+        data: BaseObject[];
+    };
+}
+
+export type NewCommunication = Omit<BaseResponse<NewCommunicationAttributes, NewCommunicationRelationship, 'communication'>, 'id'>
