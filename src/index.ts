@@ -225,6 +225,8 @@ export class Skolengo {
 
   /**
    * Télécharger le bilan périodique PDF (bulletin).
+   *
+   *
    * 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL donnée en paramètre. Assurez-vous que l'URL provient de votre établissement.
    * @param {string} url L'URL du document
    * @async
