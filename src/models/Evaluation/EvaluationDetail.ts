@@ -23,12 +23,12 @@ export type EvaluationDetail = BaseResponse<{
         evaluationResult: {
             data: BaseObject
         };
-}>
+}, 'evaluation'>
 
 export type EvaluationDetailIncluded = BaseResponse<SimpleUser | {
     mark: number|null;
     nonEvaluationReason: null;
-    comment: null;
+    comment: string|null;
 } | {
     coefficient: number|null
     average: number|null

@@ -13,7 +13,7 @@ export type Communication = BaseResponse<{
         lastParticipation: {
             data: BaseObject | null;
         };
-}>
+}, 'communication'>
 
 export type CommunicationIncluded = BaseResponse<{
     label: string;

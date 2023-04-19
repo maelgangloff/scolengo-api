@@ -16,7 +16,7 @@ export type Evaluation = BaseResponse<{
     teachers: {
         data: BaseObject<'teacher'>[];
     }
-}>
+}, 'evaluationService'>
 
 export type EvaluationIncluded = BaseResponse<SimpleUser | {
     title: string | null;

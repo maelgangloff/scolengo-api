@@ -12,8 +12,7 @@ export type Agenda = BaseResponse<{
     homeworkAssignments: {
         data: BaseObject<'homework'>[];
     };
-}
->
+}, 'agenda'>
 
 export type AgendaIncluded = BaseResponse<Homework|Subject|LessonAttributes|SimpleUser, {
     subject?: {

@@ -13,4 +13,4 @@ export type SchoolAttributes = {
     emsOIDCWellKnownUrl: string;
 }
 
-export type School = BaseResponse<SchoolAttributes>
+export type School = BaseResponse<SchoolAttributes, never, 'school'>

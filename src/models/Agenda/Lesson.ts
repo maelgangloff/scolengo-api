@@ -39,7 +39,7 @@ export type Lesson = BaseResponse<LessonAttributes, {
         toDoAfterTheLesson: {
             data: BaseObject<'homework'>[];
         };
-}>
+}, 'lesson'>
 
 export type LessonIncluded = BaseResponse<Attachment | Homework | Subject | SimpleUser | LessonContent, {
     subject?: {

@@ -20,22 +20,22 @@ export type HomeworkAssignment = BaseResponse<Homework, {
         attachments: {
             data: BaseObject<'attachment'>[];
         };
-        commonCorrectedWork: {
+        commonCorrectedWork?: {
             data: BaseObject | null;
         };
         subject: {
             data: BaseObject<'subject'>
         };
-        audio: {
+        audio?: {
             data: any;
         };
-        pedagogicContent: {
+        pedagogicContent?: {
             data: any;
         };
-        individualCorrectedWork: {
+        individualCorrectedWork?: {
             data: any;
         };
-}>
+}, 'homework'>
 
 type CorrectionWork = {
     html: string;

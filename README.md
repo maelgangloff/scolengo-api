@@ -57,7 +57,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
-        * [.patchHomeWorkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeWorkAssignment)
+        * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
         * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
         * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
@@ -207,9 +207,9 @@ user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
 })
 
 ```
-<a name="Skolengo+patchHomeWorkAssignment"></a>
+<a name="Skolengo+patchHomeworkAssignment"></a>
 
-### skolengo.patchHomeWorkAssignment(studentId, homeworkId, attributes)
+### skolengo.patchHomeworkAssignment(studentId, homeworkId, attributes)
 Modifier le statut d'un travail à faire
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -225,7 +225,7 @@ Modifier le statut d'un travail à faire
 const {Skolengo} = require('scolengo-api')
 
 const user = await Skolengo.fromConfigObject(config)
-user.patchHomeWorkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123456', { done: true }).then(hmw => {
+user.patchHomeworkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123456', { done: true }).then(hmw => {
   console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
 })
 ```

@@ -25,7 +25,7 @@ export type User = BaseResponse<{
         students?: {
             data: BaseObject<'student'>[];
         };
-}>
+}, 'legalRepresentativeUserInfo' | 'studentUserInfo'>
 
 export type UserIncluded = BaseResponse<{
     name: string;

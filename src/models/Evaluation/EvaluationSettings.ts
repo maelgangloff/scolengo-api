@@ -29,4 +29,4 @@ export type EvaluationSettings = BaseResponse<{
         skillsSetting: {
             data: BaseObject
         };
-    }>
+}, 'evaluationsSetting'>

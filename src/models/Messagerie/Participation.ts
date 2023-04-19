@@ -11,7 +11,7 @@ export type Participation = BaseResponse<{
         sender: {
             data: BaseObject;
         };
-}>
+}, 'participation'>
 
 export type ParticipationIncluded = BaseResponse<{
     category: string;

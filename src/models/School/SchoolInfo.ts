@@ -23,7 +23,7 @@ export type SchoolInfo = BaseResponse<{
         attachments?: {
             data: BaseObject<'attachment'>[];
         };
-}>
+}, 'news'>
 
 type SchoolInfoAuthor = {
     additionalInfo: any;

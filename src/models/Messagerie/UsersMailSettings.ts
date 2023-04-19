@@ -14,7 +14,7 @@ export type UsersMailSettings = BaseResponse<{
             data: BaseObject<'signature'>
         };
         contacts: Contacts;
-    }>
+}, 'userMailSetting'>
 
 export type UsersMailSettingsIncluded = BaseResponse<{
     content?: string;
