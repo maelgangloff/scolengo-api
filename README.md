@@ -70,6 +70,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
         * [.postCommunication(attributes)](#Skolengo+postCommunication)
         * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
+        * [.getAbsenceFile(folderId)](#Skolengo+getAbsenceFile)
         * [.getAbsenceReasons()](#Skolengo+getAbsenceReasons)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
@@ -395,6 +396,17 @@ Récupérer les absences et retards d'un étudiant
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
+
+<a name="Skolengo+getAbsenceFile"></a>
+
+### skolengo.getAbsenceFile(folderId)
+Récupérer les détails d'une absence
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| folderId | <code>string</code> | Identifiant d'un dossier |
 
 <a name="Skolengo+getAbsenceReasons"></a>
 

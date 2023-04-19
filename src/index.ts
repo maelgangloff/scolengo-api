@@ -557,6 +557,22 @@ export class Skolengo {
   }
 
   /**
+   * Récupérer les détails d'une absence
+   * @param {string} folderId Identifiant d'un dossier
+   * @async
+   */
+  public async getAbsenceFile (folderId: string): Promise<SkolengoResponse<AbsenceFile, AbsenceFileIncluded>> {
+    return (await this.request<SkolengoResponse<AbsenceFile, AbsenceFileIncluded>>({
+      url: `/absence-files/${folderId}`,
+      responseType: 'json',
+      params: {
+        include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence,history,history.creator'
+      }
+    })
+    ).data
+  }
+
+  /**
    * Récupérer la liste des motifs d'absence de l'établissement
    * @async
    * @example ```js

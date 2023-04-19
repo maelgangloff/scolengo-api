@@ -1,13 +1,17 @@
+import { SimpleUser } from '../App/User'
 import { BaseObject, BaseResponse } from '../Globals'
 import { SupportedAbsenceType } from './AbsenceReasons'
 
 export type AbsenceFileRelationships = {
     currentState: {
-        data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
+        data: BaseObject<'absenceFileState'> | null;
     };
+    history?: {
+        data: BaseObject<'absenceFileState'>[] | BaseObject<'absenceFileState'> | null;
+    }
 }
 
-export type AbsenceFile = BaseResponse<never, AbsenceFileRelationships, 'absenceFileState' | 'absenceFile' | 'absenceReason'>
+export type AbsenceFile = BaseResponse<never, AbsenceFileRelationships, 'absenceFile'>
 
 export type AbsenceFileIncludedAttributes = {
     creationDateTime: string;
@@ -20,20 +24,20 @@ export type AbsenceFileIncludedAttributes = {
     code: string;
     longLabel: string;
     supportedAbsenceTypes: string[];
-}
+} | SimpleUser
 
 export type AbsenceFileIncludedRelationships = {
     creator: {
-        data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
+        data: BaseObject<'nonTeachingStaff' | 'teacher' | string> | null;
     };
     absenceReason: {
-        data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
+        data: BaseObject<'absenceReason'> | null;
     };
     absenceRecurrence: {
-        data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
+        data: BaseObject<'absenceRecurrence'> | null;
     };
     absenceFile: {
-        data: BaseObject<'absenceFileState' | 'absenceFile' | 'absenceReason'> | null;
+        data: BaseObject<'absenceFile'> | null;
     };
 }
 
