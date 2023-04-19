@@ -406,9 +406,10 @@ Récupérer la liste des motifs d'absence de l'établissement
 ```js
 const {Skolengo} = require('scolengo-api')
 
-const user = await Skolengo.fromConfigObject(config)
-user.getAbsenceReasons().then(response => {
-  console.log(`Liste des motifs: ${response.data.map(r => r.attributes.longLabel).join(';')}`)
+Skolengo.fromConfigObject(config).then(async user => {
+  user.getAbsenceReasons().then(response => {
+    console.log(`Liste des motifs: ${response.data.map(r => r.attributes?.longLabel).join(';')}`)
+  })
 })
 ```
 <a name="Skolengo.revokeToken"></a>
