@@ -52,14 +52,8 @@ export type UserIncludedAttributes = {
     name: string;
     timeZone: string;
     subscribedServices: ('MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string)[];
-} | {
-    lastName: string;
-    firstName: string;
-    photoUrl: string|null;
-    className: string;
-    dateOfBirth: string;
-    regime: string;
-}
+} | UserAttributes
+
 export type UserIncludedRelationships = {
     school: {
         data: BaseObject<'school'>;
