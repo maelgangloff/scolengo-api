@@ -67,6 +67,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
+        * [.getCommunicationParticipants(communicationId)](#Skolengo+getCommunicationParticipants)
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
         * [.postCommunication(attributes)](#Skolengo+postCommunication)
         * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
@@ -355,6 +356,17 @@ Récupérer les communication d'un dossier
 
 ### skolengo.getCommunicationParticipations(communicationId)
 Récupérer les participations d'un fil de discussion (communication)
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| communicationId | <code>string</code> | Identifiant d'une communication |
+
+<a name="Skolengo+getCommunicationParticipants"></a>
+
+### skolengo.getCommunicationParticipants(communicationId)
+Récupérer tous les participants d'un fil de discussion (communication)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 

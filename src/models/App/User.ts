@@ -7,15 +7,24 @@ export type UserPermission<Service extends string, Operation extends string> = {
 }
 
 export type UserAttributes = {
+    title?: string
     className?: string;
     dateOfBirth?: string;
     regime?: string;
     lastName: string;
     firstName: string;
     photoUrl: string|null;
+    mef?: {
+        code: string
+        label: string
+    }
     externalMail?: string;
+    importedMail?: string
+    internalMail?: string
+    profile?: string
+    source?: string
     mobilePhone?: string;
-    permissions: (
+    permissions?: (
         UserPermission<'EVAL', 'READ_EVALUATIONS'> |
         UserPermission<'CDT', 'READ_LESSONS'> |
         UserPermission<'TAF', 'READ_HOMEWORK_ASSIGNMENTS' | 'MARK_HOMEWORK_ASSIGNMENT_AS_DONE'> |
@@ -58,10 +67,3 @@ export type UserIncludedRelationships = {
 }
 
 export type UserIncluded = BaseResponse<UserIncludedAttributes, UserIncludedRelationships>
-
-export type SimpleUser = {
-    title: string;
-    firstName: string;
-    lastName: string;
-    photoUrl: string|null;
-}

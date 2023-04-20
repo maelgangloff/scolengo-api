@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
 export type EvaluationAttributes = {
@@ -22,7 +22,7 @@ export type EvaluationRelationships = {
 
 export type Evaluation = BaseResponse<EvaluationAttributes, EvaluationRelationships, 'evaluationService'>
 
-export type EvaluationIncludedAttributes = SimpleUser | {
+export type EvaluationIncludedAttributes = UserAttributes | {
     title: string | null;
     topic: string | null
     dateTime: string;

@@ -1,6 +1,6 @@
 import { PublicAttachment } from './Attachment'
 import { BaseResponse, BaseObject } from '../Globals'
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 
 export type SchoolInfoAttributes = {
@@ -48,7 +48,7 @@ type SchoolInfoSchool = {
     timeZone?: string|null;
 };
 
-export type SchoolInfoIncludedAttributes = SimpleUser | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
+export type SchoolInfoIncludedAttributes = UserAttributes | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
 export type SchoolInfoIncludedRelationships = {
     technicalUser: {
         data: BaseObject<'technicalUser'> | null;

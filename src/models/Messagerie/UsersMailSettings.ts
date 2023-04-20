@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
 export type UsersMailSettings = BaseResponse<{
@@ -34,7 +34,7 @@ export type UsersMailSettingsIncluded = BaseResponse<{
         schoolId?: string;
         groupId?: string
     }[] | null;
-} | SimpleUser, {
+} | UserAttributes, {
     parent?: {
         data: BaseObject[] | BaseObject | null;
     };

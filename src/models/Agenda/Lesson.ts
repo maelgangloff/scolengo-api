@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { Attachment } from '../School/Attachment'
@@ -52,6 +52,6 @@ export type LessonIncludedRelationships = {
     };
 }
 
-export type LessonIncludedAttributes = Attachment | HomeworkAttributes | Subject | SimpleUser | LessonContent
+export type LessonIncludedAttributes = Attachment | HomeworkAttributes | Subject | UserAttributes | LessonContent
 
 export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships>;

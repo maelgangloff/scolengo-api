@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { PersonType } from './UsersMailSettings'
 
@@ -22,7 +22,7 @@ export type ParticipationIncludedAttributes = {
 } | {
     label: string;
     logoUrl: any|null;
-} | SimpleUser
+} | UserAttributes
 
 export type ParticipationIncludedRelationships = {
     technicalUser: {

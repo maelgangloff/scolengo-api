@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { PersonType } from './UsersMailSettings'
 
@@ -19,7 +19,7 @@ export type Communication = BaseResponse<CommunicationAttributes, {
         };
 }, 'communication'>
 
-export type CommunicationIncluded = BaseResponse<SimpleUser | {
+export type CommunicationIncluded = BaseResponse<UserAttributes | {
     label: string;
     logoUrl: string|null;
 } | {

@@ -1,5 +1,5 @@
 import { Subject } from '../Agenda/Lesson'
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { Attachment } from '../School/Attachment'
 
@@ -44,7 +44,7 @@ type CorrectionWork = {
     correctionDate: string;
 }
 
-export type HomeworkAssignmentIncludedAttributes = Subject|SimpleUser|Attachment|CorrectionWork
+export type HomeworkAssignmentIncludedAttributes = Subject|UserAttributes|Attachment|CorrectionWork
 
 export type HomeworkAssignmentIncludedRelationships = {
     attachments?: {

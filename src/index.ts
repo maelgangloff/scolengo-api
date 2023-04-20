@@ -20,6 +20,7 @@ import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
 import { AbsenceFile, AbsenceFileIncluded } from './models/Assiduite/AbsenceFile'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
+import { Participant, ParticipantIncluded } from './models/Messagerie/Participant'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -491,6 +492,23 @@ export class Skolengo {
       responseType: 'json',
       params: {
         include: 'sender,sender.person,sender.technicalUser,attachments'
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer tous les participants d'un fil de discussion (communication)
+   * @param {string} communicationId Identifiant d'une communication
+   * @async
+   */
+  public async getCommunicationParticipants (communicationId: string, fromGroup = true): Promise<SkolengoResponse<Participant[], ParticipantIncluded>> {
+    return (await this.request<SkolengoResponse<Participant[], ParticipantIncluded>>({
+      url: `communications/${communicationId}/participants`,
+      responseType: 'json',
+      params: {
+        include: 'person,technicalUser',
+        filter: { fromGroup }
       }
     })
     ).data

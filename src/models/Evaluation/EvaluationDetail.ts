@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
 export type EvaluationDetailAttributes = {
@@ -29,7 +29,7 @@ export type EvaluationDetailRelationships = {
 
 export type EvaluationDetail = BaseResponse<EvaluationDetailAttributes, EvaluationDetailRelationships, 'evaluation'>
 
-export type EvaluationDetailIncludedAttributes = SimpleUser | {
+export type EvaluationDetailIncludedAttributes = UserAttributes | {
     mark: number|null;
     nonEvaluationReason: null;
     comment: string|null;

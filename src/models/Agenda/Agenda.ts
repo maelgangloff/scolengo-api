@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { LessonAttributes, Subject } from './Lesson'
@@ -27,4 +27,4 @@ export type AgendaIncludedRelationships = {
     };
 }
 
-export type AgendaIncluded = BaseResponse<HomeworkAttributes|Subject|LessonAttributes|SimpleUser, AgendaIncludedRelationships>;
+export type AgendaIncluded = BaseResponse<HomeworkAttributes|Subject|LessonAttributes|UserAttributes, AgendaIncludedRelationships>;

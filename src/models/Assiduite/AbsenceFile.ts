@@ -1,4 +1,4 @@
-import { SimpleUser } from '../App/User'
+import { UserAttributes } from '../App/User'
 import { BaseObject, BaseResponse } from '../Globals'
 import { SupportedAbsenceType } from './AbsenceReasons'
 
@@ -24,7 +24,7 @@ export type AbsenceFileIncludedAttributes = {
     code: string;
     longLabel: string;
     supportedAbsenceTypes: SupportedAbsenceType[] | string[];
-} | SimpleUser
+} | UserAttributes
 
 export type AbsenceFileIncludedRelationships = {
     creator: {
