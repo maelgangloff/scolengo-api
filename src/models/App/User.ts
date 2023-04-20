@@ -1,5 +1,11 @@
 import { BaseResponse, BaseObject } from '../Globals'
 
+export type UserPermission<Service extends string, Operation extends string> = {
+    schoolId: string,
+    service: Service,
+    permittedOperations: Operation[]
+}
+
 export type UserAttributes = {
     className?: string;
     dateOfBirth?: string;
@@ -9,11 +15,13 @@ export type UserAttributes = {
     photoUrl: string|null;
     externalMail?: string;
     mobilePhone?: string;
-    permissions: {
-        schoolId: string;
-        service: string;
-        permittedOperations: string[];
-    }[];
+    permissions: (
+        UserPermission<'EVAL', 'READ_EVALUATIONS'> |
+        UserPermission<'CDT', 'READ_LESSONS'> |
+        UserPermission<'TAF', 'READ_HOMEWORK_ASSIGNMENTS'> |
+        UserPermission<'ABS', 'READ_ABSENCE_FILES' | 'READ_ABSENCE_FILES_DETAILS' | 'COMPLETE_ABSENCE_FILES'> |
+        UserPermission<'MSG', 'READ_MESSAGES' | 'WRITE_MESSAGES'> | UserPermission<string, string>
+        )[];
     addressLines?: string[];
     postalCode?: string;
     city?: string;

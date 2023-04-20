@@ -8,4 +8,4 @@ export type AbsenceReasonAttributes = {
     supportedAbsenceTypes: SupportedAbsenceType[];
 }
 
-export type AbsenceReason = BaseResponse<AbsenceReasonAttributes, never, 'absenceReason'>
+export type AbsenceReason = BaseResponse<AbsenceReasonAttributes, undefined, 'absenceReason'>

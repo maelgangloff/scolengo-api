@@ -14,4 +14,4 @@ export type SchoolAttributes = {
     distance?: number
 }
 
-export type School = BaseResponse<SchoolAttributes, never, 'school'>
+export type School = BaseResponse<SchoolAttributes, undefined, 'school'>

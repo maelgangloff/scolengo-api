@@ -8,4 +8,4 @@ export type CurrentConfigAttributes = {
         skoAppDeploymentInfoUrl: string;
 }
 
-export type CurrentConfig = BaseResponse<CurrentConfigAttributes, never, 'skoAppConfig'>
+export type CurrentConfig = BaseResponse<CurrentConfigAttributes, undefined, 'skoAppConfig'>

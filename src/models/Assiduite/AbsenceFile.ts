@@ -11,7 +11,7 @@ export type AbsenceFileRelationships = {
     }
 }
 
-export type AbsenceFile = BaseResponse<never, AbsenceFileRelationships, 'absenceFile'>
+export type AbsenceFile = BaseResponse<undefined, AbsenceFileRelationships, 'absenceFile'>
 
 export type AbsenceFileIncludedAttributes = {
     creationDateTime: string;

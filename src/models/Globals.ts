@@ -3,12 +3,12 @@ export type BaseObject<Type = string> = {
     type: Type
 }
 
-export type BaseResponse<Attributes = never, Relationships = never, Type = string> = BaseObject<Type> & {
+export type BaseResponse<Attributes = undefined, Relationships = undefined, Type = string> = BaseObject<Type> & {
     attributes?: Attributes;
     relationships?: Relationships
 }
 
-export type SkolengoResponse<Data, Included = never> = {
+export type SkolengoResponse<Data, Included = undefined> = {
     data: Data;
     links?: {
         first: string
