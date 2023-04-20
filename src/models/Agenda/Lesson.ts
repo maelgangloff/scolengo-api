@@ -1,57 +1,57 @@
 import { UserAttributes } from '../App/User'
-import { BaseResponse, BaseObject } from '../Globals'
+import { BaseObject, BaseResponse } from '../Globals'
 import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { Attachment } from '../School/Attachment'
 
-export type Subject = {
-    label: string;
-    color: string;
+export interface Subject {
+  label: string
+  color: string
 }
 
-export type LessonContent = {
-    html: string;
-    title: string;
-    url: string|null;
+export interface LessonContent {
+  html: string
+  title: string
+  url: string | null
 }
 
-export type LessonAttributes = {
-    startDateTime: string;
-    endDateTime: string;
-    title: string;
-    location: string;
-    locationComplement: any;
-    canceled: boolean
+export interface LessonAttributes {
+  startDateTime: string
+  endDateTime: string
+  title: string
+  location: string
+  locationComplement: any
+  canceled: boolean
 }
 
-export type LessonRelationships = {
-    contents: {
-        data: BaseObject[];
-    };
-    teachers: {
-        data: BaseObject<'teacher'>[];
-    };
-    subject: {
-        data: BaseObject<'subject'>;
-    };
-    toDoForTheLesson: {
-        data: BaseObject<'homework'>[];
-    };
-    toDoAfterTheLesson: {
-        data: BaseObject<'homework'>[];
-    };
+export interface LessonRelationships {
+  contents: {
+    data: BaseObject[]
+  }
+  teachers: {
+    data: Array<BaseObject<'teacher'>>
+  }
+  subject: {
+    data: BaseObject<'subject'>
+  }
+  toDoForTheLesson: {
+    data: Array<BaseObject<'homework'>>
+  }
+  toDoAfterTheLesson: {
+    data: Array<BaseObject<'homework'>>
+  }
 }
 
 export type Lesson = BaseResponse<LessonAttributes, LessonRelationships, 'lesson'>
 
-export type LessonIncludedRelationships = {
-    subject?: {
-        data: BaseObject<'subject'>;
-    };
-    attachments?: {
-        data: BaseObject<'attachment'>[];
-    };
+export interface LessonIncludedRelationships {
+  subject?: {
+    data: BaseObject<'subject'>
+  }
+  attachments?: {
+    data: Array<BaseObject<'attachment'>>
+  }
 }
 
 export type LessonIncludedAttributes = Attachment | HomeworkAttributes | Subject | UserAttributes | LessonContent
 
-export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships, 'subject' | 'homework' | 'teacher' | 'attachment' | 'lessonContent'>;
+export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships, 'subject' | 'homework' | 'teacher' | 'attachment' | 'lessonContent'>

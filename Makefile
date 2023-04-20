@@ -12,7 +12,7 @@ test: node_modules tests ## Tester le fonctionnement du code
 	npx jest
 
 lint: node_modules .eslintrc .eslintignore ## Analyse statique du code
-	npx eslint src tests --ext .ts
+	npx eslint src/ --ext .ts
 
 README.md: dist ## Construire le fichier de description du module
 	npx jsdoc2md --template docs/README.hbs -f dist/index.js > README.md

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { Client, Issuer, TokenSet, TokenSetParameters } from 'openid-client'
+import { Client, Issuer, TokenSet } from 'openid-client'
 import { Stream } from 'node:stream'
 
 import { CurrentConfig } from './models/App/CurrentConfig'
@@ -14,7 +14,11 @@ import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluat
 import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
 import { Communication, CommunicationIncluded, NewCommunication } from './models/Messagerie/Communication'
 import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
-import { HomeworkAssignment, HomeworkAssignmentIncluded, HomeworkAttributes } from './models/Homework/HomeworkAssignment'
+import {
+  HomeworkAssignment,
+  HomeworkAssignmentIncluded,
+  HomeworkAttributes
+} from './models/Homework/HomeworkAssignment'
 import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
 import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
 import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
@@ -27,8 +31,8 @@ const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZ
 const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
 
 export class Skolengo {
-  private httpClient: AxiosInstance
-  private oidClient: Client
+  private readonly httpClient: AxiosInstance
+  private readonly oidClient: Client
   public readonly school: School
   public tokenSet: TokenSet
 
@@ -38,7 +42,7 @@ export class Skolengo {
    * const {Skolengo, TokenSet} = require('scolengo-api')
    *
    * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-   *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools.data[0]
    *   const oidClient = await Skolengo.getOIDClient(school)
    *
@@ -71,7 +75,7 @@ export class Skolengo {
       baseURL: BASE_URL,
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${tokenSet.access_token}`,
+        Authorization: `Bearer ${tokenSet.access_token as string}`,
         'X-Skolengo-Date-Format': 'utc',
         'X-Skolengo-School-Id': school.id,
         'X-Skolengo-Ems-Code': school.attributes?.emsCode as string
@@ -90,14 +94,14 @@ export class Skolengo {
       responseType: 'json',
       params: {
         /*
-        fields: {
-          userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
-          school: 'name,timeZone,subscribedServices',
-          legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
-          studentUserInfo: 'className,dateOfBirth,regime,school',
-          student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
-        },
-        */
+          fields: {
+            userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
+            school: 'name,timeZone,subscribedServices',
+            legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
+            studentUserInfo: 'className,dateOfBirth,regime,school',
+            student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
+          },
+          */
         include: 'school,students,students.school'
       }
     })
@@ -119,13 +123,13 @@ export class Skolengo {
         },
         include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors'
         /*
-        fields: {
-          evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
-          period: 'label,startDate,endDate',
-          skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
-          skillAcquisitionColors: 'colorLevelMappings'
-        }
-        */
+          fields: {
+            evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
+            period: 'label,startDate,endDate',
+            skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
+            skillAcquisitionColors: 'colorLevelMappings'
+          }
+          */
       }
     })
     ).data
@@ -148,16 +152,16 @@ export class Skolengo {
         },
         include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers'
         /*
-        fields: {
-          evaluationService: 'coefficient,average,studentAverage,scale',
-          subject: 'label,color',
-          evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
-          evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
-          subSkillEvaluationResult: 'level,subSkill',
-          teacher: 'firstName,lastName,title',
-          subSkill: 'shortLabel'
-        }
-        */
+          fields: {
+            evaluationService: 'coefficient,average,studentAverage,scale',
+            subject: 'label,color',
+            evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
+            evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
+            subSkillEvaluationResult: 'level,subSkill',
+            teacher: 'firstName,lastName,title',
+            subSkill: 'shortLabel'
+          }
+          */
       }
     })
     ).data
@@ -179,17 +183,17 @@ export class Skolengo {
         },
         include: 'evaluationService,evaluationService.subject,evaluationService.teachers,subSubject,subSkills,evaluationResult,evaluationResult.subSkillsEvaluationResults,evaluationResult.subSkillsEvaluationResults.subSkill'
         /*
-        fields: {
-          evaluationService: 'subject,teachers',
-          subject: 'label,color',
-          subSubject: 'label',
-          evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
-          evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
-          subSkill: 'shortLabel',
-          subSkillEvaluationResult: 'level,subSkill',
-          teacher: 'firstName,lastName,title'
-        }
-        */
+          fields: {
+            evaluationService: 'subject,teachers',
+            subject: 'label,color',
+            subSubject: 'label',
+            evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
+            evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
+            subSkill: 'shortLabel',
+            subSkillEvaluationResult: 'level,subSkill',
+            teacher: 'firstName,lastName,title'
+          }
+          */
       }
     })
     ).data
@@ -261,15 +265,15 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.fromConfigObject(config).then(async user => {
-   *   const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
-   *   const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
+   *   const startDate = new Date().toISOString().split('T')[0] // Aujourd'hui
+   *   const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split('T')[0] // Aujourd'hui + 15 jours
    *   const homework = await user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate)
    *
    *   console.log("Voici les exercices à faire pour les 2 prochaines semaines :", homework)
    * })
    * ```
    * @async
-  */
+   */
   public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
       url: '/homework-assignments',
@@ -444,15 +448,15 @@ export class Skolengo {
       params: {
         include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
         /*
-        fields: {
-          personContact: 'person,linksWithUser',
-          groupContact: 'label,personContacts,linksWithUser',
-          person: 'firstName,lastName,title,photoUrl',
-          userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
-          signature: 'content',
-          folder: 'name,position,type,parent'
-        }
-        */
+          fields: {
+            personContact: 'person,linksWithUser',
+            groupContact: 'label,personContacts,linksWithUser',
+            person: 'firstName,lastName,title,photoUrl',
+            userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+            signature: 'content',
+            folder: 'name,position,type,parent'
+          }
+          */
       },
       responseType: 'json'
     })
@@ -475,7 +479,10 @@ export class Skolengo {
           'folders.id': folderId
         },
         include: 'lastParticipation,lastParticipation.sender,lastParticipation.sender.person,lastParticipation.sender.technicalUser',
-        page: { limit, offset }
+        page: {
+          limit,
+          offset
+        }
       }
     })
     ).data
@@ -521,7 +528,7 @@ export class Skolengo {
    * @param {string|undefined} userId Identifiant de l'utilisateur
    * @async
    */
-  public async patchCommunicationFolders (communicationId: string, folders: BaseObject<'folders'>[], userId?: string): Promise<void> {
+  public async patchCommunicationFolders (communicationId: string, folders: Array<BaseObject<'folders'>>, userId?: string): Promise<void> {
     return (await this.request({
       url: `communications/${communicationId}/relationships/folders`,
       method: 'patch',
@@ -541,8 +548,10 @@ export class Skolengo {
    * @param {NewCommunication} attributes Les attributs de la nouvelle communication
    * @async
    */
-  public async postCommunication (attributes: NewCommunication): Promise<SkolengoResponse<NewCommunication & {id: string}>> {
-    return (await this.request<SkolengoResponse<NewCommunication & {id: string}>>({
+  public async postCommunication (attributes: NewCommunication): Promise<SkolengoResponse<NewCommunication & {
+    id: string
+  }>> {
+    return (await this.request<SkolengoResponse<NewCommunication & { id: string }>>({
       url: 'communications',
       method: 'post',
       responseType: 'json',
@@ -617,7 +626,7 @@ export class Skolengo {
    * @async
    */
   public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
-    return oidClient.revoke(token)
+    return await oidClient.revoke(token)
   }
 
   /**
@@ -655,14 +664,17 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<Array<School>>> {
+  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<School[]>> {
     return (await axios.request<SkolengoResponse<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
       method: 'get',
       responseType: 'json',
       params: {
-        page: { limit, offset },
+        page: {
+          limit,
+          offset
+        },
         filter: { text }
       }
     })).data
@@ -690,8 +702,14 @@ export class Skolengo {
       method: 'get',
       responseType: 'json',
       params: {
-        page: { limit, offset },
-        filter: { lat, lon }
+        page: {
+          limit,
+          offset
+        },
+        filter: {
+          lat,
+          lon
+        }
       }
     })).data
   }
@@ -703,7 +721,7 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-   *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools.data[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *   console.log(oidClient.authorizationUrl())
@@ -714,7 +732,7 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-   *   if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools.data[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *
@@ -786,7 +804,7 @@ export class Skolengo {
    */
   public static async fromConfigObject (config: AuthConfig): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
-    const tokenSet = new TokenSet(config.tokenSet as TokenSetParameters)
+    const tokenSet = new TokenSet(config.tokenSet)
     return new Skolengo(oidClient, config.school, tokenSet)
   }
 
@@ -802,7 +820,7 @@ export class Skolengo {
     } catch {
       const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
       this.tokenSet = tokenSet
-      this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token}`
+      this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token as string}`
       return await this.httpClient.request<T, R, D>(config)
     }
   }

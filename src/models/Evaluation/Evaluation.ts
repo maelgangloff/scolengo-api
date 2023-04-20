@@ -1,55 +1,55 @@
 import { UserAttributes } from '../App/User'
-import { BaseResponse, BaseObject } from '../Globals'
+import { BaseObject, BaseResponse } from '../Globals'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { EvaluationDetailAttributes } from './EvaluationDetail'
 
-export type EvaluationAttributes = {
-    coefficient: number;
-    average: number | null;
-    scale: number;
-    studentAverage: number | null;
+export interface EvaluationAttributes {
+  coefficient: number
+  average: number | null
+  scale: number
+  studentAverage: number | null
 }
 
-export type EvaluationRelationships = {
-    evaluations: {
-        data: BaseObject<'evaluation'>[];
-    };
-    subject: {
-        data: BaseObject<'subject'>
-    };
-    teachers: {
-        data: BaseObject<'teacher'>[];
-    }
-    }
+export interface EvaluationRelationships {
+  evaluations: {
+    data: Array<BaseObject<'evaluation'>>
+  }
+  subject: {
+    data: BaseObject<'subject'>
+  }
+  teachers: {
+    data: Array<BaseObject<'teacher'>>
+  }
+}
 
 export type Evaluation = BaseResponse<EvaluationAttributes, EvaluationRelationships, 'evaluationService'>
 
 export type EvaluationIncludedAttributes = UserAttributes | EvaluationDetailAttributes | {
-    mark: number | null;
-    nonEvaluationReason: null | string;
-    comment: string|null
+  mark: number | null
+  nonEvaluationReason: null | string
+  comment: string | null
 } | {
-    label: string;
-    color: null | string;
+  label: string
+  color: null | string
 } | {
-    shortLabel: string
+  shortLabel: string
 } | {
-    level: string
+  level: string
 }
 
-export type EvaluationIncludedRelationships = {
-    subSkills?: {
-        data: BaseObject<'subSkill'>[];
-    };
-    evaluationResult?: {
-        data: BaseObject<'evaluationResult'>
-    };
-    subSkillsEvaluationResults?: {
-        data: BaseObject<'subSkillEvaluationResult'>[];
-    },
-    subSkill?: {
-        data: BaseObject<'subSkill'>
-    }
+export interface EvaluationIncludedRelationships {
+  subSkills?: {
+    data: Array<BaseObject<'subSkill'>>
+  }
+  evaluationResult?: {
+    data: BaseObject<'evaluationResult'>
+  }
+  subSkillsEvaluationResults?: {
+    data: Array<BaseObject<'subSkillEvaluationResult'>>
+  }
+  subSkill?: {
+    data: BaseObject<'subSkill'>
+  }
 }
 
 export type EvaluationIncluded = BaseResponse<EvaluationIncludedAttributes, EvaluationIncludedRelationships, 'evaluation' | 'evaluationResult' | 'subSkill' | 'subSkillEvaluationResult' | 'subject' | PersonType>

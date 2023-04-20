@@ -98,7 +98,7 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 const {Skolengo, TokenSet} = require('scolengo-api')
 
 Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-  if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+  if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
   const school = schools.data[0]
   const oidClient = await Skolengo.getOIDClient(school)
 
@@ -232,8 +232,8 @@ Récupérer les devoirs d'un étudiant
 const {Skolengo} = require('scolengo-api')
 
 Skolengo.fromConfigObject(config).then(async user => {
-  const startDate = new Date().toISOString().split("T")[0] // Aujourd'hui
-  const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split("T")[0] // Aujourd'hui + 15 jours
+  const startDate = new Date().toISOString().split('T')[0] // Aujourd'hui
+  const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split('T')[0] // Aujourd'hui + 15 jours
   const homework = await user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate)
 
   console.log("Voici les exercices à faire pour les 2 prochaines semaines :", homework)
@@ -522,7 +522,7 @@ Créer un client OpenID Connect permettant l'obtention des jetons (refresh token
 const {Skolengo} = require('scolengo-api')
 
 Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-  if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+  if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
   const school = schools.data[0]
   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
   console.log(oidClient.authorizationUrl())
@@ -533,7 +533,7 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
 const {Skolengo} = require('scolengo-api')
 
 Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-  if(!schools.data.length) throw new Error("Aucun établissement n'a été trouvé.")
+  if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
   const school = schools.data[0]
   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
 
