@@ -1,6 +1,7 @@
 import { PublicAttachment } from './Attachment'
 import { BaseResponse, BaseObject } from '../Globals'
 import { SimpleUser } from '../App/User'
+import { PersonType } from '../Messagerie/UsersMailSettings'
 
 export type SchoolInfoAttributes = {
     publicationDateTime: string;
@@ -50,10 +51,10 @@ type SchoolInfoSchool = {
 export type SchoolInfoIncludedAttributes = SimpleUser | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
 export type SchoolInfoIncludedRelationships = {
     technicalUser: {
-        data: BaseObject | null;
+        data: BaseObject<'technicalUser'> | null;
     };
     person: {
-        data: BaseObject | null;
+        data: BaseObject<PersonType> | null;
     };
 }
 

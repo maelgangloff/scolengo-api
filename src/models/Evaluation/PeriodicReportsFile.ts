@@ -1,4 +1,4 @@
-import { BaseResponse } from '../Globals'
+import { BaseObject, BaseResponse } from '../Globals'
 
 export type PeriodicReportsFileAttributes = {
     name: string
@@ -11,7 +11,7 @@ export type PeriodicReportsFileAttributes = {
 
 export type PeriodicReportsFileRelationships = {
     period: {
-        data :any
+        data : BaseObject<'period'> | null
     }
 }
 

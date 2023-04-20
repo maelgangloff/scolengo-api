@@ -1,5 +1,6 @@
 import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { PersonType } from './UsersMailSettings'
 
 export type CommunicationAttributes = {
     subject: string;
@@ -37,10 +38,10 @@ export type CommunicationIncluded = BaseResponse<SimpleUser | {
         data: BaseObject | null;
     };
     technicalUser?: {
-        data: BaseObject | null;
+        data: BaseObject<'technicalUser'> | null;
     };
     person?: {
-        data: BaseObject | null;
+        data: BaseObject<PersonType> | null;
     };
 }>
 

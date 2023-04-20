@@ -23,7 +23,7 @@ export type AbsenceFileIncludedAttributes = {
 } | {
     code: string;
     longLabel: string;
-    supportedAbsenceTypes: string[];
+    supportedAbsenceTypes: SupportedAbsenceType[] | string[];
 } | SimpleUser
 
 export type AbsenceFileIncludedRelationships = {

@@ -10,7 +10,7 @@ export type EvaluationAttributes = {
 
 export type EvaluationRelationships = {
     evaluations: {
-        data: BaseObject[];
+        data: BaseObject<'evaluation'>[];
     };
     subject: {
         data: BaseObject<'subject'>
@@ -38,17 +38,24 @@ export type EvaluationIncludedAttributes = SimpleUser | {
 } | {
     label: string;
     color: null | string;
+} | {
+    shortLabel: string
+} | {
+    level: string
 }
 
 export type EvaluationIncludedRelationships = {
     subSkills?: {
-        data: BaseObject[];
+        data: BaseObject<'subSkill'>[];
     };
     evaluationResult?: {
-        data: BaseObject
+        data: BaseObject<'evaluationResult'>
     };
     subSkillsEvaluationResults?: {
-        data: BaseObject[];
+        data: BaseObject<'subSkillEvaluationResult'>[];
+    },
+    subSkill?: {
+        data: BaseObject<'subSkill'>
     }
 }
 

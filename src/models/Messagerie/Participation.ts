@@ -1,4 +1,6 @@
+import { SimpleUser } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { PersonType } from './UsersMailSettings'
 
 export type Participation = BaseResponse<{
         dateTime: string;
@@ -13,18 +15,26 @@ export type Participation = BaseResponse<{
         };
 }, 'participation'>
 
-export type ParticipationIncluded = BaseResponse<{
+export type ParticipationIncludedAttributes = {
     category: string;
     additionalInfo: any|null;
     fromGroup: boolean;
 } | {
     label: string;
     logoUrl: any|null;
-}, {
+} | SimpleUser
+
+export type ParticipationIncludedRelationships = {
     technicalUser: {
         data: BaseObject[] | BaseObject | null;
     };
     person: {
-        data: BaseObject[] | BaseObject | null;
+        data: BaseObject<PersonType>[] | BaseObject<PersonType> | null;
     };
-}>
+} | {
+    school: {
+        data: any
+    }
+}
+
+export type ParticipationIncluded = BaseResponse<ParticipationIncludedAttributes, ParticipationIncludedRelationships>

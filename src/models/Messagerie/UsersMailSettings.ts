@@ -6,15 +6,17 @@ export type UsersMailSettings = BaseResponse<{
         maxCharsInCommunicationSubject: number;
     }, {
         folders: {
-            data: BaseObject[] | BaseObject | null;
+            data: BaseObject<'folder'>[];
         };
         signature: {
             data: BaseObject<'signature'>
         };
         contacts: {
-            data: BaseObject[] | BaseObject | null;
+            data: BaseObject<'personContact' | 'groupContact'>[];
         };
 }, 'userMailSetting'>
+
+export type PersonType = 'person' | 'student' | 'personInContactWithStudent' | 'nonTeachingStaff' | 'teacher'
 
 export type UsersMailSettingsIncluded = BaseResponse<{
     content?: string;
@@ -27,18 +29,19 @@ export type UsersMailSettingsIncluded = BaseResponse<{
     linksWithUser: {
         description: null | string;
         additionalInfo: string[];
-        type: string;
+        type: ('SCHOOL' | 'FAMILY' | 'GROUP' | string);
         studentId?: string;
         schoolId?: string;
+        groupId?: string
     }[] | null;
 } | SimpleUser, {
     parent?: {
         data: BaseObject[] | BaseObject | null;
     };
     personContacts?: {
-        data: BaseObject[] | BaseObject | null;
+        data: BaseObject<'personContact'>[] | BaseObject<'personContact'> | null;
     };
     person?: {
-        data: BaseObject[] | BaseObject | null;
+        data: BaseObject<PersonType>[] | BaseObject<PersonType> | null;
     };
 }>

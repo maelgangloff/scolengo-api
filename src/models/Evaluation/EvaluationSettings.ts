@@ -17,7 +17,7 @@ export type EvaluationSettingsIncludedAttributes = {
 
 export type EvaluationSettingsIncludedRelationships = {
     skillAcquisitionColors: {
-        data: BaseObject
+        data: BaseObject<'skillAcquisitionColors'>
     };
 }
 
@@ -34,7 +34,7 @@ export type EvaluationSettingsRelationships = {
         data: BaseObject<'period'>[];
     };
     skillsSetting: {
-        data: BaseObject
+        data: BaseObject<'skillsSetting'>
     };
 }
 

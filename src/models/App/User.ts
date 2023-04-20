@@ -18,7 +18,7 @@ export type UserAttributes = {
     permissions: (
         UserPermission<'EVAL', 'READ_EVALUATIONS'> |
         UserPermission<'CDT', 'READ_LESSONS'> |
-        UserPermission<'TAF', 'READ_HOMEWORK_ASSIGNMENTS'> |
+        UserPermission<'TAF', 'READ_HOMEWORK_ASSIGNMENTS' | 'MARK_HOMEWORK_ASSIGNMENT_AS_DONE'> |
         UserPermission<'ABS', 'READ_ABSENCE_FILES' | 'READ_ABSENCE_FILES_DETAILS' | 'COMPLETE_ABSENCE_FILES'> |
         UserPermission<'MSG', 'READ_MESSAGES' | 'WRITE_MESSAGES'> | UserPermission<string, string>
         )[];
@@ -42,7 +42,7 @@ export type User = BaseResponse<UserAttributes, UserRelationships, 'legalReprese
 export type UserIncludedAttributes = {
     name: string;
     timeZone: string;
-    subscribedServices: string[];
+    subscribedServices: ('MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string)[];
 } | {
     lastName: string;
     firstName: string;
