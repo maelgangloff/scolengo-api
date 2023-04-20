@@ -1,5 +1,7 @@
 import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { PersonType } from '../Messagerie/UsersMailSettings'
+import { EvaluationDetailAttributes } from './EvaluationDetail'
 
 export type EvaluationAttributes = {
     coefficient: number;
@@ -22,16 +24,7 @@ export type EvaluationRelationships = {
 
 export type Evaluation = BaseResponse<EvaluationAttributes, EvaluationRelationships, 'evaluationService'>
 
-export type EvaluationIncludedAttributes = UserAttributes | {
-    title: string | null;
-    topic: string | null
-    dateTime: string;
-    coefficient: number;
-    min: number |null
-    max: number |null
-    average: number | null;
-    scale: number;
-} | {
+export type EvaluationIncludedAttributes = UserAttributes | EvaluationDetailAttributes | {
     mark: number | null;
     nonEvaluationReason: null | string;
     comment: string|null
@@ -59,4 +52,4 @@ export type EvaluationIncludedRelationships = {
     }
 }
 
-export type EvaluationIncluded = BaseResponse<EvaluationIncludedAttributes, EvaluationIncludedRelationships>
+export type EvaluationIncluded = BaseResponse<EvaluationIncludedAttributes, EvaluationIncludedRelationships, 'evaluation' | 'evaluationResult' | 'subSkill' | 'subSkillEvaluationResult' | 'subject' | PersonType>

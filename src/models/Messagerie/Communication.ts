@@ -1,5 +1,5 @@
-import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { ParticipantIncludedAttributes } from './Participant'
 import { PersonType } from './UsersMailSettings'
 
 export type CommunicationAttributes = {
@@ -15,14 +15,11 @@ export type CommunicationAttributes = {
 
 export type Communication = BaseResponse<CommunicationAttributes, {
         lastParticipation: {
-            data: BaseObject | null;
+            data: BaseObject<'participation'> | null;
         };
 }, 'communication'>
 
-export type CommunicationIncludedAttributes = UserAttributes | {
-    label: string;
-    logoUrl: string|null;
-} | {
+export type CommunicationIncludedAttributes = ParticipantIncludedAttributes | {
     dateTime: string;
     content: string;
     read: boolean;

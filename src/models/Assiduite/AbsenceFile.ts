@@ -1,6 +1,7 @@
 import { UserAttributes } from '../App/User'
 import { BaseObject, BaseResponse } from '../Globals'
-import { SupportedAbsenceType } from './AbsenceReasons'
+import { PersonType } from '../Messagerie/UsersMailSettings'
+import { AbsenceReasonAttributes, SupportedAbsenceType } from './AbsenceReasons'
 
 export type AbsenceFileRelationships = {
     currentState: {
@@ -20,15 +21,11 @@ export type AbsenceFileIncludedAttributes = {
     absenceType: SupportedAbsenceType | string;
     absenceFileStatus: 'IN_PROGRESS' | 'LOCKED' | string;
     comment: string;
-} | {
-    code: string;
-    longLabel: string;
-    supportedAbsenceTypes: SupportedAbsenceType[] | string[];
-} | UserAttributes
+} | AbsenceReasonAttributes | UserAttributes
 
 export type AbsenceFileIncludedRelationships = {
     creator: {
-        data: BaseObject<'nonTeachingStaff' | 'teacher' | string> | null;
+        data: BaseObject<PersonType> | null;
     };
     absenceReason: {
         data: BaseObject<'absenceReason'> | null;

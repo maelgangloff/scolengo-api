@@ -21,7 +21,7 @@ export type EvaluationSettingsIncludedRelationships = {
     };
 }
 
-export type EvaluationSettingsIncluded = BaseResponse<EvaluationSettingsIncludedAttributes, EvaluationSettingsIncludedRelationships>
+export type EvaluationSettingsIncluded = BaseResponse<EvaluationSettingsIncludedAttributes, EvaluationSettingsIncludedRelationships, 'period' | 'skillAcquisitionColors' | 'skillsSetting'>
 
 export type EvaluationSettingsAttributes = {
     periodicReportsEnabled: boolean;

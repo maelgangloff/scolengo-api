@@ -1,5 +1,5 @@
-import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { ParticipantIncludedAttributes } from './Participant'
 import { PersonType } from './UsersMailSettings'
 
 export type ParticipationAttributes = {
@@ -23,10 +23,7 @@ export type ParticipationIncludedAttributes = {
     category: 'INITIATOR' | 'TO';
     additionalInfo: any|null;
     fromGroup: boolean;
-} | {
-    label: string;
-    logoUrl: string|null;
-} | UserAttributes
+} | ParticipantIncludedAttributes
 
 export type ParticipationIncludedRelationships = {
     technicalUser: {
@@ -41,4 +38,4 @@ export type ParticipationIncludedRelationships = {
     }
 }
 
-export type ParticipationIncluded = BaseResponse<ParticipationIncludedAttributes, ParticipationIncludedRelationships>
+export type ParticipationIncluded = BaseResponse<ParticipationIncludedAttributes, ParticipationIncludedRelationships, PersonType | 'school'>

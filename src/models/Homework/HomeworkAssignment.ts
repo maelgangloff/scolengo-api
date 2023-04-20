@@ -1,6 +1,7 @@
 import { Subject } from '../Agenda/Lesson'
 import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { PersonType } from '../Messagerie/UsersMailSettings'
 import { Attachment } from '../School/Attachment'
 
 export type HomeworkAttributes = {
@@ -61,4 +62,4 @@ export type HomeworkAssignmentIncludedRelationships = {
     }
 }
 
-export type HomeworkAssignmentIncluded = BaseResponse<HomeworkAssignmentIncludedAttributes, HomeworkAssignmentIncludedRelationships>
+export type HomeworkAssignmentIncluded = BaseResponse<HomeworkAssignmentIncludedAttributes, HomeworkAssignmentIncludedRelationships, 'attachment' | 'subject' | 'correctedWork' | PersonType>

@@ -54,4 +54,4 @@ export type LessonIncludedRelationships = {
 
 export type LessonIncludedAttributes = Attachment | HomeworkAttributes | Subject | UserAttributes | LessonContent
 
-export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships>;
+export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships, 'subject' | 'homework' | 'teacher' | 'attachment' | 'lessonContent'>;

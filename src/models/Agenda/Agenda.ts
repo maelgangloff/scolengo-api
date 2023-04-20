@@ -27,4 +27,4 @@ export type AgendaIncludedRelationships = {
     };
 }
 
-export type AgendaIncluded = BaseResponse<HomeworkAttributes|Subject|LessonAttributes|UserAttributes, AgendaIncludedRelationships>;
+export type AgendaIncluded = BaseResponse<HomeworkAttributes|Subject|LessonAttributes|UserAttributes, AgendaIncludedRelationships, 'homework' | 'lesson' | 'subject' | 'teacher'>;

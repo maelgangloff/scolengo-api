@@ -1,5 +1,6 @@
 import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
+import { PersonType } from '../Messagerie/UsersMailSettings'
 
 export type EvaluationDetailAttributes = {
     title: string|null;
@@ -55,4 +56,4 @@ export type EvaluationDetailIncludedRelationships = {
     };
 }
 
-export type EvaluationDetailIncluded = BaseResponse<EvaluationDetailIncludedAttributes, EvaluationDetailIncludedRelationships >
+export type EvaluationDetailIncluded = BaseResponse<EvaluationDetailIncludedAttributes, EvaluationDetailIncludedRelationships, 'evaluationResult' | 'evaluationService' | 'subSkill' | 'subSkillEvaluationResult' | 'subject' | PersonType>

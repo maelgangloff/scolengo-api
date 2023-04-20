@@ -60,4 +60,4 @@ export type UserIncludedRelationships = {
     };
 }
 
-export type UserIncluded = BaseResponse<UserIncludedAttributes, UserIncludedRelationships>
+export type UserIncluded = BaseResponse<UserIncludedAttributes, UserIncludedRelationships, 'school' | 'student'>
