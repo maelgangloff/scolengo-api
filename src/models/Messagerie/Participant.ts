@@ -11,14 +11,17 @@ export type ParticipantAttributes = {
 
 export type ParticipantRelationships = {
     technicalUser: {
-        data: BaseObject<PersonType> | null
+        data: BaseObject<'technicalUser'> | null
     }
     person: {
         data: BaseObject<PersonType> | null
     };
 }
 
-export type ParticipantIncludedAttributes = UserAttributes
+export type ParticipantIncludedAttributes = UserAttributes | {
+    label: string
+    logoUrl: string|null
+}
 
 export type ParticipantIncludedRelationships = {
     school? : {

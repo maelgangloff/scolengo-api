@@ -1,24 +1,28 @@
 import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 
-export type UsersMailSettings = BaseResponse<{
-        maxCharsInParticipationContent: number;
-        maxCharsInCommunicationSubject: number;
-    }, {
-        folders: {
-            data: BaseObject<'folder'>[];
-        };
-        signature: {
-            data: BaseObject<'signature'>
-        };
-        contacts: {
-            data: BaseObject<'personContact' | 'groupContact'>[];
-        };
-}, 'userMailSetting'>
+export type UsersMailSettingsAttributes = {
+    maxCharsInParticipationContent: number;
+    maxCharsInCommunicationSubject: number;
+}
 
-export type PersonType = 'person' | 'student' | 'personInContactWithStudent' | 'nonTeachingStaff' | 'teacher'
+export type UsersMailSettingsRelationships = {
+    folders: {
+        data: BaseObject<'folder'>[];
+    };
+    signature: {
+        data: BaseObject<'signature'>
+    };
+    contacts: {
+        data: BaseObject<'personContact' | 'groupContact'>[];
+    };
+}
 
-export type UsersMailSettingsIncluded = BaseResponse<{
+export type UsersMailSettings = BaseResponse<UsersMailSettingsAttributes, UsersMailSettingsRelationships, 'userMailSetting'>
+
+export type PersonType = 'person' | 'student' | 'personInContactWithStudent' | 'nonTeachingStaff' | 'teacher' | 'technicalUser'
+
+export type UsersMailSettingsIncludedAttributes = {
     content?: string;
 } | {
     name: string;
@@ -34,7 +38,9 @@ export type UsersMailSettingsIncluded = BaseResponse<{
         schoolId?: string;
         groupId?: string
     }[] | null;
-} | UserAttributes, {
+} | UserAttributes
+
+export type UsersMailSettingsIncludedRelationships = {
     parent?: {
         data: BaseObject[] | BaseObject | null;
     };
@@ -44,4 +50,10 @@ export type UsersMailSettingsIncluded = BaseResponse<{
     person?: {
         data: BaseObject<PersonType>[] | BaseObject<PersonType> | null;
     };
-}>
+}
+
+export type UsersMailSettingsIncluded = BaseResponse<
+    UsersMailSettingsIncludedAttributes,
+    UsersMailSettingsIncludedRelationships,
+    'groupContact' | 'signature' | 'personContact' | 'folder' | PersonType
+>

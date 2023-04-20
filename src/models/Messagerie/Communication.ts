@@ -19,7 +19,7 @@ export type Communication = BaseResponse<CommunicationAttributes, {
         };
 }, 'communication'>
 
-export type CommunicationIncluded = BaseResponse<UserAttributes | {
+export type CommunicationIncludedAttributes = UserAttributes | {
     label: string;
     logoUrl: string|null;
 } | {
@@ -27,10 +27,11 @@ export type CommunicationIncluded = BaseResponse<UserAttributes | {
     content: string;
     read: boolean;
 } | {
-    category: string;
+    category: 'INITIATOR' | 'TO';
     additionalInfo: any|null;
     fromGroup: boolean;
-}, {
+}
+export type CommunicationIncludedRelationShips = {
     school?: {
         data: BaseObject<'school'> | null;
     };
@@ -43,7 +44,9 @@ export type CommunicationIncluded = BaseResponse<UserAttributes | {
     person?: {
         data: BaseObject<PersonType> | null;
     };
-}>
+}
+
+export type CommunicationIncluded = BaseResponse<CommunicationIncludedAttributes, CommunicationIncludedRelationShips, PersonType | 'participation' | 'personParticipant'>
 
 export type NewCommunicationAttributes = Partial<CommunicationAttributes> & {
     subject: string;

@@ -2,34 +2,38 @@ import { UserAttributes } from '../App/User'
 import { BaseResponse, BaseObject } from '../Globals'
 import { PersonType } from './UsersMailSettings'
 
-export type Participation = BaseResponse<{
-        dateTime: string;
-        content: string;
-        read: boolean;
-    }, {
-        attachments: {
-            data: any[] | BaseObject<'attachment'> | null;
-        };
-        sender: {
-            data: BaseObject;
-        };
-}, 'participation'>
+export type ParticipationAttributes = {
+    dateTime: string;
+    content: string;
+    read: boolean;
+}
+
+export type ParticipationRelationships = {
+    attachments: {
+        data: any[] | BaseObject<'attachment'> | null;
+    };
+    sender: {
+        data: BaseObject;
+    };
+}
+
+export type Participation = BaseResponse<ParticipationAttributes, ParticipationRelationships, 'participation'>
 
 export type ParticipationIncludedAttributes = {
-    category: string;
+    category: 'INITIATOR' | 'TO';
     additionalInfo: any|null;
     fromGroup: boolean;
 } | {
     label: string;
-    logoUrl: any|null;
+    logoUrl: string|null;
 } | UserAttributes
 
 export type ParticipationIncludedRelationships = {
     technicalUser: {
-        data: BaseObject[] | BaseObject | null;
+        data: BaseObject<'technicalUser'> | null;
     };
     person: {
-        data: BaseObject<PersonType>[] | BaseObject<PersonType> | null;
+        data: BaseObject<PersonType> | null;
     };
 } | {
     school: {
