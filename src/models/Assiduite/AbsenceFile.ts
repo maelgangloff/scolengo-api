@@ -8,7 +8,7 @@ export interface AbsenceFileRelationships {
     data: BaseObject<'absenceFileState'> | null
   }
   history?: {
-    data: Array<BaseObject<'absenceFileState'>> | BaseObject<'absenceFileState'> | null
+    data: Array<BaseObject<'absenceFileState'>> | null
   }
 }
 

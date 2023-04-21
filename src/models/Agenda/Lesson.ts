@@ -25,7 +25,7 @@ export interface LessonAttributes {
 
 export interface LessonRelationships {
   contents: {
-    data: BaseObject[]
+    data: Array<BaseObject<'lessonContent'>>
   }
   teachers: {
     data: Array<BaseObject<'teacher'>>
