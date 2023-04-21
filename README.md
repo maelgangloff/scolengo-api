@@ -52,18 +52,18 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * [new Skolengo(oidClient, school, tokenSet)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo(userId)](#Skolengo+getUserInfo)
+        * [.downloadAttachment(attributes)](#Skolengo+downloadAttachment)
+        * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
+        * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
         * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getPeriodicReportsFiles(studentId)](#Skolengo+getPeriodicReportsFiles)
-        * [.downloadAttachment(attributes)](#Skolengo+downloadAttachment)
+        * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
+        * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
-        * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
-        * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
-        * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
-        * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
@@ -130,6 +130,52 @@ Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de 
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
 
+<a name="Skolengo+downloadAttachment"></a>
+
+### skolengo.downloadAttachment(attributes)
+Télécharger une pièce jointe.
+
+Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
+
+🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| attributes | <code>AttachmentAttributes</code> | La pièce jointe |
+
+**Example**  
+```js
+const {createWriteStream} = require('node:fs')
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.fromConfigObject(config).then(async user => {
+  const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
+  const bulletins = await user.getPeriodicReportsFiles(student)
+  for(const bulletin of bulletins.data) {
+    console.log(bulletin.attributes.name)
+    (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
+  }
+})
+```
+<a name="Skolengo+getSchoolInfos"></a>
+
+### skolengo.getSchoolInfos()
+Récupérer toutes les actualités de l'établissement
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+<a name="Skolengo+getSchoolInfo"></a>
+
+### skolengo.getSchoolInfo(schoolInfoId)
+Récupérer une actualité de l'établissement
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| schoolInfoId | <code>string</code> | Identifiant d'une actualité |
+
 <a name="Skolengo+getEvaluationSettings"></a>
 
 ### skolengo.getEvaluationSettings(studentId)
@@ -186,35 +232,31 @@ Skolengo.fromConfigObject(config).then(async user => {
   console.log(bulletins)
 })
 ```
-<a name="Skolengo+downloadAttachment"></a>
+<a name="Skolengo+getAgenda"></a>
 
-### skolengo.downloadAttachment(attributes)
-Télécharger une pièce jointe.
-
-Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
-
-🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
+### skolengo.getAgenda(studentId, startDate, endDate)
+Récupérer l'agenda d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| attributes | <code>AttachmentAttributes</code> | La pièce jointe |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
+| endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
 
-**Example**  
-```js
-const {createWriteStream} = require('node:fs')
-const {Skolengo} = require('scolengo-api')
+<a name="Skolengo+getLesson"></a>
 
-Skolengo.fromConfigObject(config).then(async user => {
-  const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
-  const bulletins = await user.getPeriodicReportsFiles(student)
-  for(const bulletin of bulletins.data) {
-    console.log(bulletin.attributes.name)
-    (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
-  }
-})
-```
+### skolengo.getLesson(studentId, lessonId)
+Récupérer les données d'un cours/leçon
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| studentId | <code>string</code> | Identifiant d'un étudiant |
+| lessonId | <code>string</code> | Identifiant d'un cours/leçon |
+
 <a name="Skolengo+getHomeworkAssignments"></a>
 
 ### skolengo.getHomeworkAssignments(studentId, startDate, endDate)
@@ -287,48 +329,6 @@ user.patchHomeworkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123
   console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
 })
 ```
-<a name="Skolengo+getAgenda"></a>
-
-### skolengo.getAgenda(studentId, startDate, endDate)
-Récupérer l'agenda d'un étudiant
-
-**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
-| startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
-| endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
-
-<a name="Skolengo+getLesson"></a>
-
-### skolengo.getLesson(studentId, lessonId)
-Récupérer les données d'un cours/leçon
-
-**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
-| lessonId | <code>string</code> | Identifiant d'un cours/leçon |
-
-<a name="Skolengo+getSchoolInfos"></a>
-
-### skolengo.getSchoolInfos()
-Récupérer toutes les actualités de l'établissement
-
-**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-<a name="Skolengo+getSchoolInfo"></a>
-
-### skolengo.getSchoolInfo(schoolInfoId)
-Récupérer une actualité de l'établissement
-
-**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| schoolInfoId | <code>string</code> | Identifiant d'une actualité |
-
 <a name="Skolengo+getUsersMailSettings"></a>
 
 ### skolengo.getUsersMailSettings(userId)

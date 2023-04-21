@@ -110,6 +110,67 @@ export class Skolengo {
   }
 
   /**
+   * Télécharger une pièce jointe.
+   *
+   * Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
+   *
+   * 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
+   * @async
+   * @example ```js
+   * const {createWriteStream} = require('node:fs')
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
+   *   const bulletins = await user.getPeriodicReportsFiles(student)
+   *   for(const bulletin of bulletins.data) {
+   *     console.log(bulletin.attributes.name)
+   *     (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
+   *   }
+   * })
+   * ```
+   * @param {AttachmentAttributes} attributes La pièce jointe
+   */
+  public async downloadAttachment (attributes: AttachmentAttributes): Promise<Stream> {
+    return (await this.request<Stream>({
+      url: attributes.url,
+      responseType: 'stream'
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer toutes les actualités de l'établissement
+   * @async
+   */
+  public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
+    return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
+      url: '/schools-info',
+      responseType: 'json',
+      params: {
+        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer une actualité de l'établissement
+   * @param {string} schoolInfoId Identifiant d'une actualité
+   * @async
+   */
+  public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
+    return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
+      url: `/schools-info/${schoolInfoId}`,
+      responseType: 'json',
+      params: {
+        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
+      }
+    })
+    ).data
+  }
+
+  /**
    * Statut des services d'évaluation (identifiant des périodes, ...)
    * @param {string} studentId Identifiant d'un étudiant
    * @async
@@ -229,31 +290,46 @@ export class Skolengo {
   }
 
   /**
-   * Télécharger une pièce jointe.
-   *
-   * Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
-   *
-   * 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
+   * Récupérer l'agenda d'un étudiant
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} startDate Date de début - Format : YYYY-MM-DD
+   * @param {string} endDate Date de fin - Format : YYYY-MM-DD
    * @async
-   * @example ```js
-   * const {createWriteStream} = require('node:fs')
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.fromConfigObject(config).then(async user => {
-   *   const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
-   *   const bulletins = await user.getPeriodicReportsFiles(student)
-   *   for(const bulletin of bulletins.data) {
-   *     console.log(bulletin.attributes.name)
-   *     (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
-   *   }
-   * })
-   * ```
-   * @param {AttachmentAttributes} attributes La pièce jointe
    */
-  public async downloadAttachment (attributes: AttachmentAttributes): Promise<Stream> {
-    return (await this.request<Stream>({
-      url: attributes.url,
-      responseType: 'stream'
+  public async getAgenda (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
+    return (await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
+      url: '/agendas',
+      responseType: 'json',
+      params: {
+        include: 'lessons,lessons.subject,lessons.teachers,homeworkAssignments,homeworkAssignments.subject',
+        filter: {
+          'student.id': studentId,
+          date: {
+            GE: startDate,
+            LE: endDate
+          }
+        }
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Récupérer les données d'un cours/leçon
+   * @param {string} studentId Identifiant d'un étudiant
+   * @param {string} lessonId Identifiant d'un cours/leçon
+   * @async
+   */
+  public async getLesson (studentId: string, lessonId: string): Promise<SkolengoResponse<Lesson, LessonIncluded>> {
+    return (await this.request<SkolengoResponse<Lesson, LessonIncluded>>({
+      url: `/lessons/${lessonId}`,
+      responseType: 'json',
+      params: {
+        include: 'teachers,contents,contents.attachments,subject,toDoForTheLesson,toDoForTheLesson.subject,toDoAfterTheLesson,toDoAfterTheLesson.subject',
+        filter: {
+          'student.id': studentId
+        }
+      }
     })
     ).data
   }
@@ -364,82 +440,6 @@ export class Skolengo {
   }
 
   /**
-   * Récupérer l'agenda d'un étudiant
-   * @param {string} studentId Identifiant d'un étudiant
-   * @param {string} startDate Date de début - Format : YYYY-MM-DD
-   * @param {string} endDate Date de fin - Format : YYYY-MM-DD
-   * @async
-   */
-  public async getAgenda (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
-    return (await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
-      url: '/agendas',
-      responseType: 'json',
-      params: {
-        include: 'lessons,lessons.subject,lessons.teachers,homeworkAssignments,homeworkAssignments.subject',
-        filter: {
-          'student.id': studentId,
-          date: {
-            GE: startDate,
-            LE: endDate
-          }
-        }
-      }
-    })
-    ).data
-  }
-
-  /**
-   * Récupérer les données d'un cours/leçon
-   * @param {string} studentId Identifiant d'un étudiant
-   * @param {string} lessonId Identifiant d'un cours/leçon
-   * @async
-   */
-  public async getLesson (studentId: string, lessonId: string): Promise<SkolengoResponse<Lesson, LessonIncluded>> {
-    return (await this.request<SkolengoResponse<Lesson, LessonIncluded>>({
-      url: `/lessons/${lessonId}`,
-      responseType: 'json',
-      params: {
-        include: 'teachers,contents,contents.attachments,subject,toDoForTheLesson,toDoForTheLesson.subject,toDoAfterTheLesson,toDoAfterTheLesson.subject',
-        filter: {
-          'student.id': studentId
-        }
-      }
-    })
-    ).data
-  }
-
-  /**
-   * Récupérer toutes les actualités de l'établissement
-   * @async
-   */
-  public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
-    return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
-      url: '/schools-info',
-      responseType: 'json',
-      params: {
-        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
-      }
-    })
-    ).data
-  }
-
-  /**
-   * Récupérer une actualité de l'établissement
-   * @param {string} schoolInfoId Identifiant d'une actualité
-   * @async
-   */
-  public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
-    return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
-      url: `/schools-info/${schoolInfoId}`,
-      responseType: 'json',
-      params: {
-        include: 'illustration,school,author,author.person,author.technicalUser,attachments'
-      }
-    })
-    ).data
-  }
-
-  /**
    * Récupérer les informations du service de communication (identifiants des dossiers, ...)
    * @param {string|undefined} userId Identifiant d'un utilisateur
    * @async
@@ -450,15 +450,15 @@ export class Skolengo {
       params: {
         include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
         /*
-          fields: {
-            personContact: 'person,linksWithUser',
-            groupContact: 'label,personContacts,linksWithUser',
-            person: 'firstName,lastName,title,photoUrl',
-            userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
-            signature: 'content',
-            folder: 'name,position,type,parent'
-          }
-          */
+            fields: {
+              personContact: 'person,linksWithUser',
+              groupContact: 'label,personContacts,linksWithUser',
+              person: 'firstName,lastName,title,photoUrl',
+              userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+              signature: 'content',
+              folder: 'name,position,type,parent'
+            }
+            */
       },
       responseType: 'json'
     })
