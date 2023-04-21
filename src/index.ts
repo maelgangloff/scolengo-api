@@ -32,10 +32,10 @@ const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZ
 const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
 
 export class Skolengo {
-  private readonly httpClient: AxiosInstance
-  private readonly oidClient: Client
   public readonly school: School
   public tokenSet: TokenSet
+  private readonly httpClient: AxiosInstance
+  private readonly oidClient: Client
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
@@ -85,6 +85,195 @@ export class Skolengo {
   }
 
   /**
+   * Révoquer un jeton
+   * @param {Client} oidClient Un client OpenID Connect
+   * @param {string} token Un jeton
+   * @async
+   */
+  public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
+    return await oidClient.revoke(token)
+  }
+
+  /**
+   * Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.getAppCurrentConfig().then(config => {
+   *   console.log(`Dernière version déployée: ${config.data.attributes.latestDeployedSkoAppVersion}`)
+   *   console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
+   * })
+   * ```
+   * @async
+   */
+  public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
+    return (await axios.request<SkolengoResponse<CurrentConfig>>({
+      baseURL: BASE_URL,
+      url: '/sko-app-configs/current',
+      method: 'get',
+      responseType: 'json'
+    })).data
+  }
+
+  /**
+   * Rechercher un établissement scolaire
+   * @param {string} text Le nom partiel de l'établissement
+   * @param {number} limit Limite
+   * @param {number} offset Offset
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+   *   console.log(schools)
+   * })
+   * ```
+   * @async
+   */
+  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<School[]>> {
+    return (await axios.request<SkolengoResponse<School[]>>({
+      baseURL: BASE_URL,
+      url: '/schools',
+      method: 'get',
+      responseType: 'json',
+      params: {
+        page: {
+          limit,
+          offset
+        },
+        filter: { text }
+      }
+    })).data
+  }
+
+  /**
+   * Rechercher un établissement scolaire à partir de coordonnées GPS
+   * @param {number} lat Latitude
+   * @param {number} lon Longitude
+   * @param {number} limit Limite
+   * @param {number} offset Offset
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool(48.0, 7.0).then(schools => {
+   *   console.log(schools)
+   * })
+   * ```
+   * @async
+   */
+  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 10): Promise<SkolengoResponse<School[]>> {
+    return (await axios.request<SkolengoResponse<School[]>>({
+      baseURL: BASE_URL,
+      url: '/schools',
+      method: 'get',
+      responseType: 'json',
+      params: {
+        page: {
+          limit,
+          offset
+        },
+        filter: {
+          lat,
+          lon
+        }
+      }
+    })).data
+  }
+
+  /**
+   * Créer un client OpenID Connect permettant l'obtention des jetons (refresh token et access token)
+   * @param {School} school L'établissement scolaire
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   const school = schools.data[0]
+   *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+   *   console.log(oidClient.authorizationUrl())
+   *   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
+   * })
+   * ```
+   * ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   const school = schools.data[0]
+   *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
+   *
+   *   const params = oidClient.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
+   *   const tokenSet = await oidClient.callback('skoapp-prod://sign-in-callback', params)
+   *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+   *
+   *   const user = new Skolengo(oidClient, school, tokenSet)
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   * })
+   * ```
+   */
+  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
+    const skolengoIssuer = await Issuer.discover(school.attributes?.emsOIDCWellKnownUrl as string)
+    const client = new skolengoIssuer.Client({
+      client_id: OID_CLIENT_ID,
+      client_secret: OID_CLIENT_SECRET,
+      redirect_uris: [redirectUri],
+      response_types: ['code']
+    })
+    return client
+  }
+
+  /**
+   * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
+   * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token)
+   * @param {AuthConfig} config Informations d'authentification
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   * const config = require('./config.json')
+   * const user = await Skolengo.fromConfigObject(config)
+   * ```
+   * ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+   * const config = {
+   *   "tokenSet": {
+   *     "access_token": "<access_token_here>",
+   *     "id_token": "<id_token_here>",
+   *     "refresh_token": "RT-<refresh_token_here>",
+   *     "token_type": "bearer",
+   *     "expires_at": 1234567890,
+   *     "scope": "openid"
+   *   },
+   *   "school": {
+   *     "id": "SKO-E-<school_id>",
+   *     "type": "school",
+   *     "attributes": {
+   *       "name": "<school_name>",
+   *       "addressLine1": "<school_address>",
+   *       "addressLine2": null,
+   *       "addressLine3": null,
+   *       "zipCode": "<school_zip_code>",
+   *       "city": "<school_city>",
+   *       "country": "France",
+   *       "homePageUrl": "<cas_login_url>",
+   *       "emsCode": "<school_ems_code>",
+   *       "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
+   *     }
+   *   }
+   * }
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   * })
+   * ```
+   */
+  public static async fromConfigObject (config: AuthConfig): Promise<Skolengo> {
+    const oidClient = await Skolengo.getOIDClient(config.school)
+    const tokenSet = new TokenSet(config.tokenSet)
+    return new Skolengo(oidClient, config.school, tokenSet)
+  }
+
+  /**
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    * @param {string|undefined} userId Identifiant de l'utilisateur
    * @async
@@ -95,14 +284,14 @@ export class Skolengo {
       responseType: 'json',
       params: {
         /*
-          fields: {
-            userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
-            school: 'name,timeZone,subscribedServices',
-            legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
-            studentUserInfo: 'className,dateOfBirth,regime,school',
-            student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
-          },
-          */
+            fields: {
+              userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
+              school: 'name,timeZone,subscribedServices',
+              legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
+              studentUserInfo: 'className,dateOfBirth,regime,school',
+              student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
+            },
+            */
         include: 'school,students,students.school'
       }
     })
@@ -185,13 +374,13 @@ export class Skolengo {
         },
         include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors'
         /*
-          fields: {
-            evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
-            period: 'label,startDate,endDate',
-            skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
-            skillAcquisitionColors: 'colorLevelMappings'
-          }
-          */
+            fields: {
+              evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
+              period: 'label,startDate,endDate',
+              skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
+              skillAcquisitionColors: 'colorLevelMappings'
+            }
+            */
       }
     })
     ).data
@@ -214,16 +403,16 @@ export class Skolengo {
         },
         include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers'
         /*
-          fields: {
-            evaluationService: 'coefficient,average,studentAverage,scale',
-            subject: 'label,color',
-            evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
-            evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
-            subSkillEvaluationResult: 'level,subSkill',
-            teacher: 'firstName,lastName,title',
-            subSkill: 'shortLabel'
-          }
-          */
+            fields: {
+              evaluationService: 'coefficient,average,studentAverage,scale',
+              subject: 'label,color',
+              evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
+              evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
+              subSkillEvaluationResult: 'level,subSkill',
+              teacher: 'firstName,lastName,title',
+              subSkill: 'shortLabel'
+            }
+            */
       }
     })
     ).data
@@ -245,17 +434,17 @@ export class Skolengo {
         },
         include: 'evaluationService,evaluationService.subject,evaluationService.teachers,subSubject,subSkills,evaluationResult,evaluationResult.subSkillsEvaluationResults,evaluationResult.subSkillsEvaluationResults.subSkill'
         /*
-          fields: {
-            evaluationService: 'subject,teachers',
-            subject: 'label,color',
-            subSubject: 'label',
-            evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
-            evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
-            subSkill: 'shortLabel',
-            subSkillEvaluationResult: 'level,subSkill',
-            teacher: 'firstName,lastName,title'
-          }
-          */
+            fields: {
+              evaluationService: 'subject,teachers',
+              subject: 'label,color',
+              subSubject: 'label',
+              evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
+              evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
+              subSkill: 'shortLabel',
+              subSkillEvaluationResult: 'level,subSkill',
+              teacher: 'firstName,lastName,title'
+            }
+            */
       }
     })
     ).data
@@ -450,15 +639,15 @@ export class Skolengo {
       params: {
         include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
         /*
-            fields: {
-              personContact: 'person,linksWithUser',
-              groupContact: 'label,personContacts,linksWithUser',
-              person: 'firstName,lastName,title,photoUrl',
-              userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
-              signature: 'content',
-              folder: 'name,position,type,parent'
-            }
-            */
+              fields: {
+                personContact: 'person,linksWithUser',
+                groupContact: 'label,personContacts,linksWithUser',
+                person: 'firstName,lastName,title,photoUrl',
+                userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+                signature: 'content',
+                folder: 'name,position,type,parent'
+              }
+              */
       },
       responseType: 'json'
     })
@@ -619,195 +808,6 @@ export class Skolengo {
       responseType: 'json'
     })
     ).data
-  }
-
-  /**
-   * Révoquer un jeton
-   * @param {Client} oidClient Un client OpenID Connect
-   * @param {string} token Un jeton
-   * @async
-   */
-  public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
-    return await oidClient.revoke(token)
-  }
-
-  /**
-   * Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
-   * @example ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.getAppCurrentConfig().then(config => {
-   *   console.log(`Dernière version déployée: ${config.data.attributes.latestDeployedSkoAppVersion}`)
-   *   console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
-   * })
-   * ```
-   * @async
-   */
-  public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
-    return (await axios.request<SkolengoResponse<CurrentConfig>>({
-      baseURL: BASE_URL,
-      url: '/sko-app-configs/current',
-      method: 'get',
-      responseType: 'json'
-    })).data
-  }
-
-  /**
-   * Rechercher un établissement scolaire
-   * @param {string} text Le nom partiel de l'établissement
-   * @param {number} limit Limite
-   * @param {number} offset Offset
-   * @example ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
-   *   console.log(schools)
-   * })
-   * ```
-   * @async
-   */
-  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<School[]>> {
-    return (await axios.request<SkolengoResponse<School[]>>({
-      baseURL: BASE_URL,
-      url: '/schools',
-      method: 'get',
-      responseType: 'json',
-      params: {
-        page: {
-          limit,
-          offset
-        },
-        filter: { text }
-      }
-    })).data
-  }
-
-  /**
-   * Rechercher un établissement scolaire à partir de coordonnées GPS
-   * @param {number} lat Latitude
-   * @param {number} lon Longitude
-   * @param {number} limit Limite
-   * @param {number} offset Offset
-   * @example ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.searchSchool(48.0, 7.0).then(schools => {
-   *   console.log(schools)
-   * })
-   * ```
-   * @async
-   */
-  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 10): Promise<SkolengoResponse<School[]>> {
-    return (await axios.request<SkolengoResponse<School[]>>({
-      baseURL: BASE_URL,
-      url: '/schools',
-      method: 'get',
-      responseType: 'json',
-      params: {
-        page: {
-          limit,
-          offset
-        },
-        filter: {
-          lat,
-          lon
-        }
-      }
-    })).data
-  }
-
-  /**
-   * Créer un client OpenID Connect permettant l'obtention des jetons (refresh token et access token)
-   * @param {School} school L'établissement scolaire
-   * @example ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
-   *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
-   *   console.log(oidClient.authorizationUrl())
-   *   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
-   * })
-   * ```
-   * ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
-   *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
-   *
-   *   const params = oidClient.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
-   *   const tokenSet = await oidClient.callback('skoapp-prod://sign-in-callback', params)
-   *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
-   *
-   *   const user = new Skolengo(oidClient, school, tokenSet)
-   *   const infoUser = await user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
-   * })
-   * ```
-   */
-  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
-    const skolengoIssuer = await Issuer.discover(school.attributes?.emsOIDCWellKnownUrl as string)
-    const client = new skolengoIssuer.Client({
-      client_id: OID_CLIENT_ID,
-      client_secret: OID_CLIENT_SECRET,
-      redirect_uris: [redirectUri],
-      response_types: ['code']
-    })
-    return client
-  }
-
-  /**
-   * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
-   * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token)
-   * @param {AuthConfig} config Informations d'authentification
-   * @example ```js
-   * const {Skolengo} = require('scolengo-api')
-   * const config = require('./config.json')
-   * const user = await Skolengo.fromConfigObject(config)
-   * ```
-   * ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
-   * const config = {
-   *   "tokenSet": {
-   *     "access_token": "<access_token_here>",
-   *     "id_token": "<id_token_here>",
-   *     "refresh_token": "RT-<refresh_token_here>",
-   *     "token_type": "bearer",
-   *     "expires_at": 1234567890,
-   *     "scope": "openid"
-   *   },
-   *   "school": {
-   *     "id": "SKO-E-<school_id>",
-   *     "type": "school",
-   *     "attributes": {
-   *       "name": "<school_name>",
-   *       "addressLine1": "<school_address>",
-   *       "addressLine2": null,
-   *       "addressLine3": null,
-   *       "zipCode": "<school_zip_code>",
-   *       "city": "<school_city>",
-   *       "country": "France",
-   *       "homePageUrl": "<cas_login_url>",
-   *       "emsCode": "<school_ems_code>",
-   *       "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
-   *     }
-   *   }
-   * }
-   * Skolengo.fromConfigObject(config).then(async user => {
-   *   const infoUser = await user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
-   * })
-   * ```
-   */
-  public static async fromConfigObject (config: AuthConfig): Promise<Skolengo> {
-    const oidClient = await Skolengo.getOIDClient(config.school)
-    const tokenSet = new TokenSet(config.tokenSet)
-    return new Skolengo(oidClient, config.school, tokenSet)
   }
 
   /**

@@ -28,6 +28,7 @@ export type CommunicationIncludedAttributes = ParticipantIncludedAttributes | {
   additionalInfo: any | null
   fromGroup: boolean
 }
+
 export interface CommunicationIncludedRelationShips {
   school?: {
     data: BaseObject<'school'> | null

@@ -49,6 +49,7 @@ interface SchoolInfoSchool {
 }
 
 export type SchoolInfoIncludedAttributes = UserAttributes | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
+
 export interface SchoolInfoIncludedRelationships {
   technicalUser: {
     data: BaseObject<'technicalUser'> | null

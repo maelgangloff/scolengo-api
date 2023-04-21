@@ -52,6 +52,11 @@ export interface LessonIncludedRelationships {
   }
 }
 
-export type LessonIncludedAttributes = AttachmentAttributes | HomeworkAttributes | Subject | UserAttributes | LessonContent
+export type LessonIncludedAttributes =
+  AttachmentAttributes
+  | HomeworkAttributes
+  | Subject
+  | UserAttributes
+  | LessonContent
 
 export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships, 'subject' | 'homework' | 'teacher' | 'attachment' | 'lessonContent'>
