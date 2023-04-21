@@ -57,7 +57,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
         * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
-        * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
+        * [.getEvaluationDetail(studentId, evaluationId)](#Skolengo+getEvaluationDetail)
         * [.getPeriodicReportsFiles(studentId)](#Skolengo+getPeriodicReportsFiles)
         * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
         * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
@@ -201,7 +201,7 @@ Récupérer les notes d'un étudiant sur une période
 
 <a name="Skolengo+getEvaluationDetail"></a>
 
-### skolengo.getEvaluationDetail(studentId, markId)
+### skolengo.getEvaluationDetail(studentId, evaluationId)
 Récupérer le détail d'une note d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -209,7 +209,7 @@ Récupérer le détail d'une note d'un étudiant
 | Param | Type | Description |
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
-| markId | <code>string</code> | Identifiant de la note |
+| evaluationId | <code>string</code> | Identifiant de la note |
 
 <a name="Skolengo+getPeriodicReportsFiles"></a>
 

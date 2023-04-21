@@ -421,12 +421,12 @@ export class Skolengo {
   /**
    * Récupérer le détail d'une note d'un étudiant
    * @param {string} studentId Identifiant d'un étudiant
-   * @param {string} markId Identifiant de la note
+   * @param {string} evaluationId Identifiant de la note
    * @async
    */
-  public async getEvaluationDetail (studentId: string, markId: string): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
+  public async getEvaluationDetail (studentId: string, evaluationId: string): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
     return (await this.request<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>>({
-      url: `/evaluations/${markId}`,
+      url: `/evaluations/${evaluationId}`,
       responseType: 'json',
       params: {
         filter: {
