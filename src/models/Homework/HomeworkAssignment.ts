@@ -2,7 +2,7 @@ import { Subject } from '../Agenda/Lesson'
 import { UserAttributes } from '../App/User'
 import { BaseObject, BaseResponse } from '../Globals'
 import { PersonType } from '../Messagerie/UsersMailSettings'
-import { Attachment } from '../School/Attachment'
+import { AttachmentAttributes } from '../School/Attachment'
 
 export interface HomeworkAttributes {
   title: string
@@ -45,7 +45,7 @@ interface CorrectionWork {
   correctionDate: string
 }
 
-export type HomeworkAssignmentIncludedAttributes = Subject | UserAttributes | Attachment | CorrectionWork
+export type HomeworkAssignmentIncludedAttributes = Subject | UserAttributes | AttachmentAttributes | CorrectionWork
 
 export interface HomeworkAssignmentIncludedRelationships {
   attachments?: {

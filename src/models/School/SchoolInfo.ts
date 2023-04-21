@@ -18,10 +18,10 @@ export interface SchoolInfoRelationships {
     data: BaseObject<'school'> | null
   }
   author: {
-    data: BaseObject | null
+    data: BaseObject<'schoolInfoAuthor'> | null
   }
   illustration: {
-    data: BaseObject | null
+    data: BaseObject<'schoolInfoFile'> | null
   }
   attachments?: {
     data: Array<BaseObject<'attachment'>>

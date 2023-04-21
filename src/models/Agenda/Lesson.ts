@@ -1,7 +1,7 @@
 import { UserAttributes } from '../App/User'
 import { BaseObject, BaseResponse } from '../Globals'
 import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
-import { Attachment } from '../School/Attachment'
+import { AttachmentAttributes } from '../School/Attachment'
 
 export interface Subject {
   label: string
@@ -52,6 +52,6 @@ export interface LessonIncludedRelationships {
   }
 }
 
-export type LessonIncludedAttributes = Attachment | HomeworkAttributes | Subject | UserAttributes | LessonContent
+export type LessonIncludedAttributes = AttachmentAttributes | HomeworkAttributes | Subject | UserAttributes | LessonContent
 
 export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships, 'subject' | 'homework' | 'teacher' | 'attachment' | 'lessonContent'>

@@ -51,10 +51,10 @@ export interface UsersMailSettingsIncludedRelationships {
     data: BaseObject[] | BaseObject | null
   }
   personContacts?: {
-    data: Array<BaseObject<'personContact'>> | BaseObject<'personContact'> | null
+    data: Array<BaseObject<'personContact'>> | null
   }
   person?: {
-    data: Array<BaseObject<PersonType>> | BaseObject<PersonType> | null
+    data: BaseObject<PersonType> | null
   }
 }
 

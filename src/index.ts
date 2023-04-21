@@ -25,6 +25,7 @@ import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
 import { AbsenceFile, AbsenceFileIncluded } from './models/Assiduite/AbsenceFile'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { Participant, ParticipantIncluded } from './models/Messagerie/Participant'
+import { AttachmentAttributes } from './models/School/Attachment'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -228,11 +229,11 @@ export class Skolengo {
   }
 
   /**
-   * Télécharger le bilan périodique PDF (bulletin).
+   * Télécharger une pièce jointe.
    *
+   * Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
    *
-   * 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL donnée en paramètre. Assurez-vous que l'URL provient de votre établissement.
-   * @param {string} url L'URL du document
+   * 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
    * @async
    * @example ```js
    * const {createWriteStream} = require('node:fs')
@@ -243,14 +244,15 @@ export class Skolengo {
    *   const bulletins = await user.getPeriodicReportsFiles(student)
    *   for(const bulletin of bulletins.data) {
    *     console.log(bulletin.attributes.name)
-   *     (await user.downloadPeriodicReportsFiles(bulletin.attributes.url)).pipe(createWriteStream(bulletin.attributes.name));
+   *     (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
    *   }
    * })
    * ```
+   * @param {AttachmentAttributes} attributes La pièce jointe
    */
-  public async downloadPeriodicReportsFiles (url: string): Promise<Stream> {
+  public async downloadAttachment (attributes: AttachmentAttributes): Promise<Stream> {
     return (await this.request<Stream>({
-      url,
+      url: attributes.url,
       responseType: 'stream'
     })
     ).data

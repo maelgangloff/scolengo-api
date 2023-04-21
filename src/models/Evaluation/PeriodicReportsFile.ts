@@ -1,13 +1,7 @@
 import { BaseObject, BaseResponse } from '../Globals'
+import { PublicAttachment } from '../School/Attachment'
 
-export interface PeriodicReportsFileAttributes {
-  name: string
-  mimeType: string
-  mimeTypeLabel: string
-  size: number
-  url: string
-  alternativeText: string | null
-}
+export type PeriodicReportsFileAttributes = PublicAttachment
 
 export interface PeriodicReportsFileRelationships {
   period: {

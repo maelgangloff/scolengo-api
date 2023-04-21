@@ -1,6 +1,7 @@
 import { BaseObject, BaseResponse } from '../Globals'
 import { ParticipantIncludedAttributes } from './Participant'
 import { PersonType } from './UsersMailSettings'
+import { AttachmentAttributes } from '../School/Attachment'
 
 export interface ParticipationAttributes {
   dateTime: string
@@ -23,7 +24,7 @@ export type ParticipationIncludedAttributes = {
   category: 'INITIATOR' | 'TO'
   additionalInfo: any | null
   fromGroup: boolean
-} | ParticipantIncludedAttributes
+} | ParticipantIncludedAttributes | AttachmentAttributes
 
 export type ParticipationIncludedRelationships = {
   technicalUser: {
@@ -38,4 +39,4 @@ export type ParticipationIncludedRelationships = {
   }
 }
 
-export type ParticipationIncluded = BaseResponse<ParticipationIncludedAttributes, ParticipationIncludedRelationships, PersonType | 'school'>
+export type ParticipationIncluded = BaseResponse<ParticipationIncludedAttributes, ParticipationIncludedRelationships, PersonType | 'school' | 'attachment' | 'personParticipant'>

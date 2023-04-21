@@ -56,7 +56,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, markId)](#Skolengo+getEvaluationDetail)
         * [.getPeriodicReportsFiles(studentId)](#Skolengo+getPeriodicReportsFiles)
-        * [.downloadPeriodicReportsFiles(url)](#Skolengo+downloadPeriodicReportsFiles)
+        * [.downloadAttachment(attributes)](#Skolengo+downloadAttachment)
         * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
@@ -186,19 +186,20 @@ Skolengo.fromConfigObject(config).then(async user => {
   console.log(bulletins)
 })
 ```
-<a name="Skolengo+downloadPeriodicReportsFiles"></a>
+<a name="Skolengo+downloadAttachment"></a>
 
-### skolengo.downloadPeriodicReportsFiles(url)
-Télécharger le bilan périodique PDF (bulletin).
+### skolengo.downloadAttachment(attributes)
+Télécharger une pièce jointe.
 
+Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
 
-🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL donnée en paramètre. Assurez-vous que l'URL provient de votre établissement.
+🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| url | <code>string</code> | L'URL du document |
+| attributes | <code>AttachmentAttributes</code> | La pièce jointe |
 
 **Example**  
 ```js
@@ -210,7 +211,7 @@ Skolengo.fromConfigObject(config).then(async user => {
   const bulletins = await user.getPeriodicReportsFiles(student)
   for(const bulletin of bulletins.data) {
     console.log(bulletin.attributes.name)
-    (await user.downloadPeriodicReportsFiles(bulletin.attributes.url)).pipe(createWriteStream(bulletin.attributes.name));
+    (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
   }
 })
 ```

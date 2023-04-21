@@ -33,7 +33,7 @@ export interface CommunicationIncludedRelationShips {
     data: BaseObject<'school'> | null
   }
   sender?: {
-    data: BaseObject | null
+    data: BaseObject<PersonType> | null
   }
   technicalUser?: {
     data: BaseObject<'technicalUser'> | null
