@@ -67,7 +67,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
-        * [.getCommunicationParticipants(communicationId)](#Skolengo+getCommunicationParticipants)
+        * [.getCommunicationParticipants(communicationId, fromGroup)](#Skolengo+getCommunicationParticipants)
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
         * [.postCommunication(attributes)](#Skolengo+postCommunication)
         * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
@@ -78,7 +78,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
         * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
         * [.searchSchoolGPS(lat, lon, limit, offset)](#Skolengo.searchSchoolGPS)
-        * [.getOIDClient(school)](#Skolengo.getOIDClient)
+        * [.getOIDClient(school, redirectUri)](#Skolengo.getOIDClient)
         * [.fromConfigObject(config)](#Skolengo.fromConfigObject)
 
 <a name="new_Skolengo_new"></a>
@@ -366,14 +366,15 @@ Récupérer les participations d'un fil de discussion (communication)
 
 <a name="Skolengo+getCommunicationParticipants"></a>
 
-### skolengo.getCommunicationParticipants(communicationId)
+### skolengo.getCommunicationParticipants(communicationId, fromGroup)
 Récupérer tous les participants d'un fil de discussion (communication)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| communicationId | <code>string</code> | Identifiant d'une communication |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| communicationId | <code>string</code> |  | Identifiant d'une communication |
+| fromGroup | <code>boolean</code> | <code>true</code> | Afficher le détail des groupes |
 
 <a name="Skolengo+patchCommunicationFolders"></a>
 
@@ -509,14 +510,15 @@ Skolengo.searchSchool(48.0, 7.0).then(schools => {
 ```
 <a name="Skolengo.getOIDClient"></a>
 
-### Skolengo.getOIDClient(school)
+### Skolengo.getOIDClient(school, redirectUri)
 Créer un client OpenID Connect permettant l'obtention des jetons (refresh token et access token)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| school | <code>School</code> | L'établissement scolaire |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| school | <code>School</code> |  | L'établissement scolaire |
+| redirectUri | <code>string</code> \| <code>undefined</code> | <code>&quot;skoapp-prod://sign-in-callback&quot;</code> | Callback |
 
 **Example**  
 ```js

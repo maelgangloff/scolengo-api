@@ -19,7 +19,7 @@ export type AbsenceFileIncludedAttributes = {
   absenceStartDateTime: string
   absenceEndDateTime: string
   absenceType: SupportedAbsenceType | string
-  absenceFileStatus: 'IN_PROGRESS' | 'LOCKED' | string
+  absenceFileStatus: 'NEW' | 'IN_PROGRESS' | 'LOCKED' | string
   comment: string
 } | AbsenceReasonAttributes | UserAttributes
 

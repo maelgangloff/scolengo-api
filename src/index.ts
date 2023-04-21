@@ -182,6 +182,7 @@ export class Skolengo {
   /**
    * Créer un client OpenID Connect permettant l'obtention des jetons (refresh token et access token)
    * @param {School} school L'établissement scolaire
+   * @param {string|undefined} redirectUri Callback
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -213,13 +214,12 @@ export class Skolengo {
    */
   public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
     const skolengoIssuer = await Issuer.discover(school.attributes?.emsOIDCWellKnownUrl as string)
-    const client = new skolengoIssuer.Client({
+    return new skolengoIssuer.Client({
       client_id: OID_CLIENT_ID,
       client_secret: OID_CLIENT_SECRET,
       redirect_uris: [redirectUri],
       response_types: ['code']
     })
-    return client
   }
 
   /**
@@ -473,6 +473,11 @@ export class Skolengo {
           'student.id': studentId
         },
         include: 'period'
+        /*
+        fields: {
+          periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
+        }
+         */
       }
     })
     ).data
@@ -498,6 +503,15 @@ export class Skolengo {
             LE: endDate
           }
         }
+        /*
+        fields: {
+          lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
+          homework: 'title,done,dueDateTime,subject',
+          cateringService: 'title,startDateTime,endDateTime',
+          teacher: 'firstName,lastName,title',
+          subject: 'label,color'
+        }
+         */
       }
     })
     ).data
@@ -554,6 +568,12 @@ export class Skolengo {
             LE: endDate
           }
         }
+        /*
+        fields: {
+          homework: 'title,done,dueDateTime',
+          subject: 'label,color'
+        }
+         */
       }
     })
     ).data
@@ -698,6 +718,7 @@ export class Skolengo {
   /**
    * Récupérer tous les participants d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
+   * @param {boolean} fromGroup Afficher le détail des groupes
    * @async
    */
   public async getCommunicationParticipants (communicationId: string, fromGroup = true): Promise<SkolengoResponse<Participant[], ParticipantIncluded>> {
