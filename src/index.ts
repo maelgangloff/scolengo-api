@@ -160,7 +160,7 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 10): Promise<SkolengoResponse<School[]>> {
+  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 0): Promise<SkolengoResponse<School[]>> {
     return (await axios.request<SkolengoResponse<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
