@@ -11,6 +11,7 @@ export type BaseResponse<Attributes = undefined, Relationships = undefined, Type
 export interface SkolengoResponse<Data, Included = undefined> {
   data: Data
   links?: {
+    self?: string
     first: string
     last: string
     next?: string

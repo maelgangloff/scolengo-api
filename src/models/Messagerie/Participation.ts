@@ -11,10 +11,10 @@ export interface ParticipationAttributes {
 
 export interface ParticipationRelationships {
   attachments: {
-    data: BaseObject<'attachment'> | null
+    data: Array<BaseObject<'attachment'>> | null
   }
   sender: {
-    data: BaseObject<PersonType>
+    data: BaseObject<'personParticipant'>
   }
 }
 

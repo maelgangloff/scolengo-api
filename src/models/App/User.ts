@@ -9,7 +9,7 @@ export interface UserPermission<Service extends string, Operation extends string
 export interface UserAttributes {
   title?: string
   className?: string
-  dateOfBirth?: string
+  dateOfBirth?: string | null
   regime?: string
   lastName: string
   firstName: string
