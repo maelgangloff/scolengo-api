@@ -1,4 +1,4 @@
-import { BaseObject, BaseResponse } from '../Globals'
+import { BaseObject, BaseResponse } from '../Global'
 
 export interface UserPermission<Service extends string, Operation extends string> {
   schoolId: string
@@ -46,16 +46,15 @@ export interface UserRelationships {
 
 export type User = BaseResponse<UserAttributes, UserRelationships, 'legalRepresentativeUserInfo' | 'studentUserInfo'>
 
-export type UserIncludedAttributes = {
-  name: string
-  timeZone: string
-  subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string>
-} | UserAttributes
-
-export interface UserIncludedRelationships {
+export interface SchoolRelationship {
   school: {
-    data: BaseObject<'school'>
+    data: BaseObject<'school'> | null
   }
 }
 
-export type UserIncluded = BaseResponse<UserIncludedAttributes, UserIncludedRelationships, 'school' | 'student'>
+export type UserIncluded = BaseResponse<UserAttributes, SchoolRelationship, 'student'>
+| BaseResponse<{
+  name: string
+  timeZone: string
+  subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string>
+}, undefined, 'school'>

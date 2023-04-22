@@ -1,4 +1,4 @@
-import { BaseResponse } from '../Globals'
+import { BaseResponse } from '../Global'
 
 export interface SchoolAttributes {
   name: string

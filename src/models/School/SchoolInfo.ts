@@ -1,6 +1,6 @@
 import { PublicAttachment } from './Attachment'
-import { BaseObject, BaseResponse } from '../Globals'
-import { UserAttributes } from '../App/User'
+import { BaseObject, BaseResponse } from '../Global'
+import { UserAttributes } from '../Global/User'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 
 export interface SchoolInfoAttributes {
@@ -15,16 +15,16 @@ export interface SchoolInfoAttributes {
 
 export interface SchoolInfoRelationships {
   school: {
-    data: BaseObject<'school'> | null
+    data: BaseObject<'school'>
+  }
+  attachments?: {
+    data: Array<BaseObject<'attachment'>>
   }
   author: {
     data: BaseObject<'schoolInfoAuthor'> | null
   }
   illustration: {
     data: BaseObject<'schoolInfoFile'> | null
-  }
-  attachments?: {
-    data: Array<BaseObject<'attachment'>>
   }
 }
 

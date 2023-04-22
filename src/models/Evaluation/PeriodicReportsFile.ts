@@ -1,12 +1,12 @@
-import { BaseObject, BaseResponse } from '../Globals'
+import { BaseObject, BaseResponse } from '../Global'
 import { PublicAttachment } from '../School/Attachment'
 
 export type PeriodicReportsFileAttributes = PublicAttachment
 
-export interface PeriodicReportsFileRelationships {
+export interface PeriodRelationship {
   period: {
     data: BaseObject<'period'> | null
   }
 }
 
-export type PeriodicReportsFile = BaseResponse<PeriodicReportsFileAttributes, PeriodicReportsFileRelationships, 'periodicSchoolReportFile'>
+export type PeriodicReportsFile = BaseResponse<PeriodicReportsFileAttributes, PeriodRelationship, 'periodicSchoolReportFile'>

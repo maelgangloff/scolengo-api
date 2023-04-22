@@ -1,9 +1,9 @@
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
+import { SchoolRelationship, UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
 import { PersonType } from './UsersMailSettings'
 
 export interface ParticipantAttributes {
-  category: string
+  category: 'INITIATOR' | 'TO'
   additionalInfo: any
   label?: string
   fromGroup?: boolean
@@ -23,12 +23,6 @@ export type ParticipantIncludedAttributes = UserAttributes | {
   logoUrl: string | null
 }
 
-export interface ParticipantIncludedRelationships {
-  school?: {
-    data: any
-  }
-}
-
-export type ParticipantIncluded = BaseResponse<ParticipantIncludedAttributes, ParticipantIncludedRelationships, PersonType>
+export type ParticipantIncluded = BaseResponse<ParticipantIncludedAttributes, SchoolRelationship, PersonType>
 
 export type Participant = BaseResponse<ParticipantAttributes, ParticipantRelationships, 'personParticipant' | 'groupParticipant'>

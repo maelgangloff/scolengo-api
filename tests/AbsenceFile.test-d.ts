@@ -1,5 +1,5 @@
 import { expectAssignable } from 'tsd'
-import { SkolengoResponse } from '../src/models/Globals'
+import { SkolengoResponse } from '../src/models/Global'
 import { AbsenceFile, AbsenceFileIncluded } from '../src/models/Assiduite/AbsenceFile'
 
 expectAssignable<SkolengoResponse<AbsenceFile, AbsenceFileIncluded>>({

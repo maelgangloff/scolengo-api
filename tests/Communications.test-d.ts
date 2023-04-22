@@ -1,5 +1,5 @@
 import { expectAssignable } from 'tsd'
-import { SkolengoResponse } from '../src/models/Globals'
+import { SkolengoResponse } from '../src/models/Global'
 import { Communication, CommunicationIncluded } from '../src/models/Messagerie/Communication'
 
 expectAssignable<SkolengoResponse<Communication[], CommunicationIncluded>>({

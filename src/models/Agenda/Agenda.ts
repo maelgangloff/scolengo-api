@@ -1,30 +1,31 @@
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
-import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
-import { LessonAttributes, Subject } from './Lesson'
+import { UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
+import { HomeworkAssignmentsRelationship, HomeworkAttributes } from '../Homework/HomeworkAssignment'
+import { PersonType } from '../Messagerie/UsersMailSettings'
+import { LessonAttributes, LessonsRelationship, Subject } from './Lesson'
 
 export interface AgendaAttributes {
   date: string
 }
 
-export interface AgendaRelationships {
-  lessons: {
-    data: Array<BaseObject<'lesson'>>
-  }
-  homeworkAssignments: {
-    data: Array<BaseObject<'homework'>>
-  }
-}
+export type AgendaRelationships = LessonsRelationship & HomeworkAssignmentsRelationship
 
 export type Agenda = BaseResponse<AgendaAttributes, AgendaRelationships, 'agenda'>
 
-export interface AgendaIncludedRelationships {
-  subject?: {
-    data: BaseObject<'subject'>
-  }
-  teachers?: {
-    data: Array<BaseObject<'teacher'>>
-  }
-}
-
-export type AgendaIncluded = BaseResponse<HomeworkAttributes | Subject | LessonAttributes | UserAttributes, AgendaIncludedRelationships, 'homework' | 'lesson' | 'subject' | 'teacher'>
+export type AgendaIncluded =
+  BaseResponse<HomeworkAttributes, {
+    subject: {
+      data: BaseObject<'subject'>
+    }
+  }, 'homework'>
+  | BaseResponse<Subject, undefined, 'subject'>
+  | BaseResponse<LessonAttributes, {
+    subject: {
+      data: BaseObject<'subject'>
+    }
+  } & {
+    teachers: {
+      data: Array<BaseObject<'teacher'>>
+    }
+  }, 'lesson'>
+  | BaseResponse<UserAttributes, undefined, PersonType>

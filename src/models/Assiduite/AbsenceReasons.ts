@@ -1,4 +1,4 @@
-import { BaseResponse } from '../Globals'
+import { BaseResponse } from '../Global'
 
 export type SupportedAbsenceType = 'ABSENCE' | 'DEPARTURE' | 'EXEMPTION' | 'LATENESS'
 

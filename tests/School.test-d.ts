@@ -1,6 +1,6 @@
 import { expectAssignable } from 'tsd'
 import { School } from '../src/models/School/School'
-import { SkolengoResponse } from '../src/models/Globals'
+import { SkolengoResponse } from '../src/models/Global'
 
 expectAssignable<SkolengoResponse<School[]>>(
   {

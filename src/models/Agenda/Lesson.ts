@@ -1,7 +1,14 @@
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
+import { UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
 import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { AttachmentAttributes } from '../School/Attachment'
+import { PersonType } from '../Messagerie/UsersMailSettings'
+
+export interface LessonsRelationship {
+  lessons: {
+    data: Array<BaseObject<'lesson'>>
+  }
+}
 
 export interface Subject {
   label: string
@@ -24,39 +31,35 @@ export interface LessonAttributes {
 }
 
 export interface LessonRelationships {
-  contents: {
-    data: Array<BaseObject<'lessonContent'>>
-  }
-  teachers: {
-    data: Array<BaseObject<'teacher'>>
-  }
-  subject: {
-    data: BaseObject<'subject'>
-  }
   toDoForTheLesson: {
     data: Array<BaseObject<'homework'>>
   }
   toDoAfterTheLesson: {
     data: Array<BaseObject<'homework'>>
   }
+  contents: {
+    data: Array<BaseObject<'lessonContent'>>
+  }
+  subject: {
+    data: BaseObject<'subject'>
+  }
+  teachers: {
+    data: Array<BaseObject<'teacher'>> | null
+  }
 }
 
 export type Lesson = BaseResponse<LessonAttributes, LessonRelationships, 'lesson'>
 
-export interface LessonIncludedRelationships {
-  subject?: {
+export type LessonIncluded = BaseResponse<HomeworkAttributes, {
+  subject: {
     data: BaseObject<'subject'>
   }
-  attachments?: {
+}, 'homework'>
+| BaseResponse<Subject, undefined, 'subject'>
+| BaseResponse<UserAttributes, undefined, PersonType>
+| BaseResponse<AttachmentAttributes, undefined, 'attachment'>
+| BaseResponse<LessonContent, {
+  attachments: {
     data: Array<BaseObject<'attachment'>>
   }
-}
-
-export type LessonIncludedAttributes =
-  AttachmentAttributes
-  | HomeworkAttributes
-  | Subject
-  | UserAttributes
-  | LessonContent
-
-export type LessonIncluded = BaseResponse<LessonIncludedAttributes, LessonIncludedRelationships, 'subject' | 'homework' | 'teacher' | 'attachment' | 'lessonContent'>
+}, 'lessonContent'>

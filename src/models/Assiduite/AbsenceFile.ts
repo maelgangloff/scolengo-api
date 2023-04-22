@@ -1,5 +1,5 @@
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
+import { UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { AbsenceReasonAttributes, SupportedAbsenceType } from './AbsenceReasons'
 
@@ -14,14 +14,14 @@ export interface AbsenceFileRelationships {
 
 export type AbsenceFile = BaseResponse<undefined, AbsenceFileRelationships, 'absenceFile'>
 
-export type AbsenceFileIncludedAttributes = {
+export interface AbsenceFileIncludedAttributes {
   creationDateTime: string
   absenceStartDateTime: string
   absenceEndDateTime: string
   absenceType: SupportedAbsenceType | string
   absenceFileStatus: 'NEW' | 'IN_PROGRESS' | 'LOCKED' | string
   comment: string
-} | AbsenceReasonAttributes | UserAttributes
+}
 
 export interface AbsenceFileIncludedRelationships {
   creator: {
@@ -38,4 +38,8 @@ export interface AbsenceFileIncludedRelationships {
   }
 }
 
-export type AbsenceFileIncluded = BaseResponse<AbsenceFileIncludedAttributes, AbsenceFileIncludedRelationships>
+export type AbsenceFileIncluded =
+  BaseResponse<AbsenceFileIncludedAttributes, AbsenceFileIncludedRelationships, 'absenceFile'>
+  | BaseResponse<AbsenceFileIncludedAttributes, AbsenceFileIncludedRelationships, 'absenceFileState'>
+  | BaseResponse<AbsenceReasonAttributes, AbsenceFileIncludedRelationships, 'absenceReason'>
+  | BaseResponse<UserAttributes, AbsenceFileIncludedRelationships, PersonType>

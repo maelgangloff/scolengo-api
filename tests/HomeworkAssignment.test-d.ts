@@ -1,5 +1,5 @@
 import { expectAssignable } from 'tsd'
-import { SkolengoResponse } from '../src/models/Globals'
+import { SkolengoResponse } from '../src/models/Global'
 import { HomeworkAssignment, HomeworkAssignmentIncluded } from '../src/models/Homework/HomeworkAssignment'
 
 expectAssignable<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
@@ -20,7 +20,7 @@ expectAssignable<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded
         'data': {
           'id': 'PSKO-P-398b9ef2-5b41-45d7-8f38-e02613a38da5',
           'type': 'teacher'
-        }
+        },
       },
       'attachments': {
         'data': []

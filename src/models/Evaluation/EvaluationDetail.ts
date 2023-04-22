@@ -1,6 +1,13 @@
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
+import { UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
+import {
+  EvaluationResultAttributes,
+  EvaluationResultRelationship, SubjectAttributes, SubSkillAttributes,
+  SubSkillRelationShip,
+  SubSkillsEvaluationResultRelationship,
+  SubSkillsRelationship
+} from './Evaluation'
 
 export interface EvaluationDetailAttributes {
   title: string | null
@@ -13,47 +20,34 @@ export interface EvaluationDetailAttributes {
   scale: number | null
 }
 
-export interface EvaluationDetailRelationships {
-  subSkills: {
-    data: Array<BaseObject<'subSkill'>> | null
-  }
+export type EvaluationDetailRelationships = SubSkillsRelationship & EvaluationResultRelationship & {
   subSubject: {
     data: BaseObject<'subSubject'> | null
   }
   evaluationService: {
     data: BaseObject<'evaluationService'>
   }
-  evaluationResult: {
-    data: BaseObject<'evaluationResult'>
-  }
 }
 
 export type EvaluationDetail = BaseResponse<EvaluationDetailAttributes, EvaluationDetailRelationships, 'evaluation'>
 
-export type EvaluationDetailIncludedAttributes = UserAttributes | {
-  mark: number | null
-  nonEvaluationReason: null
-  comment: string | null
-} | {
+export interface EvaluationServiceAttributes {
   coefficient: number | null
   average: number | null
   scale: number | null
   studentAverage: number | null
-} | {
-  color: string
-  label: string
 }
 
-export interface EvaluationDetailIncludedRelationships {
-  subSkillsEvaluationResults?: {
-    data: Array<BaseObject<'subSkillEvaluationResult'>> | null
-  }
-  subject?: {
+export type EvaluationDetailIncluded = BaseResponse<UserAttributes, undefined, PersonType>
+| BaseResponse<SubSkillAttributes, SubSkillRelationShip, 'subSkill'>
+| BaseResponse<SubSkillsEvaluationResultRelationship, SubSkillsEvaluationResultRelationship, 'subSkillEvaluationResult'>
+| BaseResponse<SubjectAttributes, undefined, 'subject'>
+| BaseResponse<EvaluationResultAttributes, SubSkillsEvaluationResultRelationship, 'evaluationResult'>
+| BaseResponse<EvaluationServiceAttributes, {
+  subject: {
     data: BaseObject<'subject'>
   }
-  teachers?: {
-    data: Array<BaseObject<'teacher'>> | null
+  teachers: {
+    data: Array<BaseObject<'teacher'>>
   }
-}
-
-export type EvaluationDetailIncluded = BaseResponse<EvaluationDetailIncludedAttributes, EvaluationDetailIncludedRelationships, 'evaluationResult' | 'evaluationService' | 'subSkill' | 'subSkillEvaluationResult' | 'subject' | PersonType>
+}, 'evaluationService'>

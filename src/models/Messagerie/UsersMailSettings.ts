@@ -1,5 +1,5 @@
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
+import { UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
 
 export interface UsersMailSettingsAttributes {
   maxCharsInParticipationContent: number
@@ -28,13 +28,7 @@ export type PersonType =
   | 'teacher'
   | 'technicalUser'
 
-export type UsersMailSettingsIncludedAttributes = {
-  content?: string
-} | {
-  name: string
-  position: number
-  type: string
-} | {
+export interface ContactAttributes {
   label?: string
   linksWithUser: Array<{
     description: null | string
@@ -44,22 +38,32 @@ export type UsersMailSettingsIncludedAttributes = {
     schoolId?: string
     groupId?: string
   }> | null
-} | UserAttributes
-
-export interface UsersMailSettingsIncludedRelationships {
-  parent?: {
-    data: BaseObject[] | BaseObject | null
-  }
-  personContacts?: {
-    data: Array<BaseObject<'personContact'>> | null
-  }
-  person?: {
-    data: BaseObject<PersonType> | null
-  }
 }
 
-export type UsersMailSettingsIncluded = BaseResponse<
-UsersMailSettingsIncludedAttributes,
-UsersMailSettingsIncludedRelationships,
-'groupContact' | 'signature' | 'personContact' | 'folder' | PersonType
->
+export interface SignatureAttributes {
+  content: string
+}
+
+export interface FolderAttributes {
+  name: string
+  position: number
+  type: string
+}
+
+export type UsersMailSettingsIncluded = BaseResponse<SignatureAttributes, undefined, 'signature'>
+| BaseResponse<UserAttributes, undefined, PersonType>
+| BaseResponse<FolderAttributes, {
+  parent: {
+    data: BaseObject<'folder'> | null
+  }
+}, 'folder'>
+| BaseResponse<ContactAttributes, {
+  person: {
+    data: BaseObject<PersonType> | null
+  }
+}, 'personContact'>
+| BaseResponse<ContactAttributes, {
+  personContacts: {
+    data: Array<BaseObject<'personContact'>> | null
+  }
+}, 'groupContact'>

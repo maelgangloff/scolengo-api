@@ -1,8 +1,14 @@
 import { Subject } from '../Agenda/Lesson'
-import { UserAttributes } from '../App/User'
-import { BaseObject, BaseResponse } from '../Globals'
+import { SchoolRelationship, UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { AttachmentAttributes } from '../School/Attachment'
+
+export interface HomeworkAssignmentsRelationship {
+  homeworkAssignments: {
+    data: Array<BaseObject<'homework'>>
+  }
+}
 
 export interface HomeworkAttributes {
   title: string
@@ -15,17 +21,17 @@ export interface HomeworkAttributes {
 }
 
 export interface HomeworkRelationships {
-  teacher: {
-    data: BaseObject<'teacher'>
+  subject: {
+    data: BaseObject<'subject'>
   }
   attachments: {
     data: Array<BaseObject<'attachment'>>
   }
+  teacher: {
+    data: BaseObject<'teacher'>
+  }
   commonCorrectedWork?: {
     data: BaseObject | null
-  }
-  subject: {
-    data: BaseObject<'subject'>
   }
   audio?: {
     data: any
@@ -40,12 +46,10 @@ export interface HomeworkRelationships {
 
 export type HomeworkAssignment = BaseResponse<HomeworkAttributes, HomeworkRelationships, 'homework'>
 
-interface CorrectionWork {
+interface CorrectionWorkAttributes {
   html: string
   correctionDate: string
 }
-
-export type HomeworkAssignmentIncludedAttributes = Subject | UserAttributes | AttachmentAttributes | CorrectionWork
 
 export interface HomeworkAssignmentIncludedRelationships {
   attachments?: {
@@ -57,9 +61,9 @@ export interface HomeworkAssignmentIncludedRelationships {
   pedagogicContent?: {
     data: any
   }
-  school?: {
-    data: any
-  }
 }
 
-export type HomeworkAssignmentIncluded = BaseResponse<HomeworkAssignmentIncludedAttributes, HomeworkAssignmentIncludedRelationships, 'attachment' | 'subject' | 'correctedWork' | PersonType>
+export type HomeworkAssignmentIncluded = BaseResponse<Subject, undefined, 'subject'>
+| BaseResponse<UserAttributes, SchoolRelationship, PersonType>
+| BaseResponse<AttachmentAttributes, HomeworkAssignmentIncludedRelationships, 'attachment'>
+| BaseResponse<CorrectionWorkAttributes, HomeworkAssignmentIncludedRelationships, 'correctedWork'>
