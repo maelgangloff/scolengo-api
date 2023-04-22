@@ -8,8 +8,7 @@
     "moduleResolution": "Node",
     "module": "CommonJS",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules"
