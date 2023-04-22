@@ -498,7 +498,7 @@ Rechercher un établissement scolaire à partir de coordonnées GPS
 | lat | <code>number</code> |  | Latitude |
 | lon | <code>number</code> |  | Longitude |
 | limit | <code>number</code> | <code>10</code> | Limite |
-| offset | <code>number</code> | <code>10</code> | Offset |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 **Example**  
 ```js
