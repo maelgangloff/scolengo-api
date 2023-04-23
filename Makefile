@@ -8,8 +8,8 @@ node_modules: package.json yarn.lock ## Installer les dépendances
 dist: node_modules src tsconfig.json ## Construire les fichiers de distribution
 	npx tsc -p tsconfig.json
 
-test: node_modules tests ## Tester le fonctionnement du code
-	npx jest
+test: node_modules tests ## Tester les types
+	npx tsd --files tests/
 
 lint: node_modules .eslintrc .eslintignore ## Analyse statique du code
 	npx eslint src/ --ext .ts
