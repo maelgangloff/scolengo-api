@@ -1,4 +1,4 @@
-import { BaseResponse } from '../Global'
+import { BaseResponseAttributes } from '../Global'
 
 export type SupportedAbsenceType = 'ABSENCE' | 'DEPARTURE' | 'EXEMPTION' | 'LATENESS'
 
@@ -8,4 +8,4 @@ export interface AbsenceReasonAttributes {
   supportedAbsenceTypes: SupportedAbsenceType[]
 }
 
-export type AbsenceReason = BaseResponse<AbsenceReasonAttributes, undefined, 'absenceReason'>
+export type AbsenceReason = BaseResponseAttributes<AbsenceReasonAttributes, 'absenceReason'>

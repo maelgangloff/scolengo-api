@@ -1,4 +1,4 @@
-import { BaseResponse } from '../Global'
+import { BaseResponseAttributes } from '../Global'
 
 export interface CurrentConfigAttributes {
   latestDeployedSkoAppVersion: string
@@ -8,4 +8,4 @@ export interface CurrentConfigAttributes {
   skoAppDeploymentInfoUrl: string
 }
 
-export type CurrentConfig = BaseResponse<CurrentConfigAttributes, undefined, 'skoAppConfig'>
+export type CurrentConfig = BaseResponseAttributes<CurrentConfigAttributes, 'skoAppConfig'>

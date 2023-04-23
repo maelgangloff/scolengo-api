@@ -1,4 +1,4 @@
-import { BaseResponse } from '../Global'
+import { BaseResponseAttributes } from '../Global'
 
 export interface SchoolAttributes {
   name: string
@@ -14,4 +14,4 @@ export interface SchoolAttributes {
   distance?: number
 }
 
-export type School = BaseResponse<SchoolAttributes, undefined, 'school'>
+export type School = BaseResponseAttributes<SchoolAttributes, 'school'>

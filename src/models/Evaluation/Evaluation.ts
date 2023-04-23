@@ -1,5 +1,5 @@
 import { UserAttributes } from '../Global/User'
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { EvaluationDetailAttributes } from './EvaluationDetail'
 
@@ -78,4 +78,4 @@ export type EvaluationIncluded =
       data: BaseObject<'subject'>
     }
   }, 'subject'>
-  | BaseResponse<UserAttributes, undefined, PersonType>
+  | BaseResponseAttributes<UserAttributes, PersonType>

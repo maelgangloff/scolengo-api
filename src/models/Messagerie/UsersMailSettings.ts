@@ -1,5 +1,5 @@
 import { UserAttributes } from '../Global/User'
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 
 export interface UsersMailSettingsAttributes {
   maxCharsInParticipationContent: number
@@ -50,7 +50,7 @@ export interface FolderAttributes {
   type: string
 }
 
-export type UsersMailSettingsIncluded = BaseResponse<SignatureAttributes, undefined, 'signature'>
+export type UsersMailSettingsIncluded = BaseResponseAttributes<SignatureAttributes, 'signature'>
 | BaseResponse<UserAttributes, undefined, PersonType>
 | BaseResponse<FolderAttributes, {
   parent: {

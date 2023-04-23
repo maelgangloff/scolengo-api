@@ -1,5 +1,5 @@
 import { UserAttributes } from '../Global/User'
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { AttachmentAttributes } from '../School/Attachment'
 import { PersonType } from '../Messagerie/UsersMailSettings'
@@ -55,9 +55,9 @@ export type LessonIncluded = BaseResponse<HomeworkAttributes, {
     data: BaseObject<'subject'>
   }
 }, 'homework'>
-| BaseResponse<Subject, undefined, 'subject'>
-| BaseResponse<UserAttributes, undefined, PersonType>
-| BaseResponse<AttachmentAttributes, undefined, 'attachment'>
+| BaseResponseAttributes<Subject, 'subject'>
+| BaseResponseAttributes<UserAttributes, PersonType>
+| BaseResponseAttributes<AttachmentAttributes, 'attachment'>
 | BaseResponse<LessonContent, {
   attachments: {
     data: Array<BaseObject<'attachment'>>

@@ -1,5 +1,5 @@
 import { UserAttributes } from '../Global/User'
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import {
   EvaluationResultAttributes,
@@ -38,10 +38,10 @@ export interface EvaluationServiceAttributes {
   studentAverage: number | null
 }
 
-export type EvaluationDetailIncluded = BaseResponse<UserAttributes, undefined, PersonType>
+export type EvaluationDetailIncluded = BaseResponseAttributes<UserAttributes, PersonType>
 | BaseResponse<SubSkillAttributes, SubSkillRelationShip, 'subSkill'>
 | BaseResponse<SubSkillsEvaluationResultRelationship, SubSkillsEvaluationResultRelationship, 'subSkillEvaluationResult'>
-| BaseResponse<SubjectAttributes, undefined, 'subject'>
+| BaseResponseAttributes<SubjectAttributes, 'subject'>
 | BaseResponse<EvaluationResultAttributes, SubSkillsEvaluationResultRelationship, 'evaluationResult'>
 | BaseResponse<EvaluationServiceAttributes, {
   subject: {

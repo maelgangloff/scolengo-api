@@ -1,4 +1,4 @@
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 
 export interface PeriodAttributes {
   endDate: string
@@ -6,7 +6,7 @@ export interface PeriodAttributes {
   label: string
 }
 
-export type EvaluationSettingsIncluded = BaseResponse<PeriodAttributes, undefined, 'period'>
+export type EvaluationSettingsIncluded = BaseResponseAttributes<PeriodAttributes, 'period'>
 | BaseResponse<{
   skillAcquisitionLevels: Array<{
     label: string

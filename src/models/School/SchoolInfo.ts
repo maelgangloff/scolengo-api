@@ -59,4 +59,4 @@ export interface SchoolInfoIncludedRelationships {
   }
 }
 
-export type SchoolInfoIncluded = BaseResponse<SchoolInfoIncludedAttributes, SchoolInfoIncludedRelationships>
+export type SchoolInfoIncluded = BaseResponse<SchoolInfoIncludedAttributes, SchoolInfoIncludedRelationships, string>

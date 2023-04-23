@@ -1,5 +1,5 @@
 import { UserAttributes } from '../Global/User'
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { HomeworkAssignmentsRelationship, HomeworkAttributes } from '../Homework/HomeworkAssignment'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { LessonAttributes, LessonsRelationship, Subject } from './Lesson'
@@ -18,7 +18,7 @@ export type AgendaIncluded =
       data: BaseObject<'subject'>
     }
   }, 'homework'>
-  | BaseResponse<Subject, undefined, 'subject'>
+  | BaseResponseAttributes<Subject, 'subject'>
   | BaseResponse<LessonAttributes, {
     subject: {
       data: BaseObject<'subject'>
@@ -28,4 +28,4 @@ export type AgendaIncluded =
       data: Array<BaseObject<'teacher'>>
     }
   }, 'lesson'>
-  | BaseResponse<UserAttributes, undefined, PersonType>
+  | BaseResponseAttributes<UserAttributes, PersonType>

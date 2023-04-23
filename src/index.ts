@@ -79,7 +79,7 @@ export class Skolengo {
         Authorization: `Bearer ${tokenSet.access_token as string}`,
         'X-Skolengo-Date-Format': 'utc',
         'X-Skolengo-School-Id': school.id,
-        'X-Skolengo-Ems-Code': school.attributes?.emsCode as string
+        'X-Skolengo-Ems-Code': school.attributes?.emsCode
       }
     })
   }
@@ -213,7 +213,7 @@ export class Skolengo {
    * ```
    */
   public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
-    const skolengoIssuer = await Issuer.discover(school.attributes?.emsOIDCWellKnownUrl as string)
+    const skolengoIssuer = await Issuer.discover(school.attributes?.emsOIDCWellKnownUrl)
     return new skolengoIssuer.Client({
       client_id: OID_CLIENT_ID,
       client_secret: OID_CLIENT_SECRET,

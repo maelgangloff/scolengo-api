@@ -1,5 +1,5 @@
 import { UserAttributes } from '../Global/User'
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseRelationships } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { AbsenceReasonAttributes, SupportedAbsenceType } from './AbsenceReasons'
 
@@ -12,7 +12,7 @@ export interface AbsenceFileRelationships {
   }
 }
 
-export type AbsenceFile = BaseResponse<undefined, AbsenceFileRelationships, 'absenceFile'>
+export type AbsenceFile = BaseResponseRelationships<AbsenceFileRelationships, 'absenceFile'>
 
 export interface AbsenceFileIncludedAttributes {
   creationDateTime: string
