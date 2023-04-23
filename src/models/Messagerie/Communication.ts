@@ -35,7 +35,7 @@ export type CommunicationIncluded = BaseResponse<ParticipationAttributes, {
 }, 'personParticipant'>
 | BaseResponse<ParticipantIncludedAttributes, {
   school: {
-    data: any | null
+    data: BaseObject | null
   }
 }, PersonType>
 

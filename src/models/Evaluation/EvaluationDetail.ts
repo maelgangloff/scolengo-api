@@ -1,13 +1,15 @@
 import { UserAttributes } from '../Global/User'
 import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
+import { EvaluationServiceAttributes } from './EvaluationService'
 import {
-  EvaluationResultAttributes,
-  EvaluationResultRelationship, SubjectAttributes, SubSkillAttributes,
+  SubSkillAttributes,
   SubSkillRelationShip,
   SubSkillsEvaluationResultRelationship,
   SubSkillsRelationship
-} from './Evaluation'
+} from './SubSkill'
+import { EvaluationResultAttributes, EvaluationResultRelationship } from './EvaluationResult'
+import { SubjectAttributes } from './Subject'
 
 export interface EvaluationDetailAttributes {
   title: string | null
@@ -30,13 +32,6 @@ export type EvaluationDetailRelationships = SubSkillsRelationship & EvaluationRe
 }
 
 export type EvaluationDetail = BaseResponse<EvaluationDetailAttributes, EvaluationDetailRelationships, 'evaluation'>
-
-export interface EvaluationServiceAttributes {
-  coefficient: number | null
-  average: number | null
-  scale: number | null
-  studentAverage: number | null
-}
 
 export type EvaluationDetailIncluded = BaseResponseAttributes<UserAttributes, PersonType>
 | BaseResponse<SubSkillAttributes, SubSkillRelationShip, 'subSkill'>

@@ -18,12 +18,12 @@ export type EvaluationSettingsIncluded = BaseResponseAttributes<PeriodAttributes
     data: BaseObject<'skillAcquisitionColors'>
   }
 }, 'skillsSetting'>
-| BaseResponse<{
+| BaseResponseAttributes<{
   colorLevelMappings: Array<{
     level: string
     color: string
   }>
-}, undefined, 'skillAcquisitionColors'>
+}, 'skillAcquisitionColors'>
 
 export interface EvaluationSettingsAttributes {
   periodicReportsEnabled: boolean

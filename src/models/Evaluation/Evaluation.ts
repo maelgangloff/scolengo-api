@@ -2,30 +2,14 @@ import { UserAttributes } from '../Global/User'
 import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 import { EvaluationDetailAttributes } from './EvaluationDetail'
-
-export interface SubSkillsRelationship {
-  subSkills: {
-    data: Array<BaseObject<'subSkill'>>
-  }
-}
-
-export interface EvaluationResultRelationship {
-  evaluationResult: {
-    data: BaseObject<'evaluationResult'>
-  }
-}
-
-export interface SubSkillsEvaluationResultRelationship {
-  subSkillsEvaluationResults: {
-    data: Array<BaseObject<'subSkillEvaluationResult'>>
-  }
-}
-
-export interface SubSkillRelationShip {
-  subSkill: {
-    data: BaseObject<'subSkill'>
-  }
-}
+import { SubjectAttributes } from './Subject'
+import { EvaluationResultAttributes, EvaluationResultRelationship } from './EvaluationResult'
+import {
+  SubSkillAttributes, SubSkillEvaluationResultAttributes,
+  SubSkillRelationShip,
+  SubSkillsEvaluationResultRelationship,
+  SubSkillsRelationship
+} from './SubSkill'
 
 export interface EvaluationRelationship {
   evaluations: {
@@ -38,25 +22,6 @@ export interface EvaluationAttributes {
   average: number | null
   scale: number
   studentAverage: number | null
-}
-
-export interface EvaluationResultAttributes {
-  mark: number | null
-  nonEvaluationReason: null | string
-  comment: string | null
-}
-
-export interface SubSkillAttributes {
-  shortLabel: string
-}
-
-export interface SubSkillEvaluationResultAttributes {
-  level: string
-}
-
-export interface SubjectAttributes {
-  label: string
-  color: null | string
 }
 
 export type Evaluation = BaseResponse<EvaluationAttributes, EvaluationRelationship & {

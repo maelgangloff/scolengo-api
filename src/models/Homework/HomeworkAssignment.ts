@@ -34,13 +34,13 @@ export interface HomeworkRelationships {
     data: BaseObject | null
   }
   audio?: {
-    data: any
+    data: BaseObject | null
   }
   pedagogicContent?: {
-    data: any
+    data: BaseObject | null
   }
   individualCorrectedWork?: {
-    data: any
+    data: BaseObject | null
   }
 }
 
@@ -56,10 +56,10 @@ export interface HomeworkAssignmentIncludedRelationships {
     data: Array<BaseObject<'attachment'>>
   }
   audio?: {
-    data: any
+    data: BaseObject | null
   }
   pedagogicContent?: {
-    data: any
+    data: BaseObject | null
   }
 }
 

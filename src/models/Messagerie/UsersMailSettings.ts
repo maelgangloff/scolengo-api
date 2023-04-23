@@ -1,5 +1,8 @@
 import { UserAttributes } from '../Global/User'
 import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
+import { Folder } from './Folder'
+import { Signature } from './Signature'
+import { Contact } from './Contact'
 
 export interface UsersMailSettingsAttributes {
   maxCharsInParticipationContent: number
@@ -28,41 +31,19 @@ export type PersonType =
   | 'teacher'
   | 'technicalUser'
 
-export interface ContactAttributes {
-  label?: string
-  linksWithUser: Array<{
-    description: null | string
-    additionalInfo: string[]
-    type: ('SCHOOL' | 'FAMILY' | 'GROUP' | string)
-    studentId?: string
-    schoolId?: string
-    groupId?: string
-  }> | null
-}
-
-export interface SignatureAttributes {
-  content: string
-}
-
-export interface FolderAttributes {
-  name: string
-  position: number
-  type: string
-}
-
-export type UsersMailSettingsIncluded = BaseResponseAttributes<SignatureAttributes, 'signature'>
-| BaseResponse<UserAttributes, undefined, PersonType>
-| BaseResponse<FolderAttributes, {
+export type UsersMailSettingsIncluded = BaseResponseAttributes<Signature, 'signature'>
+| BaseResponseAttributes<UserAttributes, PersonType>
+| BaseResponse<Folder, {
   parent: {
     data: BaseObject<'folder'> | null
   }
 }, 'folder'>
-| BaseResponse<ContactAttributes, {
+| BaseResponse<Contact, {
   person: {
     data: BaseObject<PersonType> | null
   }
 }, 'personContact'>
-| BaseResponse<ContactAttributes, {
+| BaseResponse<Contact, {
   personContacts: {
     data: Array<BaseObject<'personContact'>> | null
   }
