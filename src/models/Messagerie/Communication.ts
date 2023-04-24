@@ -1,4 +1,5 @@
 import { BaseObject, BaseResponse } from '../Global'
+import { Contact } from './Contact'
 import { PersonType } from './UsersMailSettings'
 import { ParticipantAttributes, ParticipantIncludedAttributes } from './Participant'
 import { ParticipationAttributes } from './Participation'
@@ -46,13 +47,13 @@ export type NewCommunicationAttributes = Partial<CommunicationAttributes> & {
 
 export interface NewCommunicationRelationship {
   toRecipients: {
-    data: Array<BaseObject<PersonType>>
+    data: Array<BaseObject<Contact>>
   }
   ccRecipients?: {
-    data: Array<BaseObject<PersonType>>
+    data: Array<BaseObject<Contact>>
   }
   bccRecipients?: {
-    data: Array<BaseObject<PersonType>>
+    data: Array<BaseObject<Contact>>
   }
 }
 
