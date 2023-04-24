@@ -1,8 +1,17 @@
 import { describe } from 'node:test'
 import { SkolengoResponse } from '../../src/models/Global'
 import { School } from '../../src/models/School/School'
+import { Skolengo } from '../../src'
+import axios from 'axios'
 
 type ExpectedType = SkolengoResponse<School[]>
+
+jest.mock('axios')
+
+const mockedAxios = axios as jest.Mocked<typeof axios> & jest.Mock<typeof axios>
+mockedAxios.request.mockResolvedValue({
+  data: {}
+})
 
 describe('Test Schools', () => {
   it('should be correct type', () => {
@@ -181,6 +190,44 @@ describe('Test Schools', () => {
       }
 
     expect<ExpectedType>(data).toBeDefined()
+  })
+
+  it('should getSchools make the right request', async () => {
+    await Skolengo.searchSchool('Lycée Louise Weiss', 10, 0)
+    expect(mockedAxios.request).toBeCalledWith({
+      baseURL: 'https://api.skolengo.com/api/v1/bff-sko-app',
+      url: '/schools',
+      method: 'get',
+      params: {
+        filter: {
+          text: 'Lycée Louise Weiss',
+        },
+        page: {
+          limit: 10,
+          offset: 0
+        }
+      },
+      responseType: 'json'
+    })
+  })
+  it('should getSchools make the right request', async () => {
+    await Skolengo.searchSchoolGPS(48.0, 7.0, 15, 0)
+    expect(mockedAxios.request).toBeCalledWith({
+      baseURL: 'https://api.skolengo.com/api/v1/bff-sko-app',
+      url: '/schools',
+      method: 'get',
+      params: {
+        filter: {
+          lat: 48,
+          lon: 7
+        },
+        page: {
+          limit: 15,
+          offset: 0
+        }
+      },
+      responseType: 'json'
+    })
   })
 })
 
