@@ -46,13 +46,13 @@ export type NewCommunicationAttributes = Partial<CommunicationAttributes> & {
 
 export interface NewCommunicationRelationship {
   toRecipients: {
-    data: Array<BaseObject<PersonType>>
+    data: Array<BaseObject<'groupContact' | 'personContact'>>
   }
   ccRecipients?: {
-    data: Array<BaseObject<PersonType>>
+    data: Array<BaseObject<'groupContact' | 'personContact'>>
   }
   bccRecipients?: {
-    data: Array<BaseObject<PersonType>>
+    data: Array<BaseObject<'groupContact' | 'personContact'>>
   }
 }
 
