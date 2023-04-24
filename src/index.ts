@@ -13,7 +13,7 @@ import { EvaluationDetail, EvaluationDetailIncluded } from './models/Evaluation/
 import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluation/EvaluationSettings'
 import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
 import { Communication, CommunicationIncluded, NewCommunication } from './models/Messagerie/Communication'
-import { Participation, ParticipationIncluded } from './models/Messagerie/Participation'
+import { NewParticipation, Participation, ParticipationIncluded } from './models/Messagerie/Participation'
 import {
   HomeworkAssignment,
   HomeworkAssignmentIncluded,
@@ -757,10 +757,10 @@ export class Skolengo {
 
   /**
    * Envoyer un message dans un nouveau fil de discussion
-   * @param {NewCommunication} attributes Les attributs de la nouvelle communication
+   * @param {NewCommunication} newCommunication La nouvelle communication
    * @async
    */
-  public async postCommunication (attributes: NewCommunication): Promise<SkolengoResponse<NewCommunication & {
+  public async postCommunication (newCommunication: NewCommunication): Promise<SkolengoResponse<NewCommunication & {
     id: string
   }>> {
     return (await this.request<SkolengoResponse<NewCommunication & { id: string }>>({
@@ -768,7 +768,24 @@ export class Skolengo {
       method: 'post',
       responseType: 'json',
       data: {
-        data: attributes
+        data: newCommunication
+      }
+    })
+    ).data
+  }
+
+  /**
+   * Envoyer un message dans un fil de discussion existant
+   * @param {NewParticipation} participation La nouvelle participation
+   * @async
+   */
+  public async postParticipation (participation: NewParticipation): Promise<SkolengoResponse<Participation>> {
+    return (await this.request<SkolengoResponse<Participation>>({
+      url: 'participations',
+      method: 'post',
+      responseType: 'json',
+      data: {
+        data: participation
       }
     })
     ).data

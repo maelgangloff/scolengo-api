@@ -69,7 +69,8 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
         * [.getCommunicationParticipants(communicationId, fromGroup)](#Skolengo+getCommunicationParticipants)
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
-        * [.postCommunication(attributes)](#Skolengo+postCommunication)
+        * [.postCommunication(newCommunication)](#Skolengo+postCommunication)
+        * [.postParticipation(participation)](#Skolengo+postParticipation)
         * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
         * [.getAbsenceFile(folderId)](#Skolengo+getAbsenceFile)
         * [.getAbsenceReasons()](#Skolengo+getAbsenceReasons)
@@ -391,14 +392,25 @@ Déplacer une communication dans un dossier
 
 <a name="Skolengo+postCommunication"></a>
 
-### skolengo.postCommunication(attributes)
+### skolengo.postCommunication(newCommunication)
 Envoyer un message dans un nouveau fil de discussion
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| attributes | <code>NewCommunication</code> | Les attributs de la nouvelle communication |
+| newCommunication | <code>NewCommunication</code> | La nouvelle communication |
+
+<a name="Skolengo+postParticipation"></a>
+
+### skolengo.postParticipation(participation)
+Envoyer un message dans un fil de discussion existant
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| participation | <code>NewParticipation</code> | La nouvelle participation |
 
 <a name="Skolengo+getAbsenceFiles"></a>
 

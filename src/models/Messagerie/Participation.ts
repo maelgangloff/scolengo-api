@@ -11,6 +11,10 @@ export interface ParticipationAttributes {
   read: boolean
 }
 
+export interface NewParticipationAttributes {
+  content: string
+}
+
 export interface ParticipationRelationships {
   attachments: {
     data: Array<BaseObject<'attachment'>>
@@ -20,7 +24,14 @@ export interface ParticipationRelationships {
   }
 }
 
-export type Participation = BaseResponse<ParticipationAttributes, ParticipationRelationships, 'participation'>
+export interface NewParticipationRelationships {
+  communication: {
+    data: BaseObject<'communication'>
+  }
+}
+
+export type Participation = BaseResponse<ParticipationAttributes, ParticipationRelationships | NewParticipationRelationships, 'participation'>
+export type NewParticipation = Omit<BaseResponse<NewParticipationAttributes, NewParticipationRelationships, 'participation'>, 'id'>
 
 export type ParticipationIncluded = BaseResponse<UserAttributes, {
   school: {
