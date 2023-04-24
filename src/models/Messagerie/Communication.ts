@@ -48,10 +48,10 @@ export interface NewCommunicationRelationship {
   toRecipients: {
     data: Array<BaseObject<PersonType>>
   }
-  ccRecipients: {
+  ccRecipients?: {
     data: Array<BaseObject<PersonType>>
   }
-  bccRecipients: {
+  bccRecipients?: {
     data: Array<BaseObject<PersonType>>
   }
 }
