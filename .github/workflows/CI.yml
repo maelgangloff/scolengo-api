@@ -30,4 +30,4 @@ jobs:
         run: npx tsc
 
       - name: Test
-        run: npx tsd --files tests/
+        run: npx jest
