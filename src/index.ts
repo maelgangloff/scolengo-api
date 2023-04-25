@@ -127,6 +127,13 @@ export class Skolengo {
    *   console.log(schools)
    * })
    * ```
+   * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.searchSchool({ lat: 48.0, lon: 7.0 }).then(schools => {
+   *   console.log(schools)
+   * })
+   * ```
    * @async
    */
   public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {

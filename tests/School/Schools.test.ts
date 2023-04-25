@@ -210,5 +210,25 @@ describe('Test Schools', () => {
       responseType: 'json'
     })
   })
+
+  it('should searchSchool make the right request with GPS', async () => {
+    await Skolengo.searchSchool({lat: 48.0, lon: 7.0}, 10, 0)
+    expect(mockedAxios.request).toBeCalledWith({
+      baseURL: 'https://api.skolengo.com/api/v1/bff-sko-app',
+      url: '/schools',
+      method: 'get',
+      params: {
+        filter: {
+          lat: 48.0,
+          lon: 7.0
+        },
+        page: {
+          limit: 10,
+          offset: 0
+        }
+      },
+      responseType: 'json'
+    })
+  })
 })
 

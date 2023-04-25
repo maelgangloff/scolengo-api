@@ -498,6 +498,14 @@ Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(schools => {
   console.log(schools)
 })
 ```
+**Example**  
+```js
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.searchSchool({ lat: 48.0, lon: 7.0 }).then(schools => {
+  console.log(schools)
+})
+```
 <a name="Skolengo.getOIDClient"></a>
 
 ### Skolengo.getOIDClient(school, redirectUri)
