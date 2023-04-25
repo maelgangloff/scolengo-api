@@ -3,7 +3,7 @@ import { PersonType } from './UsersMailSettings'
 import { AttachmentAttributes } from '../School/Attachment'
 import { UserAttributes } from '../Global/User'
 import { SchoolAttributes } from '../School/School'
-import { ParticipantAttributes, TechnicalUserAttributes } from './Participant'
+import { ParticipantAttributes } from './Participant'
 
 export interface ParticipationAttributes {
   dateTime: string
