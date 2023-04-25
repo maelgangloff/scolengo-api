@@ -38,7 +38,7 @@ export type ParticipationIncluded = BaseResponse<UserAttributes, {
     data: BaseObject<'school'> | null
   }
 }, PersonType>
-| BaseResponse<ParticipantAttributes | TechnicalUserAttributes, {
+| BaseResponse<ParticipantAttributes, {
   technicalUser: {
     data: BaseObject<'technicalUser'> | null
   }
