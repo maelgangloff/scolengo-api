@@ -4,7 +4,7 @@ import { Stream } from 'node:stream'
 
 import { CurrentConfig } from './models/Global/CurrentConfig'
 import { BaseObject, SkolengoResponse, SkolengoResponseData } from './models/Global'
-import { School } from './models/School/School'
+import { School, SchoolFilter } from './models/School/School'
 import { User, UserIncluded } from './models/Global/User'
 import { SchoolInfo, SchoolInfoIncluded } from './models/School/SchoolInfo'
 import { AuthConfig } from './models/Auth'
@@ -42,7 +42,7 @@ export class Skolengo {
    * @example ```js
    * const {Skolengo, TokenSet} = require('scolengo-api')
    *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
    *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools.data[0]
    *   const oidClient = await Skolengo.getOIDClient(school)
@@ -117,19 +117,19 @@ export class Skolengo {
 
   /**
    * Rechercher un établissement scolaire
-   * @param {string} text Le nom partiel de l'établissement
+   * @param {SchoolFilter} filter Le filtre de recherche
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
+   * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(schools => {
    *   console.log(schools)
    * })
    * ```
    * @async
    */
-  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {
+  public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {
     return (await axios.request<SkolengoResponseData<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
@@ -140,41 +140,7 @@ export class Skolengo {
           limit,
           offset
         },
-        filter: { text }
-      }
-    })).data
-  }
-
-  /**
-   * Rechercher un établissement scolaire à partir de coordonnées GPS
-   * @param {number} lat Latitude
-   * @param {number} lon Longitude
-   * @param {number} limit Limite
-   * @param {number} offset Offset
-   * @example ```js
-   * const {Skolengo} = require('scolengo-api')
-   *
-   * Skolengo.searchSchool(48.0, 7.0).then(schools => {
-   *   console.log(schools)
-   * })
-   * ```
-   * @async
-   */
-  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {
-    return (await axios.request<SkolengoResponseData<School[]>>({
-      baseURL: BASE_URL,
-      url: '/schools',
-      method: 'get',
-      responseType: 'json',
-      params: {
-        page: {
-          limit,
-          offset
-        },
-        filter: {
-          lat,
-          lon
-        }
+        filter
       }
     })).data
   }
@@ -186,7 +152,7 @@ export class Skolengo {
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
    *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools.data[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
@@ -197,7 +163,7 @@ export class Skolengo {
    * ```js
    * const {Skolengo} = require('scolengo-api')
    *
-   * Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+   * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
    *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools.data[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
@@ -827,14 +793,15 @@ export class Skolengo {
   }
 
   /**
-   * Récupérer la liste des motifs d'absence de l'établissement
+   * Récupérer la liste des motifs possibles d'absence.
+   * Cette liste peut être différente pour chaque établissement.
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.fromConfigObject(config).then(async user => {
    *   user.getAbsenceReasons().then(response => {
-   *     console.log(`Liste des motifs: ${response.data.map(r => r.attributes?.longLabel).join(';')}`)
+   *     console.log(`Liste des motifs: ${response.data.map(r => r.attributes.longLabel).join(';')}`)
    *   })
    * })
 

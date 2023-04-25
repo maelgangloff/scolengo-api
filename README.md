@@ -77,8 +77,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
-        * [.searchSchool(text, limit, offset)](#Skolengo.searchSchool)
-        * [.searchSchoolGPS(lat, lon, limit, offset)](#Skolengo.searchSchoolGPS)
+        * [.searchSchool(filter, limit, offset)](#Skolengo.searchSchool)
         * [.getOIDClient(school, redirectUri)](#Skolengo.getOIDClient)
         * [.fromConfigObject(config)](#Skolengo.fromConfigObject)
 
@@ -98,7 +97,7 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 ```js
 const {Skolengo, TokenSet} = require('scolengo-api')
 
-Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
   const school = schools.data[0]
   const oidClient = await Skolengo.getOIDClient(school)
@@ -437,7 +436,8 @@ Récupérer les détails d'une absence
 <a name="Skolengo+getAbsenceReasons"></a>
 
 ### skolengo.getAbsenceReasons()
-Récupérer la liste des motifs d'absence de l'établissement
+Récupérer la liste des motifs possibles d'absence.
+Cette liste peut être différente pour chaque établissement.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 **Example**  
@@ -446,7 +446,7 @@ const {Skolengo} = require('scolengo-api')
 
 Skolengo.fromConfigObject(config).then(async user => {
   user.getAbsenceReasons().then(response => {
-    console.log(`Liste des motifs: ${response.data.map(r => r.attributes?.longLabel).join(';')}`)
+    console.log(`Liste des motifs: ${response.data.map(r => r.attributes.longLabel).join(';')}`)
   })
 })
 ```
@@ -479,14 +479,14 @@ Skolengo.getAppCurrentConfig().then(config => {
 ```
 <a name="Skolengo.searchSchool"></a>
 
-### Skolengo.searchSchool(text, limit, offset)
+### Skolengo.searchSchool(filter, limit, offset)
 Rechercher un établissement scolaire
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| text | <code>string</code> |  | Le nom partiel de l'établissement |
+| filter | <code>SchoolFilter</code> |  | Le filtre de recherche |
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 
@@ -494,29 +494,7 @@ Rechercher un établissement scolaire
 ```js
 const {Skolengo} = require('scolengo-api')
 
-Skolengo.searchSchool('Lycée Louise Weiss').then(schools => {
-  console.log(schools)
-})
-```
-<a name="Skolengo.searchSchoolGPS"></a>
-
-### Skolengo.searchSchoolGPS(lat, lon, limit, offset)
-Rechercher un établissement scolaire à partir de coordonnées GPS
-
-**Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| lat | <code>number</code> |  | Latitude |
-| lon | <code>number</code> |  | Longitude |
-| limit | <code>number</code> | <code>10</code> | Limite |
-| offset | <code>number</code> | <code>0</code> | Offset |
-
-**Example**  
-```js
-const {Skolengo} = require('scolengo-api')
-
-Skolengo.searchSchool(48.0, 7.0).then(schools => {
+Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(schools => {
   console.log(schools)
 })
 ```
@@ -536,7 +514,7 @@ Créer un client OpenID Connect permettant l'obtention des jetons (refresh token
 ```js
 const {Skolengo} = require('scolengo-api')
 
-Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
   const school = schools.data[0]
   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
@@ -547,7 +525,7 @@ Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
 ```js
 const {Skolengo} = require('scolengo-api')
 
-Skolengo.searchSchool('Lycée Louise Weiss').then(async schools => {
+Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
   const school = schools.data[0]
   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')

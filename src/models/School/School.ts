@@ -1,5 +1,7 @@
 import { BaseResponseAttributes } from '../Global'
 
+export type SchoolFilter = { text: string } | { lat: number, lon: number }
+
 export interface SchoolAttributes {
   name: string
   addressLine1: string

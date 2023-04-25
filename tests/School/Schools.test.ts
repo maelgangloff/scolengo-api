@@ -192,8 +192,8 @@ describe('Test Schools', () => {
     expect<ExpectedType>(data).toBeDefined()
   })
 
-  it('should getSchools make the right request', async () => {
-    await Skolengo.searchSchool('Lycée Louise Weiss', 10, 0)
+  it('should searchSchool make the right request', async () => {
+    await Skolengo.searchSchool({text: 'Lycée Louise Weiss'}, 10, 0)
     expect(mockedAxios.request).toBeCalledWith({
       baseURL: 'https://api.skolengo.com/api/v1/bff-sko-app',
       url: '/schools',
@@ -204,25 +204,6 @@ describe('Test Schools', () => {
         },
         page: {
           limit: 10,
-          offset: 0
-        }
-      },
-      responseType: 'json'
-    })
-  })
-  it('should getSchools make the right request', async () => {
-    await Skolengo.searchSchoolGPS(48.0, 7.0, 15, 0)
-    expect(mockedAxios.request).toBeCalledWith({
-      baseURL: 'https://api.skolengo.com/api/v1/bff-sko-app',
-      url: '/schools',
-      method: 'get',
-      params: {
-        filter: {
-          lat: 48,
-          lon: 7
-        },
-        page: {
-          limit: 15,
           offset: 0
         }
       },
