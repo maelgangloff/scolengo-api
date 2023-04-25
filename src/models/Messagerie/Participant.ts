@@ -18,11 +18,11 @@ export interface ParticipantRelationships {
   }
 }
 
-export type ParticipantIncludedAttributes = UserAttributes | {
+export interface TechnicalUserAttributes {
   label: string
   logoUrl: string | null
 }
 
-export type ParticipantIncluded = BaseResponse<ParticipantIncludedAttributes, SchoolRelationship, PersonType>
+export type ParticipantIncluded = BaseResponse<UserAttributes, SchoolRelationship, PersonType>
 
 export type Participant = BaseResponse<ParticipantAttributes, ParticipantRelationships, 'personParticipant' | 'groupParticipant'>

@@ -3,7 +3,7 @@ import { PersonType } from './UsersMailSettings'
 import { AttachmentAttributes } from '../School/Attachment'
 import { UserAttributes } from '../Global/User'
 import { SchoolAttributes } from '../School/School'
-import { ParticipantAttributes } from './Participant'
+import { ParticipantAttributes, TechnicalUserAttributes } from './Participant'
 
 export interface ParticipationAttributes {
   dateTime: string
@@ -38,7 +38,7 @@ export type ParticipationIncluded = BaseResponse<UserAttributes, {
     data: BaseObject<'school'> | null
   }
 }, PersonType>
-| BaseResponse<ParticipantAttributes, {
+| BaseResponse<ParticipantAttributes | TechnicalUserAttributes, {
   technicalUser: {
     data: BaseObject<'technicalUser'> | null
   }

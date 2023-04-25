@@ -1,7 +1,8 @@
 import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { PersonType } from './UsersMailSettings'
-import { ParticipantAttributes, ParticipantIncludedAttributes } from './Participant'
+import { ParticipantAttributes, TechnicalUserAttributes } from './Participant'
 import { ParticipationAttributes } from './Participation'
+import { UserAttributes } from '../Global/User'
 
 export interface CommunicationAttributes {
   subject: string
@@ -26,15 +27,17 @@ export type CommunicationIncluded = BaseResponse<ParticipationAttributes, {
   }
 }, 'participation'>
 | BaseResponse<ParticipantAttributes, {
-  technicalUser?: {
-    data: BaseObject<'technicalUser'> | null
-  }
-  person?: {
+  person: {
     data: BaseObject<PersonType> | null
   }
 }, 'personParticipant'>
-| BaseResponseAttributes<ParticipantIncludedAttributes, 'technicalUser'>
-| BaseResponse<ParticipantIncludedAttributes, {
+| BaseResponse<TechnicalUserAttributes, {
+  technicalUser: {
+    data: BaseObject<'technicalUser'> | null
+  }
+}, 'personParticipant'>
+| BaseResponseAttributes<TechnicalUserAttributes, 'technicalUser'>
+| BaseResponse<UserAttributes, {
   school: {
     data: BaseObject | null
   }

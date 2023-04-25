@@ -29,7 +29,6 @@ export type PersonType =
   | 'personInContactWithStudent'
   | 'nonTeachingStaff'
   | 'teacher'
-  | 'technicalUser'
 
 export type UsersMailSettingsIncluded = BaseResponseAttributes<Signature, 'signature'>
 | BaseResponseAttributes<UserAttributes, PersonType>
