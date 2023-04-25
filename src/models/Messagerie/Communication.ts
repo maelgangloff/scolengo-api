@@ -1,4 +1,4 @@
-import { BaseObject, BaseResponse } from '../Global'
+import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
 import { PersonType } from './UsersMailSettings'
 import { ParticipantAttributes, ParticipantIncludedAttributes } from './Participant'
 import { ParticipationAttributes } from './Participation'
@@ -33,6 +33,7 @@ export type CommunicationIncluded = BaseResponse<ParticipationAttributes, {
     data: BaseObject<PersonType> | null
   }
 }, 'personParticipant'>
+| BaseResponseAttributes<ParticipantIncludedAttributes, 'technicalUser'>
 | BaseResponse<ParticipantIncludedAttributes, {
   school: {
     data: BaseObject | null

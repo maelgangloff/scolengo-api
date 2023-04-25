@@ -38,9 +38,5 @@ export type EvaluationIncluded =
   | BaseResponse<EvaluationResultAttributes, SubSkillsEvaluationResultRelationship, 'evaluationResult'>
   | BaseResponse<SubSkillAttributes, SubSkillRelationShip, 'subSkill'>
   | BaseResponse<SubSkillEvaluationResultAttributes, SubSkillsEvaluationResultRelationship, 'subSkillEvaluationResult'>
-  | BaseResponse<SubjectAttributes, {
-    subject: {
-      data: BaseObject<'subject'>
-    }
-  }, 'subject'>
+  | BaseResponseAttributes<SubjectAttributes, 'subject'>
   | BaseResponseAttributes<UserAttributes, PersonType>

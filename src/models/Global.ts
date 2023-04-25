@@ -12,8 +12,8 @@ export type BaseResponseRelationships<Relationships, Type> = BaseObject<Type> & 
 }
 
 export type BaseResponse<Attributes, Relationships, Type> =
-  & Partial<BaseResponseAttributes<Attributes, Type>>
-  & Partial<BaseResponseRelationships<Relationships, Type>>
+  & BaseResponseAttributes<Attributes, Type>
+  & BaseResponseRelationships<Relationships, Type>
 
 export interface SkolengoResponse<Data, Included = undefined> {
   data: Data
