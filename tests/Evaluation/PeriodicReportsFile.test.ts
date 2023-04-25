@@ -1,8 +1,8 @@
 import { describe } from 'node:test'
-import { SkolengoResponse } from '../../src/models/Global'
+import { SkolengoResponseData } from '../../src/models/Global'
 import { PeriodicReportsFile } from '../../src/models/Evaluation/PeriodicReportsFile'
 
-type ExpectedType = SkolengoResponse<PeriodicReportsFile[]>
+type ExpectedType = SkolengoResponseData<PeriodicReportsFile[]>
 
 describe('Test PeriodicReportsFile', () => {
   it('should be correct type', () => {

@@ -3,7 +3,7 @@ import { Client, Issuer, TokenSet } from 'openid-client'
 import { Stream } from 'node:stream'
 
 import { CurrentConfig } from './models/Global/CurrentConfig'
-import { BaseObject, SkolengoResponse } from './models/Global'
+import { BaseObject, SkolengoResponse, SkolengoResponseData } from './models/Global'
 import { School } from './models/School/School'
 import { User, UserIncluded } from './models/Global/User'
 import { SchoolInfo, SchoolInfoIncluded } from './models/School/SchoolInfo'
@@ -106,8 +106,8 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async getAppCurrentConfig (): Promise<SkolengoResponse<CurrentConfig>> {
-    return (await axios.request<SkolengoResponse<CurrentConfig>>({
+  public static async getAppCurrentConfig (): Promise<SkolengoResponseData<CurrentConfig>> {
+    return (await axios.request<SkolengoResponseData<CurrentConfig>>({
       baseURL: BASE_URL,
       url: '/sko-app-configs/current',
       method: 'get',
@@ -129,8 +129,8 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponse<School[]>> {
-    return (await axios.request<SkolengoResponse<School[]>>({
+  public static async searchSchool (text: string, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {
+    return (await axios.request<SkolengoResponseData<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
       method: 'get',
@@ -160,8 +160,8 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 0): Promise<SkolengoResponse<School[]>> {
-    return (await axios.request<SkolengoResponse<School[]>>({
+  public static async searchSchoolGPS (lat: number, lon: number, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {
+    return (await axios.request<SkolengoResponseData<School[]>>({
       baseURL: BASE_URL,
       url: '/schools',
       method: 'get',
@@ -464,8 +464,8 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string): Promise<SkolengoResponse<PeriodicReportsFile[]>> {
-    return (await this.request<SkolengoResponse<PeriodicReportsFile[]>>({
+  public async getPeriodicReportsFiles (studentId: string): Promise<SkolengoResponseData<PeriodicReportsFile[]>> {
+    return (await this.request<SkolengoResponseData<PeriodicReportsFile[]>>({
       url: '/periodic-reports-files',
       responseType: 'json',
       params: {
@@ -760,10 +760,10 @@ export class Skolengo {
    * @param {NewCommunication} newCommunication La nouvelle communication
    * @async
    */
-  public async postCommunication (newCommunication: NewCommunication): Promise<SkolengoResponse<NewCommunication & {
+  public async postCommunication (newCommunication: NewCommunication): Promise<SkolengoResponseData<NewCommunication & {
     id: string
   }>> {
-    return (await this.request<SkolengoResponse<NewCommunication & { id: string }>>({
+    return (await this.request<SkolengoResponseData<NewCommunication & { id: string }>>({
       url: 'communications',
       method: 'post',
       responseType: 'json',
@@ -779,8 +779,8 @@ export class Skolengo {
    * @param {NewParticipation} participation La nouvelle participation
    * @async
    */
-  public async postParticipation (participation: NewParticipation): Promise<SkolengoResponse<Participation>> {
-    return (await this.request<SkolengoResponse<Participation>>({
+  public async postParticipation (participation: NewParticipation): Promise<SkolengoResponseData<Participation>> {
+    return (await this.request<SkolengoResponseData<Participation>>({
       url: 'participations',
       method: 'post',
       responseType: 'json',
@@ -840,8 +840,8 @@ export class Skolengo {
 
    * ```
    */
-  public async getAbsenceReasons (): Promise<SkolengoResponse<AbsenceReason[]>> {
-    return (await this.request<SkolengoResponse<AbsenceReason[]>>({
+  public async getAbsenceReasons (): Promise<SkolengoResponseData<AbsenceReason[]>> {
+    return (await this.request<SkolengoResponseData<AbsenceReason[]>>({
       url: '/absence-reasons',
       responseType: 'json'
     })

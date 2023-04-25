@@ -15,7 +15,7 @@ export type BaseResponse<Attributes, Relationships, Type> =
   & BaseResponseAttributes<Attributes, Type>
   & BaseResponseRelationships<Relationships, Type>
 
-export interface SkolengoResponse<Data, Included = undefined> {
+export interface SkolengoResponse<Data, Included> {
   data: Data
   links?: {
     self?: string
@@ -27,5 +27,7 @@ export interface SkolengoResponse<Data, Included = undefined> {
   meta?: {
     totalResourceCount: number
   }
-  included?: Included[]
+  included: Included[]
 }
+
+export type SkolengoResponseData<Data> = Omit<SkolengoResponse<Data, never>, 'included'>

@@ -1,10 +1,10 @@
 import { describe } from 'node:test'
-import { SkolengoResponse } from '../../src/models/Global'
+import { SkolengoResponseData } from '../../src/models/Global'
 import { School } from '../../src/models/School/School'
 import { Skolengo } from '../../src'
 import axios from 'axios'
 
-type ExpectedType = SkolengoResponse<School[]>
+type ExpectedType = SkolengoResponseData<School[]>
 
 jest.mock('axios')
 

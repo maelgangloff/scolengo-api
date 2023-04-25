@@ -1,8 +1,8 @@
 import { describe } from 'node:test'
-import { SkolengoResponse } from '../../src/models/Global'
+import { SkolengoResponseData } from '../../src/models/Global'
 import { AbsenceReason } from '../../src/models/Assiduite/AbsenceReasons'
 
-type ExpectedType = SkolengoResponse<AbsenceReason[]>
+type ExpectedType = SkolengoResponseData<AbsenceReason[]>
 
 describe('Test AbsenceReasons', () => {
   it('should be correct type', () => {
