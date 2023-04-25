@@ -5,7 +5,9 @@
 [![Discord](https://img.shields.io/discord/1095829734211977276?label=Discord&style=flat-square)](https://discord.gg/9u69mxsFT6)
 [![npm](https://img.shields.io/npm/dm/scolengo-api?style=flat-square)](https://npm-stat.com/charts.html?package=scolengo-api)
 
-Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme. Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
+Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme. Ce module permet de récupérer les données de l'ENT de manière automatique. De plus, certaines fonctions implémentées permettent de prétraiter les données (conversion de l'emploi du temps au format iCalendar par exemple).
+
+Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
 Pour utiliser cette librairie, il est nécessaire de s'authentifier auprès des serveurs de Skolengo. Pour obtenir des jetons de connexion, vous pouvez utiliser [scolengo-token](https://github.com/maelgangloff/scolengo-token).
 
 Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
@@ -241,7 +243,8 @@ Skolengo.fromConfigObject(config).then(async user => {
 <a name="Skolengo+getAgenda"></a>
 
 ### skolengo.getAgenda(studentId, startDate, endDate, limit, offset)
-Récupérer l'agenda d'un étudiant
+Récupérer l'agenda d'un étudiant.
+Il est possible de le convertir au format iCalendar.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
@@ -253,6 +256,18 @@ Récupérer l'agenda d'un étudiant
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 
+**Example**  
+```js
+const { writeFileSync } = require('node:fs')
+const {Skolengo} = require('scolengo-api')
+
+Skolengo.fromConfigObject(config).then(async user => {
+  const studentId = 'ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+  const agenda = await user.getAgenda(studentId, '2023-05-01', '2023-05-30')
+
+  writeFileSync('export.ics', agenda.toICalendar())
+})
+```
 <a name="Skolengo+getLesson"></a>
 
 ### skolengo.getLesson(studentId, lessonId)

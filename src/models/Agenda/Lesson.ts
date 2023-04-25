@@ -44,7 +44,7 @@ export interface LessonRelationships {
     data: BaseObject<'subject'>
   }
   teachers: {
-    data: Array<BaseObject<'teacher'>> | null
+    data: Array<BaseObject<'teacher'>>
   }
 }
 

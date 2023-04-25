@@ -26,7 +26,7 @@ import { AbsenceFile, AbsenceFileIncluded } from './models/Assiduite/AbsenceFile
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { Participant, ParticipantIncluded } from './models/Messagerie/Participant'
 import { AttachmentAttributes } from './models/School/Attachment'
-
+import { AgendaResponse } from './models/Agenda'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
 const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
@@ -466,16 +466,28 @@ export class Skolengo {
   }
 
   /**
-   * Récupérer l'agenda d'un étudiant
+   * Récupérer l'agenda d'un étudiant.
+   * Il est possible de le convertir au format iCalendar.
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} startDate Date de début - Format : YYYY-MM-DD
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @async
+   * @example ```js
+   * const { writeFileSync } = require('node:fs')
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const studentId = 'ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+   *   const agenda = await user.getAgenda(studentId, '2023-05-01', '2023-05-30')
+   *
+   *   writeFileSync('export.ics', agenda.toICalendar())
+   * })
+   * ```
    */
-  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
-    return (await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
+  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<AgendaResponse> {
+    return new AgendaResponse((await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
       url: '/agendas',
       responseType: 'json',
       params: {
@@ -486,7 +498,8 @@ export class Skolengo {
             GE: startDate,
             LE: endDate
           }
-        }
+        },
+        page: { limit, offset }
         /*
         fields: {
           lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
@@ -498,7 +511,7 @@ export class Skolengo {
          */
       }
     })
-    ).data
+    ).data)
   }
 
   /**
