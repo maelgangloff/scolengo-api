@@ -55,13 +55,13 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.downloadAttachment(attributes)](#Skolengo+downloadAttachment)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
-        * [.getEvaluationSettings(studentId)](#Skolengo+getEvaluationSettings)
-        * [.getEvaluation(studentId, periodId)](#Skolengo+getEvaluation)
+        * [.getEvaluationSettings(studentId, limit, offset)](#Skolengo+getEvaluationSettings)
+        * [.getEvaluation(studentId, periodId, limit, offset)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, evaluationId)](#Skolengo+getEvaluationDetail)
-        * [.getPeriodicReportsFiles(studentId)](#Skolengo+getPeriodicReportsFiles)
-        * [.getAgenda(studentId, startDate, endDate)](#Skolengo+getAgenda)
+        * [.getPeriodicReportsFiles(studentId, limit, offset)](#Skolengo+getPeriodicReportsFiles)
+        * [.getAgenda(studentId, startDate, endDate, limit, offset)](#Skolengo+getAgenda)
         * [.getLesson(studentId, lessonId)](#Skolengo+getLesson)
-        * [.getHomeworkAssignments(studentId, startDate, endDate)](#Skolengo+getHomeworkAssignments)
+        * [.getHomeworkAssignments(studentId, startDate, endDate, limit, offset)](#Skolengo+getHomeworkAssignments)
         * [.getHomeworkAssignment(studentId, homeworkId)](#Skolengo+getHomeworkAssignment)
         * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
@@ -71,9 +71,9 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
         * [.postCommunication(newCommunication)](#Skolengo+postCommunication)
         * [.postParticipation(participation)](#Skolengo+postParticipation)
-        * [.getAbsenceFiles(studentId)](#Skolengo+getAbsenceFiles)
+        * [.getAbsenceFiles(studentId, limit, offset)](#Skolengo+getAbsenceFiles)
         * [.getAbsenceFile(folderId)](#Skolengo+getAbsenceFile)
-        * [.getAbsenceReasons()](#Skolengo+getAbsenceReasons)
+        * [.getAbsenceReasons(limit, offset)](#Skolengo+getAbsenceReasons)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -178,26 +178,30 @@ Récupérer une actualité de l'établissement
 
 <a name="Skolengo+getEvaluationSettings"></a>
 
-### skolengo.getEvaluationSettings(studentId)
+### skolengo.getEvaluationSettings(studentId, limit, offset)
 Statut des services d'évaluation (identifiant des périodes, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| studentId | <code>string</code> |  | Identifiant d'un étudiant |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 <a name="Skolengo+getEvaluation"></a>
 
-### skolengo.getEvaluation(studentId, periodId)
+### skolengo.getEvaluation(studentId, periodId, limit, offset)
 Récupérer les notes d'un étudiant sur une période
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
-| periodId | <code>string</code> | Identifiant de la période de notation |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| studentId | <code>string</code> |  | Identifiant d'un étudiant |
+| periodId | <code>string</code> |  | Identifiant de la période de notation |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 <a name="Skolengo+getEvaluationDetail"></a>
 
@@ -213,15 +217,17 @@ Récupérer le détail d'une note d'un étudiant
 
 <a name="Skolengo+getPeriodicReportsFiles"></a>
 
-### skolengo.getPeriodicReportsFiles(studentId)
+### skolengo.getPeriodicReportsFiles(studentId, limit, offset)
 Récupérer la liste des bilans périodiques disponibles pour un étudiant.
 Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| studentId | <code>string</code> |  | Identifiant d'un étudiant |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 **Example**  
 ```js
@@ -234,16 +240,18 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+getAgenda"></a>
 
-### skolengo.getAgenda(studentId, startDate, endDate)
+### skolengo.getAgenda(studentId, startDate, endDate, limit, offset)
 Récupérer l'agenda d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
-| startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
-| endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| studentId | <code>string</code> |  | Identifiant d'un étudiant |
+| startDate | <code>string</code> |  | Date de début - Format : YYYY-MM-DD |
+| endDate | <code>string</code> |  | Date de fin - Format : YYYY-MM-DD |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 <a name="Skolengo+getLesson"></a>
 
@@ -259,16 +267,18 @@ Récupérer les données d'un cours/leçon
 
 <a name="Skolengo+getHomeworkAssignments"></a>
 
-### skolengo.getHomeworkAssignments(studentId, startDate, endDate)
+### skolengo.getHomeworkAssignments(studentId, startDate, endDate, limit, offset)
 Récupérer les devoirs d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
-| startDate | <code>string</code> | Date de début - Format : YYYY-MM-DD |
-| endDate | <code>string</code> | Date de fin - Format : YYYY-MM-DD |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| studentId | <code>string</code> |  | Identifiant d'un étudiant |
+| startDate | <code>string</code> |  | Date de début - Format : YYYY-MM-DD |
+| endDate | <code>string</code> |  | Date de fin - Format : YYYY-MM-DD |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 **Example**  
 ```js
@@ -350,8 +360,8 @@ Récupérer les communication d'un dossier
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | folderId | <code>string</code> |  | Identifiant d'un dossier |
-| limit | <code>number</code> \| <code>undefined</code> | <code>10</code> | Limite |
-| offset | <code>number</code> \| <code>undefined</code> | <code>0</code> | Offset |
+| limit | <code>number</code> | <code>10</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
 
 <a name="Skolengo+getCommunicationParticipations"></a>
 
@@ -413,14 +423,16 @@ Envoyer un message dans un fil de discussion existant
 
 <a name="Skolengo+getAbsenceFiles"></a>
 
-### skolengo.getAbsenceFiles(studentId)
+### skolengo.getAbsenceFiles(studentId, limit, offset)
 Récupérer les absences et retards d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| studentId | <code>string</code> | Identifiant d'un étudiant |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| studentId | <code>string</code> |  | Identifiant d'un étudiant |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>offset</code> | <code>0</code> | Offset |
 
 <a name="Skolengo+getAbsenceFile"></a>
 
@@ -435,11 +447,17 @@ Récupérer les détails d'une absence
 
 <a name="Skolengo+getAbsenceReasons"></a>
 
-### skolengo.getAbsenceReasons()
+### skolengo.getAbsenceReasons(limit, offset)
 Récupérer la liste des motifs possibles d'absence.
 Cette liste peut être différente pour chaque établissement.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| limit | <code>number</code> | <code>20</code> | Limite |
+| offset | <code>number</code> | <code>0</code> | Offset |
+
 **Example**  
 ```js
 const {Skolengo} = require('scolengo-api')

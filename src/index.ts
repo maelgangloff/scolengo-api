@@ -335,9 +335,11 @@ export class Skolengo {
   /**
    * Statut des services d'évaluation (identifiant des périodes, ...)
    * @param {string} studentId Identifiant d'un étudiant
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @async
    */
-  public async getEvaluationSettings (studentId: string): Promise<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>> {
+  public async getEvaluationSettings (studentId: string, limit = 20, offset = 0): Promise<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>> {
     return (await this.request<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>>({
       url: '/evaluations-settings',
       responseType: 'json',
@@ -345,6 +347,7 @@ export class Skolengo {
         filter: {
           'student.id': studentId
         },
+        page: { limit, offset },
         include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors'
         /*
             fields: {
@@ -363,9 +366,11 @@ export class Skolengo {
    * Récupérer les notes d'un étudiant sur une période
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} periodId Identifiant de la période de notation
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @async
    */
-  public async getEvaluation (studentId: string, periodId: string): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
+  public async getEvaluation (studentId: string, periodId: string, limit = 20, offset = 0): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
     return (await this.request<SkolengoResponse<Evaluation[], EvaluationIncluded>>({
       url: '/evaluation-services',
       responseType: 'json',
@@ -374,6 +379,7 @@ export class Skolengo {
           'student.id': studentId,
           'period.id': periodId
         },
+        page: { limit, offset },
         include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers'
         /*
             fields: {
@@ -427,6 +433,8 @@ export class Skolengo {
    * Récupérer la liste des bilans périodiques disponibles pour un étudiant.
    * Pour chaque bulletin, une adresse est disponible pour le téléchargement.
    * @param {string} studentId Identifiant d'un étudiant
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -437,7 +445,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string): Promise<SkolengoResponseData<PeriodicReportsFile[]>> {
+  public async getPeriodicReportsFiles (studentId: string, limit = 20, offset = 0): Promise<SkolengoResponseData<PeriodicReportsFile[]>> {
     return (await this.request<SkolengoResponseData<PeriodicReportsFile[]>>({
       url: '/periodic-reports-files',
       responseType: 'json',
@@ -445,7 +453,8 @@ export class Skolengo {
         filter: {
           'student.id': studentId
         },
-        include: 'period'
+        include: 'period',
+        page: { limit, offset }
         /*
         fields: {
           periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
@@ -461,9 +470,11 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} startDate Date de début - Format : YYYY-MM-DD
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @async
    */
-  public async getAgenda (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
+  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<SkolengoResponse<Agenda[], AgendaIncluded>> {
     return (await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
       url: '/agendas',
       responseType: 'json',
@@ -515,6 +526,8 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} startDate Date de début - Format : YYYY-MM-DD
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -528,7 +541,7 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
+  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
     return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
       url: '/homework-assignments',
       responseType: 'json',
@@ -540,7 +553,8 @@ export class Skolengo {
             GE: startDate,
             LE: endDate
           }
-        }
+        },
+        page: { limit, offset }
         /*
         fields: {
           homework: 'title,done,dueDateTime',
@@ -650,8 +664,8 @@ export class Skolengo {
   /**
    * Récupérer les communication d'un dossier
    * @param {string} folderId Identifiant d'un dossier
-   * @param {number|undefined} limit Limite
-   * @param {number|undefined} offset Offset
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @async
    */
   public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0): Promise<SkolengoResponse<Communication[], CommunicationIncluded>> {
@@ -767,9 +781,11 @@ export class Skolengo {
   /**
    * Récupérer les absences et retards d'un étudiant
    * @param {string} studentId Identifiant d'un étudiant
+   * @param {number} limit Limite
+   * @param {offset} offset Offset
    * @async
    */
-  public async getAbsenceFiles (studentId: string): Promise<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>> {
+  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>> {
     return (await this.request<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>>({
       url: '/absence-files',
       responseType: 'json',
@@ -777,6 +793,7 @@ export class Skolengo {
         filter: {
           'student.id': studentId
         },
+        page: { limit, offset },
         include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence'
       }
     })
@@ -802,6 +819,8 @@ export class Skolengo {
   /**
    * Récupérer la liste des motifs possibles d'absence.
    * Cette liste peut être différente pour chaque établissement.
+   * @param {number} limit Limite
+   * @param {number} offset Offset
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -814,10 +833,13 @@ export class Skolengo {
 
    * ```
    */
-  public async getAbsenceReasons (): Promise<SkolengoResponseData<AbsenceReason[]>> {
+  public async getAbsenceReasons (limit = 20, offset = 0): Promise<SkolengoResponseData<AbsenceReason[]>> {
     return (await this.request<SkolengoResponseData<AbsenceReason[]>>({
       url: '/absence-reasons',
-      responseType: 'json'
+      responseType: 'json',
+      params: {
+        page: { limit, offset }
+      }
     })
     ).data
   }
