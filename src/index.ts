@@ -27,6 +27,7 @@ import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { Participant, ParticipantIncluded } from './models/Messagerie/Participant'
 import { AttachmentAttributes } from './models/School/Attachment'
 import { AgendaResponse } from './models/Agenda'
+import { AbsenceFilesResponse } from './models/Assiduite'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
 const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
@@ -798,8 +799,8 @@ export class Skolengo {
    * @param {offset} offset Offset
    * @async
    */
-  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>> {
-    return (await this.request<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>>({
+  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<AbsenceFilesResponse> {
+    return new AbsenceFilesResponse((await this.request<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>>({
       url: '/absence-files',
       responseType: 'json',
       params: {
@@ -810,7 +811,7 @@ export class Skolengo {
         include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence'
       }
     })
-    ).data
+    ).data)
   }
 
   /**
