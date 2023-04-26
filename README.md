@@ -259,7 +259,7 @@ Il est possible de le convertir au format iCalendar.
 **Example**  
 ```js
 const { writeFileSync } = require('node:fs')
-const {Skolengo} = require('scolengo-api')
+const { Skolengo } = require('scolengo-api')
 
 Skolengo.fromConfigObject(config).then(async user => {
   const studentId = 'ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
@@ -439,7 +439,8 @@ Envoyer un message dans un fil de discussion existant
 <a name="Skolengo+getAbsenceFiles"></a>
 
 ### skolengo.getAbsenceFiles(studentId, limit, offset)
-Récupérer les absences et retards d'un étudiant
+Récupérer les absences et retards d'un étudiant.
+Il est possible d'exporter les absences au format CSV.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
@@ -449,6 +450,18 @@ Récupérer les absences et retards d'un étudiant
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>offset</code> | <code>0</code> | Offset |
 
+**Example**  
+```js
+const { writeFileSync } = require('node:fs')
+const { Skolengo } = require('scolengo-api')
+
+Skolengo.fromConfigObject(config).then(async user => {
+  const studentId = 'ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+  const absenceFiles = await user.getAbsenceFiles(studentId)
+
+  writeFileSync('export.csv', agenda.toCSV())
+})
+```
 <a name="Skolengo+getAbsenceFile"></a>
 
 ### skolengo.getAbsenceFile(folderId)

@@ -477,7 +477,7 @@ export class Skolengo {
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
-   * const {Skolengo} = require('scolengo-api')
+   * const { Skolengo } = require('scolengo-api')
    *
    * Skolengo.fromConfigObject(config).then(async user => {
    *   const studentId = 'ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
@@ -793,11 +793,23 @@ export class Skolengo {
   }
 
   /**
-   * Récupérer les absences et retards d'un étudiant
+   * Récupérer les absences et retards d'un étudiant.
+   * Il est possible d'exporter les absences au format CSV.
    * @param {string} studentId Identifiant d'un étudiant
    * @param {number} limit Limite
    * @param {offset} offset Offset
    * @async
+   * @example ```js
+   * const { writeFileSync } = require('node:fs')
+   * const { Skolengo } = require('scolengo-api')
+   *
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const studentId = 'ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+   *   const absenceFiles = await user.getAbsenceFiles(studentId)
+   *
+   *   writeFileSync('export.csv', agenda.toCSV())
+   * })
+   * ```
    */
   public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<AbsenceFilesResponse> {
     return new AbsenceFilesResponse((await this.request<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>>({
