@@ -5,7 +5,7 @@ import { BaseObject } from './models/Global'
 import { School, SchoolFilter } from './models/School/School'
 import { AuthConfig } from './models/Auth'
 import { Communication, NewCommunication } from './models/Messagerie/Communication'
-import { Attachment, PublicAttachment } from './models/School/Attachment'
+import { Attachment } from './models/School/Attachment'
 import { deserialize, DocumentObject } from 'jsonapi-fractal'
 import { User } from './models/Global/User'
 import { EvaluationSettings } from './models/Evaluation/EvaluationSettings'
@@ -19,6 +19,7 @@ import { UsersMailSettings } from './models/Messagerie/UsersMailSettings'
 import { NewParticipation, Participation } from './models/Messagerie/Participation'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { AbsenceFile } from './models/Assiduite/AbsenceFile'
+import { SchoolInfo } from './models/School/SchoolInfo'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -281,11 +282,11 @@ export class Skolengo {
    *   }
    * })
    * ```
-   * @param {Attachment} attributes La pièce jointe
+   * @param {Attachment} attachment La pièce jointe
    */
-  public async downloadAttachment (attributes: Attachment): Promise<Stream> {
+  public async downloadAttachment (attachment: Attachment): Promise<Stream> {
     return (await this.request<Stream>({
-      url: attributes.url,
+      url: attachment.url,
       responseType: 'stream'
     })
     ).data
@@ -295,7 +296,7 @@ export class Skolengo {
    * Récupérer toutes les actualités de l'établissement
    * @async
    */
-  public async getSchoolInfos (): Promise<any> {
+  public async getSchoolInfos (): Promise<SchoolInfo[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/schools-info',
       responseType: 'json',
@@ -303,7 +304,7 @@ export class Skolengo {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
     })
-    ).data)
+    ).data) as SchoolInfo[]
   }
 
   /**
@@ -311,7 +312,7 @@ export class Skolengo {
    * @param {string} schoolInfoId Identifiant d'une actualité
    * @async
    */
-  public async getSchoolInfo (schoolInfoId: string): Promise<any> {
+  public async getSchoolInfo (schoolInfoId: string): Promise<SchoolInfo> {
     return deserialize((await this.request<DocumentObject>({
       url: `/schools-info/${schoolInfoId}`,
       responseType: 'json',
@@ -319,7 +320,7 @@ export class Skolengo {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
     })
-    ).data)
+    ).data) as SchoolInfo
   }
 
   /**
@@ -441,7 +442,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string, limit = 20, offset = 0): Promise<PublicAttachment[]> {
+  public async getPeriodicReportsFiles (studentId: string, limit = 20, offset = 0): Promise<Attachment[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/periodic-reports-files',
       responseType: 'json',
@@ -461,7 +462,7 @@ export class Skolengo {
              */
       }
     })
-    ).data) as PublicAttachment[]
+    ).data) as Attachment[]
   }
 
   /**

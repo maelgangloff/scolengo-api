@@ -54,7 +54,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
     * [new Skolengo(oidClient, school, tokenSet)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo(userId)](#Skolengo+getUserInfo)
-        * [.downloadAttachment(attributes)](#Skolengo+downloadAttachment)
+        * [.downloadAttachment(attachment)](#Skolengo+downloadAttachment)
         * [.getSchoolInfos()](#Skolengo+getSchoolInfos)
         * [.getSchoolInfo(schoolInfoId)](#Skolengo+getSchoolInfo)
         * [.getEvaluationSettings(studentId, limit, offset)](#Skolengo+getEvaluationSettings)
@@ -134,7 +134,7 @@ Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de 
 
 <a name="Skolengo+downloadAttachment"></a>
 
-### skolengo.downloadAttachment(attributes)
+### skolengo.downloadAttachment(attachment)
 Télécharger une pièce jointe.
 
 Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
@@ -145,7 +145,7 @@ Une pièce jointe peut être un fichier inclu dans un courriel, une actualité d
 
 | Param | Type | Description |
 | --- | --- | --- |
-| attributes | <code>Attachment</code> | La pièce jointe |
+| attachment | <code>Attachment</code> | La pièce jointe |
 
 **Example**  
 ```js

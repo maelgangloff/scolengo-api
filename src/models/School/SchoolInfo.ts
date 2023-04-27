@@ -1,9 +1,9 @@
-import { PublicAttachment } from './Attachment'
-import { BaseObject, BaseResponse } from '../Global'
+import { Attachment } from './Attachment'
 import { User } from '../Global/User'
-import { PersonType } from '../Messagerie/UsersMailSettings'
+import { School } from './School'
 
-export interface SchoolInfoAttributes {
+export interface SchoolInfo {
+  id: string
   publicationDateTime: string
   title: string
   shortContent: string
@@ -11,52 +11,12 @@ export interface SchoolInfoAttributes {
   url?: string | null
   linkedInfoUrl?: string | null
   linkedWebSiteUrl?: string | null
-}
-
-export interface SchoolInfoRelationships {
-  school: {
-    data: BaseObject<'school'>
-  }
-  attachments?: {
-    data: Array<BaseObject<'attachment'>>
-  }
+  school?: Partial<School>
+  attachments?: Attachment[]
   author: {
-    data: BaseObject<'schoolInfoAuthor'> | null
+    id: string
+    additionalInfo: any
+    person: User
   }
-  illustration: {
-    data: BaseObject<'schoolInfoFile'> | null
-  }
+  illustration?: Attachment
 }
-
-export type SchoolInfo = BaseResponse<SchoolInfoAttributes, SchoolInfoRelationships, 'news'>
-
-interface SchoolInfoAuthor {
-  additionalInfo: any
-}
-
-interface SchoolInfoSchool {
-  name: string
-  addressLine1?: string | null
-  addressLine2?: string | null
-  addressLine3?: string | null
-  zipCode?: string | null
-  city?: string | null
-  country?: string | null
-  homePageUrl?: string | null
-  emsCode?: string | null
-  emsOIDCWellKnownUrl?: string | null
-  timeZone?: string | null
-}
-
-export type SchoolInfoIncludedAttributes = User | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
-
-export interface SchoolInfoIncludedRelationships {
-  technicalUser: {
-    data: BaseObject<'technicalUser'> | null
-  }
-  person: {
-    data: BaseObject<PersonType> | null
-  }
-}
-
-export type SchoolInfoIncluded = BaseResponse<SchoolInfoIncludedAttributes, SchoolInfoIncludedRelationships, string>
