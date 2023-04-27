@@ -47,3 +47,5 @@ X-WR-CALNAME:Agenda Skolengo
 ` + 'END:VCALENDAR'
   }
 }
+
+export { Agenda, Lesson }

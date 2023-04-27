@@ -1,27 +1,18 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
+import { deserialize, DocumentObject } from 'jsonapi-fractal'
 import { Stream } from 'node:stream'
-import { BaseObject } from './models/Global'
+
+import { AppCurrentConfig, BaseObject, User } from './models/Global'
 import { School, SchoolFilter } from './models/School/School'
 import { AuthConfig } from './models/Auth'
-import { Communication } from './models/Messagerie/Communication'
-import { Attachment } from './models/School/Attachment'
-import { deserialize, DocumentObject } from 'jsonapi-fractal'
-import { User } from './models/Global/User'
-import { EvaluationSettings } from './models/Evaluation/EvaluationSettings'
-import { AppCurrentConfig } from './models/Global/CurrentConfig'
-import { Evaluation } from './models/Evaluation/Evaluation'
-import { EvaluationDetail } from './models/Evaluation/EvaluationDetail'
-import { Agenda } from './models/Agenda/Agenda'
+import { Communication, Participation, UsersMailSettings } from './models/Messagerie'
+import { Attachment, SchoolInfo } from './models/School'
+import { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Evaluation'
 import { HomeworkAssignment } from './models/Homework/HomeworkAssignment'
-import { Lesson } from './models/Agenda/Lesson'
-import { UsersMailSettings } from './models/Messagerie/UsersMailSettings'
-import { Participation } from './models/Messagerie/Participation'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
-import { AbsenceFile } from './models/Assiduite/AbsenceFile'
-import { SchoolInfo } from './models/School/SchoolInfo'
-import { AgendaResponse } from './models/Agenda'
-import { AbsenceFilesResponse } from './models/Assiduite'
+import { Agenda, AgendaResponse, Lesson } from './models/Agenda'
+import { AbsenceFile, AbsenceFilesResponse } from './models/Assiduite'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -250,14 +241,14 @@ export class Skolengo {
       responseType: 'json',
       params: {
         /*
-                fields: {
-                  userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
-                  school: 'name,timeZone,subscribedServices',
-                  legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
-                  studentUserInfo: 'className,dateOfBirth,regime,school',
-                  student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
-                },
-                */
+                    fields: {
+                      userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
+                      school: 'name,timeZone,subscribedServices',
+                      legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
+                      studentUserInfo: 'className,dateOfBirth,regime,school',
+                      student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
+                    },
+                    */
         include: 'school,students,students.school'
       }
     })
@@ -346,13 +337,13 @@ export class Skolengo {
         },
         include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors'
         /*
-                fields: {
-                  evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
-                  period: 'label,startDate,endDate',
-                  skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
-                  skillAcquisitionColors: 'colorLevelMappings'
-                }
-                */
+                    fields: {
+                      evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
+                      period: 'label,startDate,endDate',
+                      skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
+                      skillAcquisitionColors: 'colorLevelMappings'
+                    }
+                    */
       }
     })
     ).data) as EvaluationSettings
@@ -381,16 +372,16 @@ export class Skolengo {
         },
         include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers'
         /*
-                fields: {
-                  evaluationService: 'coefficient,average,studentAverage,scale',
-                  subject: 'label,color',
-                  evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
-                  evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
-                  subSkillEvaluationResult: 'level,subSkill',
-                  teacher: 'firstName,lastName,title',
-                  subSkill: 'shortLabel'
-                }
-                */
+                    fields: {
+                      evaluationService: 'coefficient,average,studentAverage,scale',
+                      subject: 'label,color',
+                      evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
+                      evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
+                      subSkillEvaluationResult: 'level,subSkill',
+                      teacher: 'firstName,lastName,title',
+                      subSkill: 'shortLabel'
+                    }
+                    */
       }
     })
     ).data) as Evaluation[]
@@ -412,17 +403,17 @@ export class Skolengo {
         },
         include: 'evaluationService,evaluationService.subject,evaluationService.teachers,subSubject,subSkills,evaluationResult,evaluationResult.subSkillsEvaluationResults,evaluationResult.subSkillsEvaluationResults.subSkill'
         /*
-                fields: {
-                  evaluationService: 'subject,teachers',
-                  subject: 'label,color',
-                  subSubject: 'label',
-                  evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
-                  evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
-                  subSkill: 'shortLabel',
-                  subSkillEvaluationResult: 'level,subSkill',
-                  teacher: 'firstName,lastName,title'
-                }
-                */
+                    fields: {
+                      evaluationService: 'subject,teachers',
+                      subject: 'label,color',
+                      subSubject: 'label',
+                      evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
+                      evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
+                      subSkill: 'shortLabel',
+                      subSkillEvaluationResult: 'level,subSkill',
+                      teacher: 'firstName,lastName,title'
+                    }
+                    */
       }
     })
     ).data) as EvaluationDetail
@@ -458,10 +449,10 @@ export class Skolengo {
           offset
         }
         /*
-            fields: {
-              periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
-            }
-             */
+                fields: {
+                  periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
+                }
+                 */
       }
     })
     ).data) as Attachment[]
@@ -506,14 +497,14 @@ export class Skolengo {
           offset
         }
         /*
-            fields: {
-              lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
-              homework: 'title,done,dueDateTime,subject',
-              cateringService: 'title,startDateTime,endDateTime',
-              teacher: 'firstName,lastName,title',
-              subject: 'label,color'
-            }
-             */
+                fields: {
+                  lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
+                  homework: 'title,done,dueDateTime,subject',
+                  cateringService: 'title,startDateTime,endDateTime',
+                  teacher: 'firstName,lastName,title',
+                  subject: 'label,color'
+                }
+                 */
       }
     })
     ).data) as Agenda[])
@@ -577,11 +568,11 @@ export class Skolengo {
           offset
         }
         /*
-            fields: {
-              homework: 'title,done,dueDateTime',
-              subject: 'label,color'
-            }
-             */
+                fields: {
+                  homework: 'title,done,dueDateTime',
+                  subject: 'label,color'
+                }
+                 */
       }
     })
     ).data) as HomeworkAssignment[]
@@ -667,15 +658,15 @@ export class Skolengo {
       params: {
         include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
         /*
-                  fields: {
-                    personContact: 'person,linksWithUser',
-                    groupContact: 'label,personContacts,linksWithUser',
-                    person: 'firstName,lastName,title,photoUrl',
-                    userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
-                    signature: 'content',
-                    folder: 'name,position,type,parent'
-                  }
-                  */
+                      fields: {
+                        personContact: 'person,linksWithUser',
+                        groupContact: 'label,personContacts,linksWithUser',
+                        person: 'firstName,lastName,title,photoUrl',
+                        userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+                        signature: 'content',
+                        folder: 'name,position,type,parent'
+                      }
+                      */
       },
       responseType: 'json'
     })

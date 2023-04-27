@@ -22,3 +22,5 @@ ${this.absenceFiles.map(file => {
     }).join('')}`
   }
 }
+
+export { AbsenceFile }

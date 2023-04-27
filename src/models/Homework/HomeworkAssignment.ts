@@ -1,6 +1,6 @@
 import { Subject } from '../Agenda/Lesson'
 import { Attachment } from '../School/Attachment'
-import { User } from '../Global/User'
+import { User } from '../Global'
 
 export interface HomeworkAssignment {
   id: string
