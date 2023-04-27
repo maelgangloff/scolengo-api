@@ -21,6 +21,7 @@ import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { AbsenceFile } from './models/Assiduite/AbsenceFile'
 import { SchoolInfo } from './models/School/SchoolInfo'
 import { AgendaResponse } from './models/Agenda'
+import { AbsenceFilesResponse } from './models/Assiduite'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -815,8 +816,8 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<AbsenceFile[]> {
-    return deserialize((await this.request<DocumentObject>({
+  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<AbsenceFilesResponse> {
+    return new AbsenceFilesResponse(deserialize((await this.request<DocumentObject>({
       url: '/absence-files',
       responseType: 'json',
       params: {
@@ -830,7 +831,7 @@ export class Skolengo {
         include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence'
       }
     })
-    ).data) as AbsenceFile[]
+    ).data) as AbsenceFile[])
   }
 
   /**
