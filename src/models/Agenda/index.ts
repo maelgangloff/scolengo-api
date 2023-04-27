@@ -1,38 +1,41 @@
-/*
-export class AgendaResponse extends SkolengoResponse<Agenda[], AgendaIncluded> {
-  public constructor (response: SkolengoResponse<Agenda[], AgendaIncluded>) {
-    super(response)
+import { Agenda } from './Agenda'
+import { Lesson } from './Lesson'
+import { HomeworkAssignment } from '../Homework/HomeworkAssignment'
+
+export class AgendaResponse {
+  public lessons: Lesson[]
+  public homeworkAssignments: HomeworkAssignment[]
+
+  public constructor (response: Agenda[]) {
+    this.lessons = response.map(j => j.lessons).flat()
+    this.homeworkAssignments = response.map(j => j.homeworkAssignments).flat()
   }
 
-  public lessonToVEVENT (lesson: Lesson): string {
-    const {
-      attributes,
-      id,
-      relationships
-    } = lesson
+  public static lessonToVEVENT (lesson: Lesson, dtstamp: Date = new Date()): string {
     const convertDT = (d: string): string => new Date(d).toISOString().replace(/[-:.]/g, '').slice(0, -4) + 'Z'
-    const teachers = relationships.teachers.data.map(t => this.included.find(i => i.type === 'teacher' && i.id === t.id)).map(t => {
-      const {
-        title,
-        firstName,
-        lastName
-      } = t?.attributes as User
-      return `${title ?? ''} ${firstName} ${lastName}`
-    })
-    const subject = this.included.find(i => i.type === 'subject' && i.id === relationships.subject.data.id)?.attributes as SubjectAttributes
+    const {
+      id,
+      canceled,
+      title,
+      endDateTime,
+      startDateTime,
+      location,
+      subject,
+      teachers
+    } = lesson
     return `BEGIN:VEVENT
-DTSTAMP:${convertDT(new Date().toISOString())}
-STATUS:${attributes.canceled ? 'CANCELLED' : 'CONFIRMED'}
+DTSTAMP:${convertDT(new Date(dtstamp).toISOString())}
+STATUS:${canceled ? 'CANCELLED' : 'CONFIRMED'}
 UID:${id}@kdecoleapi
-DTSTART:${convertDT(attributes.startDateTime)}
-DTEND:${convertDT(attributes.endDateTime)}
-SUMMARY:${attributes.title} (${attributes.location})
-DESCRIPTION:${subject.label} avec ${teachers.join('; ')}
-LOCATION:${attributes.location}
+DTSTART:${convertDT(startDateTime)}
+DTEND:${convertDT(endDateTime)}
+SUMMARY:${title} (${location})
+DESCRIPTION:${subject.label} avec ${teachers.map(t => `${t.title ?? ''} ${t.firstName} ${t.lastName}`).join('; ')}
+LOCATION:${location}
 END:VEVENT`
   }
 
-  public toICalendar (): string {
+  public toICalendar (dtstamp: Date = new Date()): string {
     return `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//scolengo-api//ical//EN
@@ -40,8 +43,7 @@ METHOD:PUBLISH
 TZID:Europe/Paris
 NAME:Agenda Skolengo
 X-WR-CALNAME:Agenda Skolengo
-${this.included.filter(i => i.type === 'lesson').map((lesson: unknown) => this.lessonToVEVENT(lesson as Lesson)).join('\n')}
+  ${this.lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n')}
 ` + 'END:VCALENDAR'
   }
 }
-*/

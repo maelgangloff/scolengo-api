@@ -20,6 +20,7 @@ import { Participation } from './models/Messagerie/Participation'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { AbsenceFile } from './models/Assiduite/AbsenceFile'
 import { SchoolInfo } from './models/School/SchoolInfo'
+import { AgendaResponse } from './models/Agenda'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -486,8 +487,8 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<Agenda[]> {
-    return deserialize((await this.request<DocumentObject>({
+  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<AgendaResponse> {
+    return new AgendaResponse(deserialize((await this.request<DocumentObject>({
       url: '/agendas',
       responseType: 'json',
       params: {
@@ -514,7 +515,7 @@ export class Skolengo {
              */
       }
     })
-    ).data) as Agenda[]
+    ).data) as Agenda[])
   }
 
   /**
