@@ -1,12 +1,11 @@
-import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
-
 export interface UserPermission<Service extends string, Operation extends string> {
   schoolId: string
   service: Service
   permittedOperations: Operation[]
 }
 
-export interface UserAttributes {
+export interface User {
+  id: string
   title?: string
   className?: string
   dateOfBirth?: string | null
@@ -33,28 +32,10 @@ export interface UserAttributes {
   postalCode?: string
   city?: string
   country?: string
-}
-
-export interface UserRelationships {
+  students?: User[]
   school?: {
-    data: BaseObject<'school'>
-  }
-  students?: {
-    data: Array<BaseObject<'student'>>
-  }
-}
-
-export type User = BaseResponse<UserAttributes, UserRelationships, 'legalRepresentativeUserInfo' | 'studentUserInfo'>
-
-export interface SchoolRelationship {
-  school: {
-    data: BaseObject<'school'> | null
+    name: string
+    timeZone: string
+    subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string>
   }
 }
-
-export type UserIncluded = BaseResponse<UserAttributes, SchoolRelationship, 'student'>
-| BaseResponseAttributes<{
-  name: string
-  timeZone: string
-  subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string>
-}, 'school'>

@@ -1,26 +1,4 @@
-import { BaseObject } from '../Global'
-
-export interface SubSkillAttributes {
+export interface SubSkill {
+  id: string
   shortLabel: string
-}
-export interface SubSkillRelationShip {
-  subSkill: {
-    data: BaseObject<'subSkill'>
-  }
-}
-
-export interface SubSkillsRelationship {
-  subSkills: {
-    data: Array<BaseObject<'subSkill'>>
-  }
-}
-
-export interface SubSkillsEvaluationResultRelationship {
-  subSkillsEvaluationResults: {
-    data: Array<BaseObject<'subSkillEvaluationResult'>>
-  }
-}
-
-export interface SubSkillEvaluationResultAttributes {
-  level: string
 }

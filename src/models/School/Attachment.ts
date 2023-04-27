@@ -1,4 +1,5 @@
-export interface AttachmentAttributes {
+export interface Attachment {
+  id: string
   name: string
   mimeType: string
   mimeTypeLabel: string
@@ -6,6 +7,6 @@ export interface AttachmentAttributes {
   url: string
 }
 
-export type PublicAttachment = AttachmentAttributes & {
+export type PublicAttachment = Attachment & {
   alternativeText: string | null
 }

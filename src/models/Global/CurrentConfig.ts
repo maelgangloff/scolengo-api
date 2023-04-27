@@ -1,11 +1,8 @@
-import { BaseResponseAttributes } from '../Global'
-
-export interface CurrentConfigAttributes {
+export interface AppCurrentConfig {
+  id: string
   latestDeployedSkoAppVersion: string
   latestSupportedSkoAppVersion: string
   apiCallRetryDelay: number
   apiCallMaxRetries: number
   skoAppDeploymentInfoUrl: string
 }
-
-export type CurrentConfig = BaseResponseAttributes<CurrentConfigAttributes, 'skoAppConfig'>

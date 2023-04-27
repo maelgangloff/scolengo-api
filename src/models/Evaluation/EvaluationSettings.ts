@@ -1,43 +1,29 @@
-import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
-
-export interface PeriodAttributes {
+export interface Period {
+  id: string
   endDate: string
   startDate: string
   label: string
 }
 
-export type EvaluationSettingsIncluded = BaseResponseAttributes<PeriodAttributes, 'period'>
-| BaseResponse<{
-  skillAcquisitionLevels: Array<{
-    label: string
-    shortLabel: string
-    level: string
-  }>
-}, {
-  skillAcquisitionColors: {
-    data: BaseObject<'skillAcquisitionColors'>
-  }
-}, 'skillsSetting'>
-| BaseResponseAttributes<{
-  colorLevelMappings: Array<{
-    level: string
-    color: string
-  }>
-}, 'skillAcquisitionColors'>
-
-export interface EvaluationSettingsAttributes {
+export interface EvaluationSettings {
+  id: string
   periodicReportsEnabled: boolean
   skillsEnabled: boolean
   evaluationsDetailsAvailable: boolean
-}
-
-export interface EvaluationSettingsRelationships {
-  periods: {
-    data: Array<BaseObject<'period'>>
+  periods: Period[]
+  skillsSettings: {
+    id: string
+    skillAcquisitionLevels: Array<{
+      label: string
+      shortLabel: string
+      level: string
+    }>
+    skillAcquisitionColors: {
+      id: string
+      colorLevelMappings: Array<{
+        level: string
+        color: string
+      }>
+    }
   }
-  skillsSetting: {
-    data: BaseObject<'skillsSetting'>
-  }
 }
-
-export type EvaluationSettings = BaseResponse<EvaluationSettingsAttributes, EvaluationSettingsRelationships, 'evaluationsSetting'>

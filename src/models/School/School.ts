@@ -1,8 +1,7 @@
-import { BaseResponseAttributes } from '../Global'
-
 export type SchoolFilter = { text: string } | { lat: number, lon: number }
 
-export interface SchoolAttributes {
+export interface School {
+  id: string
   name: string
   addressLine1: string
   addressLine2: null | string
@@ -15,5 +14,3 @@ export interface SchoolAttributes {
   emsOIDCWellKnownUrl: string
   distance?: number
 }
-
-export type School = BaseResponseAttributes<SchoolAttributes, 'school'>

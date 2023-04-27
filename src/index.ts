@@ -1,33 +1,25 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
 import { Stream } from 'node:stream'
-
-import { CurrentConfig } from './models/Global/CurrentConfig'
-import { BaseObject, SkolengoResponse, SkolengoResponseData } from './models/Global'
+import { BaseObject } from './models/Global'
 import { School, SchoolFilter } from './models/School/School'
-import { User, UserIncluded } from './models/Global/User'
-import { SchoolInfo, SchoolInfoIncluded } from './models/School/SchoolInfo'
 import { AuthConfig } from './models/Auth'
-import { Evaluation, EvaluationIncluded } from './models/Evaluation/Evaluation'
-import { EvaluationDetail, EvaluationDetailIncluded } from './models/Evaluation/EvaluationDetail'
-import { EvaluationSettings, EvaluationSettingsIncluded } from './models/Evaluation/EvaluationSettings'
-import { UsersMailSettings, UsersMailSettingsIncluded } from './models/Messagerie/UsersMailSettings'
-import { Communication, CommunicationIncluded, NewCommunication } from './models/Messagerie/Communication'
-import { NewParticipation, Participation, ParticipationIncluded } from './models/Messagerie/Participation'
-import {
-  HomeworkAssignment,
-  HomeworkAssignmentIncluded,
-  HomeworkAttributes
-} from './models/Homework/HomeworkAssignment'
-import { Agenda, AgendaIncluded } from './models/Agenda/Agenda'
-import { Lesson, LessonIncluded } from './models/Agenda/Lesson'
-import { PeriodicReportsFile } from './models/Evaluation/PeriodicReportsFile'
-import { AbsenceFile, AbsenceFileIncluded } from './models/Assiduite/AbsenceFile'
+import { Communication, NewCommunication } from './models/Messagerie/Communication'
+import { Attachment, PublicAttachment } from './models/School/Attachment'
+import { deserialize, DocumentObject } from 'jsonapi-fractal'
+import { User } from './models/Global/User'
+import { EvaluationSettings } from './models/Evaluation/EvaluationSettings'
+import { AppCurrentConfig } from './models/Global/CurrentConfig'
+import { Evaluation } from './models/Evaluation/Evaluation'
+import { EvaluationDetail } from './models/Evaluation/EvaluationDetail'
+import { Agenda } from './models/Agenda/Agenda'
+import { HomeworkAssignment } from './models/Homework/HomeworkAssignment'
+import { Lesson } from './models/Agenda/Lesson'
+import { UsersMailSettings } from './models/Messagerie/UsersMailSettings'
+import { NewParticipation, Participation } from './models/Messagerie/Participation'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
-import { Participant, ParticipantIncluded } from './models/Messagerie/Participant'
-import { AttachmentAttributes } from './models/School/Attachment'
-import { AgendaResponse } from './models/Agenda'
-import { AbsenceFilesResponse } from './models/Assiduite'
+import { AbsenceFile } from './models/Assiduite/AbsenceFile'
+
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
 const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
@@ -80,7 +72,7 @@ export class Skolengo {
         Authorization: `Bearer ${tokenSet.access_token as string}`,
         'X-Skolengo-Date-Format': 'utc',
         'X-Skolengo-School-Id': school.id,
-        'X-Skolengo-Ems-Code': school.attributes.emsCode
+        'X-Skolengo-Ems-Code': school.emsCode
       }
     })
   }
@@ -101,19 +93,19 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.getAppCurrentConfig().then(config => {
-   *   console.log(`Dernière version déployée: ${config.data.attributes.latestDeployedSkoAppVersion}`)
-   *   console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
+   *   console.log(`Dernière version déployée: ${config.latestDeployedSkoAppVersion}`)
+   *   console.log(`Dernière version supportée: ${config.latestSupportedSkoAppVersion}`)
    * })
    * ```
    * @async
    */
-  public static async getAppCurrentConfig (): Promise<SkolengoResponseData<CurrentConfig>> {
-    return (await axios.request<SkolengoResponseData<CurrentConfig>>({
+  public static async getAppCurrentConfig (): Promise<AppCurrentConfig> {
+    return deserialize((await axios.request<DocumentObject>({
       baseURL: BASE_URL,
       url: '/sko-app-configs/current',
       method: 'get',
       responseType: 'json'
-    })).data
+    })).data) as AppCurrentConfig
   }
 
   /**
@@ -137,8 +129,8 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<SkolengoResponseData<School[]>> {
-    return (await axios.request<SkolengoResponseData<School[]>>({
+  public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<School[]> {
+    return deserialize((await axios.request<DocumentObject>({
       baseURL: BASE_URL,
       url: '/schools',
       method: 'get',
@@ -150,7 +142,7 @@ export class Skolengo {
         },
         filter
       }
-    })).data
+    })).data) as School[]
   }
 
   /**
@@ -173,7 +165,7 @@ export class Skolengo {
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
    *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
+   *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *
    *   const params = oidClient.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
@@ -182,12 +174,12 @@ export class Skolengo {
    *
    *   const user = new Skolengo(oidClient, school, tokenSet)
    *   const infoUser = await user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
    * })
    * ```
    */
   public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
-    const skolengoIssuer = await Issuer.discover(school.attributes.emsOIDCWellKnownUrl)
+    const skolengoIssuer = await Issuer.discover(school.emsOIDCWellKnownUrl)
     return new skolengoIssuer.Client({
       client_id: OID_CLIENT_ID,
       client_secret: OID_CLIENT_SECRET,
@@ -220,24 +212,21 @@ export class Skolengo {
    *   },
    *   "school": {
    *     "id": "SKO-E-<school_id>",
-   *     "type": "school",
-   *     "attributes": {
-   *       "name": "<school_name>",
-   *       "addressLine1": "<school_address>",
-   *       "addressLine2": null,
-   *       "addressLine3": null,
-   *       "zipCode": "<school_zip_code>",
-   *       "city": "<school_city>",
-   *       "country": "France",
-   *       "homePageUrl": "<cas_login_url>",
-   *       "emsCode": "<school_ems_code>",
-   *       "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
-   *     }
+   *     "name": "<school_name>",
+   *     "addressLine1": "<school_address>",
+   *     "addressLine2": null,
+   *     "addressLine3": null,
+   *     "zipCode": "<school_zip_code>",
+   *     "city": "<school_city>",
+   *     "country": "France",
+   *     "homePageUrl": "<cas_login_url>",
+   *     "emsCode": "<school_ems_code>",
+   *     "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
    *   }
    * }
    * Skolengo.fromConfigObject(config).then(async user => {
    *   const infoUser = await user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
    * })
    * ```
    */
@@ -252,24 +241,24 @@ export class Skolengo {
    * @param {string|undefined} userId Identifiant de l'utilisateur
    * @async
    */
-  public async getUserInfo (userId?: string): Promise<SkolengoResponse<User, UserIncluded>> {
-    return (await this.request<SkolengoResponse<User, UserIncluded>>({
+  public async getUserInfo (userId?: string): Promise<User> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/users-info/${userId ?? this.tokenSet.claims().sub}`,
       responseType: 'json',
       params: {
         /*
-            fields: {
-              userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
-              school: 'name,timeZone,subscribedServices',
-              legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
-              studentUserInfo: 'className,dateOfBirth,regime,school',
-              student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
-            },
-            */
+                fields: {
+                  userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
+                  school: 'name,timeZone,subscribedServices',
+                  legalRepresentativeUserInfo: 'addressLines,postalCode,city,country,students',
+                  studentUserInfo: 'className,dateOfBirth,regime,school',
+                  student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
+                },
+                */
         include: 'school,students,students.school'
       }
     })
-    ).data
+    ).data) as User
   }
 
   /**
@@ -286,15 +275,15 @@ export class Skolengo {
    * Skolengo.fromConfigObject(config).then(async user => {
    *   const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
    *   const bulletins = await user.getPeriodicReportsFiles(student)
-   *   for(const bulletin of bulletins.data) {
-   *     console.log(bulletin.attributes.name)
-   *     (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
+   *   for(const bulletin of bulletins) {
+   *     console.log(bulletin.name)
+   *     (await user.downloadAttachment(bulletin)).pipe(createWriteStream(bulletin.name));
    *   }
    * })
    * ```
-   * @param {AttachmentAttributes} attributes La pièce jointe
+   * @param {Attachment} attributes La pièce jointe
    */
-  public async downloadAttachment (attributes: AttachmentAttributes): Promise<Stream> {
+  public async downloadAttachment (attributes: Attachment): Promise<Stream> {
     return (await this.request<Stream>({
       url: attributes.url,
       responseType: 'stream'
@@ -306,15 +295,15 @@ export class Skolengo {
    * Récupérer toutes les actualités de l'établissement
    * @async
    */
-  public async getSchoolInfos (): Promise<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>> {
-    return (await this.request<SkolengoResponse<SchoolInfo[], SchoolInfoIncluded>>({
+  public async getSchoolInfos (): Promise<any> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/schools-info',
       responseType: 'json',
       params: {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
     })
-    ).data
+    ).data)
   }
 
   /**
@@ -322,15 +311,15 @@ export class Skolengo {
    * @param {string} schoolInfoId Identifiant d'une actualité
    * @async
    */
-  public async getSchoolInfo (schoolInfoId: string): Promise<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>> {
-    return (await this.request<SkolengoResponse<SchoolInfo, SchoolInfoIncluded>>({
+  public async getSchoolInfo (schoolInfoId: string): Promise<any> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/schools-info/${schoolInfoId}`,
       responseType: 'json',
       params: {
         include: 'illustration,school,author,author.person,author.technicalUser,attachments'
       }
     })
-    ).data
+    ).data)
   }
 
   /**
@@ -340,27 +329,30 @@ export class Skolengo {
    * @param {number} offset Offset
    * @async
    */
-  public async getEvaluationSettings (studentId: string, limit = 20, offset = 0): Promise<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>> {
-    return (await this.request<SkolengoResponse<EvaluationSettings[], EvaluationSettingsIncluded>>({
+  public async getEvaluationSettings (studentId: string, limit = 20, offset = 0): Promise<EvaluationSettings> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/evaluations-settings',
       responseType: 'json',
       params: {
         filter: {
           'student.id': studentId
         },
-        page: { limit, offset },
+        page: {
+          limit,
+          offset
+        },
         include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors'
         /*
-            fields: {
-              evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
-              period: 'label,startDate,endDate',
-              skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
-              skillAcquisitionColors: 'colorLevelMappings'
-            }
-            */
+                fields: {
+                  evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
+                  period: 'label,startDate,endDate',
+                  skillsSetting: 'skillAcquisitionLevels,skillAcquisitionColors',
+                  skillAcquisitionColors: 'colorLevelMappings'
+                }
+                */
       }
     })
-    ).data
+    ).data) as EvaluationSettings
   }
 
   /**
@@ -371,8 +363,8 @@ export class Skolengo {
    * @param {number} offset Offset
    * @async
    */
-  public async getEvaluation (studentId: string, periodId: string, limit = 20, offset = 0): Promise<SkolengoResponse<Evaluation[], EvaluationIncluded>> {
-    return (await this.request<SkolengoResponse<Evaluation[], EvaluationIncluded>>({
+  public async getEvaluation (studentId: string, periodId: string, limit = 20, offset = 0): Promise<Evaluation[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/evaluation-services',
       responseType: 'json',
       params: {
@@ -380,22 +372,25 @@ export class Skolengo {
           'student.id': studentId,
           'period.id': periodId
         },
-        page: { limit, offset },
+        page: {
+          limit,
+          offset
+        },
         include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers'
         /*
-            fields: {
-              evaluationService: 'coefficient,average,studentAverage,scale',
-              subject: 'label,color',
-              evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
-              evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
-              subSkillEvaluationResult: 'level,subSkill',
-              teacher: 'firstName,lastName,title',
-              subSkill: 'shortLabel'
-            }
-            */
+                fields: {
+                  evaluationService: 'coefficient,average,studentAverage,scale',
+                  subject: 'label,color',
+                  evaluation: 'dateTime,coefficient,average,scale,evaluationResult,subSkills',
+                  evaluationResult: 'mark,nonEvaluationReason,subSkillsEvaluationResults',
+                  subSkillEvaluationResult: 'level,subSkill',
+                  teacher: 'firstName,lastName,title',
+                  subSkill: 'shortLabel'
+                }
+                */
       }
     })
-    ).data
+    ).data) as Evaluation[]
   }
 
   /**
@@ -404,8 +399,8 @@ export class Skolengo {
    * @param {string} evaluationId Identifiant de la note
    * @async
    */
-  public async getEvaluationDetail (studentId: string, evaluationId: string): Promise<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>> {
-    return (await this.request<SkolengoResponse<EvaluationDetail, EvaluationDetailIncluded>>({
+  public async getEvaluationDetail (studentId: string, evaluationId: string): Promise<EvaluationDetail> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/evaluations/${evaluationId}`,
       responseType: 'json',
       params: {
@@ -414,20 +409,20 @@ export class Skolengo {
         },
         include: 'evaluationService,evaluationService.subject,evaluationService.teachers,subSubject,subSkills,evaluationResult,evaluationResult.subSkillsEvaluationResults,evaluationResult.subSkillsEvaluationResults.subSkill'
         /*
-            fields: {
-              evaluationService: 'subject,teachers',
-              subject: 'label,color',
-              subSubject: 'label',
-              evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
-              evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
-              subSkill: 'shortLabel',
-              subSkillEvaluationResult: 'level,subSkill',
-              teacher: 'firstName,lastName,title'
-            }
-            */
+                fields: {
+                  evaluationService: 'subject,teachers',
+                  subject: 'label,color',
+                  subSubject: 'label',
+                  evaluation: 'title,topic,dateTime,coefficient,min,max,average,scale',
+                  evaluationResult: 'subSkillsEvaluationResults,nonEvaluationReason,mark,comment',
+                  subSkill: 'shortLabel',
+                  subSkillEvaluationResult: 'level,subSkill',
+                  teacher: 'firstName,lastName,title'
+                }
+                */
       }
     })
-    ).data
+    ).data) as EvaluationDetail
   }
 
   /**
@@ -446,8 +441,8 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string, limit = 20, offset = 0): Promise<SkolengoResponseData<PeriodicReportsFile[]>> {
-    return (await this.request<SkolengoResponseData<PeriodicReportsFile[]>>({
+  public async getPeriodicReportsFiles (studentId: string, limit = 20, offset = 0): Promise<PublicAttachment[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/periodic-reports-files',
       responseType: 'json',
       params: {
@@ -455,15 +450,18 @@ export class Skolengo {
           'student.id': studentId
         },
         include: 'period',
-        page: { limit, offset }
-        /*
-        fields: {
-          periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
+        page: {
+          limit,
+          offset
         }
-         */
+        /*
+            fields: {
+              periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
+            }
+             */
       }
     })
-    ).data
+    ).data) as PublicAttachment[]
   }
 
   /**
@@ -487,8 +485,8 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<AgendaResponse> {
-    return new AgendaResponse((await this.request<SkolengoResponse<Agenda[], AgendaIncluded>>({
+  public async getAgenda (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<Agenda[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/agendas',
       responseType: 'json',
       params: {
@@ -500,19 +498,22 @@ export class Skolengo {
             LE: endDate
           }
         },
-        page: { limit, offset }
-        /*
-        fields: {
-          lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
-          homework: 'title,done,dueDateTime,subject',
-          cateringService: 'title,startDateTime,endDateTime',
-          teacher: 'firstName,lastName,title',
-          subject: 'label,color'
+        page: {
+          limit,
+          offset
         }
-         */
+        /*
+            fields: {
+              lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
+              homework: 'title,done,dueDateTime,subject',
+              cateringService: 'title,startDateTime,endDateTime',
+              teacher: 'firstName,lastName,title',
+              subject: 'label,color'
+            }
+             */
       }
     })
-    ).data)
+    ).data) as Agenda[]
   }
 
   /**
@@ -521,8 +522,8 @@ export class Skolengo {
    * @param {string} lessonId Identifiant d'un cours/leçon
    * @async
    */
-  public async getLesson (studentId: string, lessonId: string): Promise<SkolengoResponse<Lesson, LessonIncluded>> {
-    return (await this.request<SkolengoResponse<Lesson, LessonIncluded>>({
+  public async getLesson (studentId: string, lessonId: string): Promise<Lesson> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/lessons/${lessonId}`,
       responseType: 'json',
       params: {
@@ -532,7 +533,7 @@ export class Skolengo {
         }
       }
     })
-    ).data
+    ).data) as Lesson
   }
 
   /**
@@ -555,8 +556,8 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>> {
-    return (await this.request<SkolengoResponse<HomeworkAssignment[], HomeworkAssignmentIncluded>>({
+  public async getHomeworkAssignments (studentId: string, startDate: string, endDate: string, limit = 20, offset = 0): Promise<HomeworkAssignment[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/homework-assignments',
       responseType: 'json',
       params: {
@@ -568,16 +569,19 @@ export class Skolengo {
             LE: endDate
           }
         },
-        page: { limit, offset }
-        /*
-        fields: {
-          homework: 'title,done,dueDateTime',
-          subject: 'label,color'
+        page: {
+          limit,
+          offset
         }
-         */
+        /*
+            fields: {
+              homework: 'title,done,dueDateTime',
+              subject: 'label,color'
+            }
+             */
       }
     })
-    ).data
+    ).data) as HomeworkAssignment[]
   }
 
   /**
@@ -590,16 +594,16 @@ export class Skolengo {
    * const user = await Skolengo.fromConfigObject(config)
    *
    * user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
-   *     console.log(`Pour le ${new Date(e.data.attributes.dueDateTime).toLocaleString()} :`)
-   *     console.log(`> ${e.data.attributes.title} (${e.included?.find(e => e.type === "subject")?.attributes.label})`)
-   *     console.log(e.data.attributes.html)
+   *     console.log(`Pour le ${new Date(e.dueDateTime).toLocaleString()} :`)
+   *     console.log(`> ${e.title} (${e.subject.label})`)
+   *     console.log(e.html)
    * })
    *
    * ```
    * @async
    */
-  public async getHomeworkAssignment (studentId: string, homeworkId: string): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
-    return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
+  public async getHomeworkAssignment (studentId: string, homeworkId: string): Promise<HomeworkAssignment> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/homework-assignments/${homeworkId}`,
       responseType: 'json',
       params: {
@@ -609,26 +613,26 @@ export class Skolengo {
         }
       }
     })
-    ).data
+    ).data) as HomeworkAssignment
   }
 
   /**
    * Modifier le statut d'un travail à faire
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant d'un devoir à modifier
-   * @param {Partial<HomeworkAttributes>} attributes Devoir modifié
+   * @param {Partial<HomeworkAssignment>} attributes Devoir modifié
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
    * const user = await Skolengo.fromConfigObject(config)
    * user.patchHomeworkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123456', { done: true }).then(hmw => {
-   *   console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
+   *   console.log(`Le travail "${hmw.title}" a été marqué ${hmw.done ? 'fait' : 'à faire'}.`)
    * })
    * ```
    * @async
    */
-  public async patchHomeworkAssignment (studentId: string, homeworkId: string, attributes: Partial<HomeworkAttributes>): Promise<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>> {
-    return (await this.request<SkolengoResponse<HomeworkAssignment, HomeworkAssignmentIncluded>>({
+  public async patchHomeworkAssignment (studentId: string, homeworkId: string, attributes: Partial<HomeworkAssignment>): Promise<HomeworkAssignment> {
+    return deserialize((await this.request<DocumentObject>({
       method: 'patch',
       url: `/homework-assignments/${homeworkId}`,
       responseType: 'json',
@@ -646,7 +650,7 @@ export class Skolengo {
         }
       }
     })
-    ).data
+    ).data) as HomeworkAssignment
   }
 
   /**
@@ -654,25 +658,25 @@ export class Skolengo {
    * @param {string|undefined} userId Identifiant d'un utilisateur
    * @async
    */
-  public async getUsersMailSettings (userId?: string): Promise<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>> {
-    return (await this.request<SkolengoResponse<UsersMailSettings, UsersMailSettingsIncluded>>({
+  public async getUsersMailSettings (userId?: string): Promise<UsersMailSettings> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
       params: {
         include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
         /*
-              fields: {
-                personContact: 'person,linksWithUser',
-                groupContact: 'label,personContacts,linksWithUser',
-                person: 'firstName,lastName,title,photoUrl',
-                userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
-                signature: 'content',
-                folder: 'name,position,type,parent'
-              }
-              */
+                  fields: {
+                    personContact: 'person,linksWithUser',
+                    groupContact: 'label,personContacts,linksWithUser',
+                    person: 'firstName,lastName,title,photoUrl',
+                    userMailSetting: 'maxCharsInParticipationContent,maxCharsInCommunicationSubject',
+                    signature: 'content',
+                    folder: 'name,position,type,parent'
+                  }
+                  */
       },
       responseType: 'json'
     })
-    ).data
+    ).data) as UsersMailSettings
   }
 
   /**
@@ -682,8 +686,8 @@ export class Skolengo {
    * @param {number} offset Offset
    * @async
    */
-  public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0): Promise<SkolengoResponse<Communication[], CommunicationIncluded>> {
-    return (await this.request<SkolengoResponse<Communication[], CommunicationIncluded>>({
+  public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0): Promise<Communication[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/communications',
       responseType: 'json',
       params: {
@@ -697,7 +701,7 @@ export class Skolengo {
         }
       }
     })
-    ).data
+    ).data) as Communication[]
   }
 
   /**
@@ -705,15 +709,15 @@ export class Skolengo {
    * @param {string} communicationId Identifiant d'une communication
    * @async
    */
-  public async getCommunicationParticipations (communicationId: string): Promise<SkolengoResponse<Participation[], ParticipationIncluded>> {
-    return (await this.request<SkolengoResponse<Participation[], ParticipationIncluded>>({
+  public async getCommunicationParticipations (communicationId: string): Promise<Participation[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: `communications/${communicationId}/participations`,
       responseType: 'json',
       params: {
         include: 'sender,sender.person,sender.technicalUser,attachments'
       }
     })
-    ).data
+    ).data) as Participation[]
   }
 
   /**
@@ -722,8 +726,8 @@ export class Skolengo {
    * @param {boolean} fromGroup Afficher le détail des groupes
    * @async
    */
-  public async getCommunicationParticipants (communicationId: string, fromGroup = true): Promise<SkolengoResponse<Participant[], ParticipantIncluded>> {
-    return (await this.request<SkolengoResponse<Participant[], ParticipantIncluded>>({
+  public async getCommunicationParticipants (communicationId: string, fromGroup = true): Promise<any> {
+    return deserialize((await this.request<DocumentObject>({
       url: `communications/${communicationId}/participants`,
       responseType: 'json',
       params: {
@@ -731,7 +735,7 @@ export class Skolengo {
         filter: { fromGroup }
       }
     })
-    ).data
+    ).data)
   }
 
   /**
@@ -761,10 +765,8 @@ export class Skolengo {
    * @param {NewCommunication} newCommunication La nouvelle communication
    * @async
    */
-  public async postCommunication (newCommunication: NewCommunication): Promise<SkolengoResponseData<NewCommunication & {
-    id: string
-  }>> {
-    return (await this.request<SkolengoResponseData<NewCommunication & { id: string }>>({
+  public async postCommunication (newCommunication: NewCommunication): Promise<Communication> {
+    return deserialize((await this.request<DocumentObject>({
       url: 'communications',
       method: 'post',
       responseType: 'json',
@@ -772,7 +774,7 @@ export class Skolengo {
         data: newCommunication
       }
     })
-    ).data
+    ).data) as Communication
   }
 
   /**
@@ -780,8 +782,8 @@ export class Skolengo {
    * @param {NewParticipation} participation La nouvelle participation
    * @async
    */
-  public async postParticipation (participation: NewParticipation): Promise<SkolengoResponseData<Participation>> {
-    return (await this.request<SkolengoResponseData<Participation>>({
+  public async postParticipation (participation: NewParticipation): Promise<Participation> {
+    return deserialize((await this.request<DocumentObject>({
       url: 'participations',
       method: 'post',
       responseType: 'json',
@@ -789,7 +791,7 @@ export class Skolengo {
         data: participation
       }
     })
-    ).data
+    ).data) as Participation
   }
 
   /**
@@ -811,19 +813,22 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<AbsenceFilesResponse> {
-    return new AbsenceFilesResponse((await this.request<SkolengoResponse<AbsenceFile[], AbsenceFileIncluded>>({
+  public async getAbsenceFiles (studentId: string, limit = 20, offset = 0): Promise<AbsenceFile[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/absence-files',
       responseType: 'json',
       params: {
         filter: {
           'student.id': studentId
         },
-        page: { limit, offset },
+        page: {
+          limit,
+          offset
+        },
         include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence'
       }
     })
-    ).data)
+    ).data) as AbsenceFile[]
   }
 
   /**
@@ -831,15 +836,15 @@ export class Skolengo {
    * @param {string} folderId Identifiant d'un dossier
    * @async
    */
-  public async getAbsenceFile (folderId: string): Promise<SkolengoResponse<AbsenceFile, AbsenceFileIncluded>> {
-    return (await this.request<SkolengoResponse<AbsenceFile, AbsenceFileIncluded>>({
+  public async getAbsenceFile (folderId: string): Promise<AbsenceFile> {
+    return deserialize((await this.request<DocumentObject>({
       url: `/absence-files/${folderId}`,
       responseType: 'json',
       params: {
         include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence,history,history.creator'
       }
     })
-    ).data
+    ).data) as AbsenceFile
   }
 
   /**
@@ -853,21 +858,24 @@ export class Skolengo {
    *
    * Skolengo.fromConfigObject(config).then(async user => {
    *   user.getAbsenceReasons().then(response => {
-   *     console.log(`Liste des motifs: ${response.data.map(r => r.attributes.longLabel).join(';')}`)
+   *     console.log(`Liste des motifs: ${response.data.map(r => r.longLabel).join(';')}`)
    *   })
    * })
 
    * ```
    */
-  public async getAbsenceReasons (limit = 20, offset = 0): Promise<SkolengoResponseData<AbsenceReason[]>> {
-    return (await this.request<SkolengoResponseData<AbsenceReason[]>>({
+  public async getAbsenceReasons (limit = 20, offset = 0): Promise<AbsenceReason[]> {
+    return deserialize((await this.request<DocumentObject>({
       url: '/absence-reasons',
       responseType: 'json',
       params: {
-        page: { limit, offset }
+        page: {
+          limit,
+          offset
+        }
       }
     })
-    ).data
+    ).data) as AbsenceReason[]
   }
 
   /**

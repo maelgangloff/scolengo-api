@@ -1,4 +1,4 @@
-import { BaseResponse, BaseResponseAttributes, SkolengoResponse } from '../Global'
+/* import { BaseResponse, BaseResponseAttributes, SkolengoResponse } from '../Global'
 import {
   AbsenceFile,
   AbsenceFileIncluded,
@@ -29,3 +29,4 @@ ${this.data.map(file => {
     }).join('')}`
   }
 }
+*/

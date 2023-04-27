@@ -1,9 +1,4 @@
-import { SkolengoResponse } from '../Global'
-import { Agenda, AgendaIncluded } from './Agenda'
-import { Lesson } from './Lesson'
-import { UserAttributes } from '../Global/User'
-import { SubjectAttributes } from '../Evaluation/Subject'
-
+/*
 export class AgendaResponse extends SkolengoResponse<Agenda[], AgendaIncluded> {
   public constructor (response: SkolengoResponse<Agenda[], AgendaIncluded>) {
     super(response)
@@ -21,7 +16,7 @@ export class AgendaResponse extends SkolengoResponse<Agenda[], AgendaIncluded> {
         title,
         firstName,
         lastName
-      } = t?.attributes as UserAttributes
+      } = t?.attributes as User
       return `${title ?? ''} ${firstName} ${lastName}`
     })
     const subject = this.included.find(i => i.type === 'subject' && i.id === relationships.subject.data.id)?.attributes as SubjectAttributes
@@ -49,3 +44,4 @@ ${this.included.filter(i => i.type === 'lesson').map((lesson: unknown) => this.l
 ` + 'END:VCALENDAR'
   }
 }
+*/

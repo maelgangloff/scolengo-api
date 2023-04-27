@@ -1,6 +1,6 @@
 import { PublicAttachment } from './Attachment'
 import { BaseObject, BaseResponse } from '../Global'
-import { UserAttributes } from '../Global/User'
+import { User } from '../Global/User'
 import { PersonType } from '../Messagerie/UsersMailSettings'
 
 export interface SchoolInfoAttributes {
@@ -48,7 +48,7 @@ interface SchoolInfoSchool {
   timeZone?: string | null
 }
 
-export type SchoolInfoIncludedAttributes = UserAttributes | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
+export type SchoolInfoIncludedAttributes = User | PublicAttachment | SchoolInfoSchool | SchoolInfoAuthor
 
 export interface SchoolInfoIncludedRelationships {
   technicalUser: {

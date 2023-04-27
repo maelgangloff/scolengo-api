@@ -1,10 +1,8 @@
-import { BaseObject, BaseResponse, BaseResponseAttributes } from '../Global'
-import { PersonType } from './UsersMailSettings'
-import { ParticipantAttributes, TechnicalUserAttributes } from './Participant'
-import { ParticipationAttributes } from './Participation'
-import { UserAttributes } from '../Global/User'
+import { BaseObject, BaseResponse } from '../Global'
+import { Participation } from './Participation'
 
-export interface CommunicationAttributes {
+export interface Communication {
+  id: string
   subject: string
   participationsNumber: number | null
   recipientsSummary: string | null
@@ -13,37 +11,10 @@ export interface CommunicationAttributes {
   replyToSenderAllowed: boolean | null
   readTrackingEnabled: boolean | null
   firstParticipationContent: string | null
+  lastParticipation?: Participation
 }
 
-export type Communication = BaseResponse<CommunicationAttributes, {
-  lastParticipation: {
-    data: BaseObject<'participation'> | null
-  }
-}, 'communication'>
-
-export type CommunicationIncluded = BaseResponse<ParticipationAttributes, {
-  sender: {
-    data: BaseObject<'personParticipant'> | null
-  }
-}, 'participation'>
-| BaseResponse<ParticipantAttributes, {
-  person: {
-    data: BaseObject<PersonType> | null
-  }
-}, 'personParticipant'>
-| BaseResponse<TechnicalUserAttributes, {
-  technicalUser: {
-    data: BaseObject<'technicalUser'> | null
-  }
-}, 'personParticipant'>
-| BaseResponseAttributes<TechnicalUserAttributes, 'technicalUser'>
-| BaseResponse<UserAttributes, {
-  school: {
-    data: BaseObject | null
-  }
-}, PersonType>
-
-export type NewCommunicationAttributes = Partial<CommunicationAttributes> & {
+export type NewCommunicationAttributes = Partial<Communication> & {
   subject: string
   firstParticipationContent: string
 }

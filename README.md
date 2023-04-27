@@ -145,7 +145,7 @@ Une pièce jointe peut être un fichier inclu dans un courriel, une actualité d
 
 | Param | Type | Description |
 | --- | --- | --- |
-| attributes | <code>AttachmentAttributes</code> | La pièce jointe |
+| attributes | <code>Attachment</code> | La pièce jointe |
 
 **Example**  
 ```js
@@ -155,9 +155,9 @@ const {Skolengo} = require('scolengo-api')
 Skolengo.fromConfigObject(config).then(async user => {
   const student = 'ESKO-P-b2c86113-1062-427e-bc7f-0618cbd5d5ec'
   const bulletins = await user.getPeriodicReportsFiles(student)
-  for(const bulletin of bulletins.data) {
-    console.log(bulletin.attributes.name)
-    (await user.downloadAttachment(bulletin.attributes)).pipe(createWriteStream(bulletin.attributes.name));
+  for(const bulletin of bulletins) {
+    console.log(bulletin.name)
+    (await user.downloadAttachment(bulletin)).pipe(createWriteStream(bulletin.name));
   }
 })
 ```
@@ -326,9 +326,9 @@ const {Skolengo} = require('scolengo-api')
 const user = await Skolengo.fromConfigObject(config)
 
 user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
-    console.log(`Pour le ${new Date(e.data.attributes.dueDateTime).toLocaleString()} :`)
-    console.log(`> ${e.data.attributes.title} (${e.included?.find(e => e.type === "subject")?.attributes.label})`)
-    console.log(e.data.attributes.html)
+    console.log(`Pour le ${new Date(e.dueDateTime).toLocaleString()} :`)
+    console.log(`> ${e.title} (${e.subject.label})`)
+    console.log(e.html)
 })
 
 ```
@@ -343,7 +343,7 @@ Modifier le statut d'un travail à faire
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant d'un devoir à modifier |
-| attributes | <code>Partial.&lt;HomeworkAttributes&gt;</code> | Devoir modifié |
+| attributes | <code>Partial.&lt;HomeworkAssignment&gt;</code> | Devoir modifié |
 
 **Example**  
 ```js
@@ -351,7 +351,7 @@ const {Skolengo} = require('scolengo-api')
 
 const user = await Skolengo.fromConfigObject(config)
 user.patchHomeworkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123456', { done: true }).then(hmw => {
-  console.log(`Le travail "${hmw.data.attributes.title}" a été marqué ${hmw.data.attributes.done ? 'fait' : 'à faire'}.`)
+  console.log(`Le travail "${hmw.title}" a été marqué ${hmw.done ? 'fait' : 'à faire'}.`)
 })
 ```
 <a name="Skolengo+getUsersMailSettings"></a>
@@ -492,7 +492,7 @@ const {Skolengo} = require('scolengo-api')
 
 Skolengo.fromConfigObject(config).then(async user => {
   user.getAbsenceReasons().then(response => {
-    console.log(`Liste des motifs: ${response.data.map(r => r.attributes.longLabel).join(';')}`)
+    console.log(`Liste des motifs: ${response.data.map(r => r.longLabel).join(';')}`)
   })
 })
 ```
@@ -519,8 +519,8 @@ Configuration actuelle de l'application mobile (dernière version déployée, de
 const {Skolengo} = require('scolengo-api')
 
 Skolengo.getAppCurrentConfig().then(config => {
-  console.log(`Dernière version déployée: ${config.data.attributes.latestDeployedSkoAppVersion}`)
-  console.log(`Dernière version supportée: ${config.data.attributes.latestSupportedSkoAppVersion}`)
+  console.log(`Dernière version déployée: ${config.latestDeployedSkoAppVersion}`)
+  console.log(`Dernière version supportée: ${config.latestSupportedSkoAppVersion}`)
 })
 ```
 <a name="Skolengo.searchSchool"></a>
@@ -581,7 +581,7 @@ const {Skolengo} = require('scolengo-api')
 
 Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-  const school = schools.data[0]
+  const school = schools[0]
   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
 
   const params = oidClient.callbackParams('skoapp-prod://sign-in-callback?code=OC-9999-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-X')
@@ -590,7 +590,7 @@ Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
 
   const user = new Skolengo(oidClient, school, tokenSet)
   const infoUser = await user.getUserInfo()
-  console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+  console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
 })
 ```
 <a name="Skolengo.fromConfigObject"></a>
@@ -626,24 +626,21 @@ const config = {
   },
   "school": {
     "id": "SKO-E-<school_id>",
-    "type": "school",
-    "attributes": {
-      "name": "<school_name>",
-      "addressLine1": "<school_address>",
-      "addressLine2": null,
-      "addressLine3": null,
-      "zipCode": "<school_zip_code>",
-      "city": "<school_city>",
-      "country": "France",
-      "homePageUrl": "<cas_login_url>",
-      "emsCode": "<school_ems_code>",
-      "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
-    }
+    "name": "<school_name>",
+    "addressLine1": "<school_address>",
+    "addressLine2": null,
+    "addressLine3": null,
+    "zipCode": "<school_zip_code>",
+    "city": "<school_city>",
+    "country": "France",
+    "homePageUrl": "<cas_login_url>",
+    "emsCode": "<school_ems_code>",
+    "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
   }
 }
 Skolengo.fromConfigObject(config).then(async user => {
   const infoUser = await user.getUserInfo()
-  console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+  console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
 })
 ```
 
