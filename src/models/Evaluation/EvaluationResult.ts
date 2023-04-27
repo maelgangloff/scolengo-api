@@ -1,4 +1,3 @@
-import { BaseObject } from '../Global'
 import { SubSkill } from './SubSkill'
 
 export interface EvaluationResult {
@@ -11,9 +10,4 @@ export interface EvaluationResult {
     level: string
     subSkill: SubSkill
   }>
-}
-export interface EvaluationResultRelationship {
-  evaluationResult: {
-    data: BaseObject<'evaluationResult'>
-  }
 }

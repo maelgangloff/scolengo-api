@@ -423,7 +423,7 @@ Envoyer un message dans un nouveau fil de discussion
 
 | Param | Type | Description |
 | --- | --- | --- |
-| newCommunication | <code>NewCommunication</code> | La nouvelle communication |
+| newCommunication | <code>Partial.&lt;Communication&gt;</code> | La nouvelle communication |
 
 <a name="Skolengo+postParticipation"></a>
 
@@ -434,7 +434,7 @@ Envoyer un message dans un fil de discussion existant
 
 | Param | Type | Description |
 | --- | --- | --- |
-| participation | <code>NewParticipation</code> | La nouvelle participation |
+| participation | <code>Partial.&lt;Participation&gt;</code> | La nouvelle participation |
 
 <a name="Skolengo+getAbsenceFiles"></a>
 

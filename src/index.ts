@@ -4,7 +4,7 @@ import { Stream } from 'node:stream'
 import { BaseObject } from './models/Global'
 import { School, SchoolFilter } from './models/School/School'
 import { AuthConfig } from './models/Auth'
-import { Communication, NewCommunication } from './models/Messagerie/Communication'
+import { Communication } from './models/Messagerie/Communication'
 import { Attachment } from './models/School/Attachment'
 import { deserialize, DocumentObject } from 'jsonapi-fractal'
 import { User } from './models/Global/User'
@@ -16,7 +16,7 @@ import { Agenda } from './models/Agenda/Agenda'
 import { HomeworkAssignment } from './models/Homework/HomeworkAssignment'
 import { Lesson } from './models/Agenda/Lesson'
 import { UsersMailSettings } from './models/Messagerie/UsersMailSettings'
-import { NewParticipation, Participation } from './models/Messagerie/Participation'
+import { Participation } from './models/Messagerie/Participation'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { AbsenceFile } from './models/Assiduite/AbsenceFile'
 import { SchoolInfo } from './models/School/SchoolInfo'
@@ -763,10 +763,10 @@ export class Skolengo {
 
   /**
    * Envoyer un message dans un nouveau fil de discussion
-   * @param {NewCommunication} newCommunication La nouvelle communication
+   * @param {Partial<Communication>} newCommunication La nouvelle communication
    * @async
    */
-  public async postCommunication (newCommunication: NewCommunication): Promise<Communication> {
+  public async postCommunication (newCommunication: Partial<Communication>): Promise<Communication> {
     return deserialize((await this.request<DocumentObject>({
       url: 'communications',
       method: 'post',
@@ -780,10 +780,10 @@ export class Skolengo {
 
   /**
    * Envoyer un message dans un fil de discussion existant
-   * @param {NewParticipation} participation La nouvelle participation
+   * @param {Partial<Participation>} participation La nouvelle participation
    * @async
    */
-  public async postParticipation (participation: NewParticipation): Promise<Participation> {
+  public async postParticipation (participation: Partial<Participation>): Promise<Participation> {
     return deserialize((await this.request<DocumentObject>({
       url: 'participations',
       method: 'post',
