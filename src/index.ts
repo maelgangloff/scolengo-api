@@ -55,23 +55,15 @@ export class Skolengo {
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
    * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
+   * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
    * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
    */
-  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet) => {}) {
+  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet) => {}, httpClient?: AxiosInstance) {
     this.oidClient = oidClient
     this.school = school
     this.tokenSet = tokenSet
     this.onTokenRefresh = onTokenRefresh
-    this.httpClient = axios.create({
-      baseURL: BASE_URL,
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${tokenSet.access_token as string}`,
-        'X-Skolengo-Date-Format': 'utc',
-        'X-Skolengo-School-Id': school.id,
-        'X-Skolengo-Ems-Code': school.emsCode
-      }
-    })
+    this.httpClient = httpClient ?? axios.create()
   }
 
   /**
@@ -191,6 +183,7 @@ export class Skolengo {
    * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
    * @param {AuthConfig} config Informations d'authentification
    * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
+   * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    * const config = require('./config.json')
@@ -229,10 +222,10 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async fromConfigObject (config: AuthConfig, onTokenRefresh = (tokenSet: TokenSet) => {}): Promise<Skolengo> {
+  public static async fromConfigObject (config: AuthConfig, onTokenRefresh = (tokenSet: TokenSet) => {}, httpClient?: AxiosInstance): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet)
-    return new Skolengo(oidClient, config.school, tokenSet, onTokenRefresh)
+    return new Skolengo(oidClient, config.school, tokenSet, onTokenRefresh, httpClient)
   }
 
   /**
@@ -898,7 +891,17 @@ export class Skolengo {
    */
   private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
     try {
-      return await this.httpClient.request<T, R, D>(config)
+      return await this.httpClient.request<T, R, D>({
+        ...config,
+        baseURL: BASE_URL,
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${this.tokenSet.access_token as string}`,
+          'X-Skolengo-Date-Format': 'utc',
+          'X-Skolengo-School-Id': this.school.id,
+          'X-Skolengo-Ems-Code': this.school.emsCode
+        }
+      })
     } catch {
       const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
       this.onTokenRefresh(tokenSet)

@@ -51,7 +51,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 **Kind**: global class  
 
 * [Skolengo](#Skolengo)
-    * [new Skolengo(oidClient, school, tokenSet, onTokenRefresh)](#new_Skolengo_new)
+    * [new Skolengo(oidClient, school, tokenSet, httpClient, onTokenRefresh)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo(userId)](#Skolengo+getUserInfo)
         * [.downloadAttachment(attachment)](#Skolengo+downloadAttachment)
@@ -82,11 +82,11 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
         * [.searchSchool(filter, limit, offset)](#Skolengo.searchSchool)
         * [.getOIDClient(school, redirectUri)](#Skolengo.getOIDClient)
-        * [.fromConfigObject(config, onTokenRefresh)](#Skolengo.fromConfigObject)
+        * [.fromConfigObject(config, onTokenRefresh, httpClient)](#Skolengo.fromConfigObject)
 
 <a name="new_Skolengo_new"></a>
 
-### new Skolengo(oidClient, school, tokenSet, onTokenRefresh)
+### new Skolengo(oidClient, school, tokenSet, httpClient, onTokenRefresh)
 Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
 
 
@@ -95,6 +95,7 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 | oidClient | <code>Client</code> | Un client OpenID Connect |
 | school | <code>School</code> | Etablissement |
 | tokenSet | <code>TokenSet</code> | Jetons d'authentification OpenID Connect |
+| httpClient | <code>AxiosInstance</code> \| <code>undefined</code> | Un client HTTP (éventuellement gestion d'un cache) |
 | onTokenRefresh |  | Fonction appellée après le rafraichissement du jeton |
 
 **Example**  
@@ -608,7 +609,7 @@ Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
 ```
 <a name="Skolengo.fromConfigObject"></a>
 
-### Skolengo.fromConfigObject(config, onTokenRefresh)
+### Skolengo.fromConfigObject(config, onTokenRefresh, httpClient)
 Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
 Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
 La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
@@ -619,6 +620,7 @@ La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (po
 | --- | --- | --- |
 | config | <code>AuthConfig</code> | Informations d'authentification |
 | onTokenRefresh |  | Fonction appellée après le rafraichissement du jeton |
+| httpClient | <code>AxiosInstance</code> \| <code>undefined</code> | Un client HTTP (éventuellement gestion d'un cache) |
 
 **Example**  
 ```js
