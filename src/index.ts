@@ -704,6 +704,19 @@ export class Skolengo {
   }
 
   /**
+   * Récupérer une communication à partir de son identifiant
+   * @param {string} communicationId Identifiant d'une communication
+   * @async
+   */
+  public async getCommunication (communicationId: string): Promise<Communication> {
+    return deserialize((await this.request<DocumentObject>({
+      url: `communications/${communicationId}`,
+      responseType: 'json'
+    })
+    ).data) as Communication
+  }
+
+  /**
    * Récupérer les participations d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
    * @async

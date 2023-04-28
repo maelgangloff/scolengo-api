@@ -68,6 +68,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.patchHomeworkAssignment(studentId, homeworkId, attributes)](#Skolengo+patchHomeworkAssignment)
         * [.getUsersMailSettings(userId)](#Skolengo+getUsersMailSettings)
         * [.getCommunicationsFolder(folderId, limit, offset)](#Skolengo+getCommunicationsFolder)
+        * [.getCommunication(communicationId)](#Skolengo+getCommunication)
         * [.getCommunicationParticipations(communicationId)](#Skolengo+getCommunicationParticipations)
         * [.getCommunicationParticipants(communicationId, fromGroup)](#Skolengo+getCommunicationParticipants)
         * [.patchCommunicationFolders(communicationId, folders, userId)](#Skolengo+patchCommunicationFolders)
@@ -378,6 +379,17 @@ Récupérer les communication d'un dossier
 | folderId | <code>string</code> |  | Identifiant d'un dossier |
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
+
+<a name="Skolengo+getCommunication"></a>
+
+### skolengo.getCommunication(communicationId)
+Récupérer une communication à partir de son identifiant
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| communicationId | <code>string</code> | Identifiant d'une communication |
 
 <a name="Skolengo+getCommunicationParticipations"></a>
 
