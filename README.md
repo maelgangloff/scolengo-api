@@ -51,7 +51,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 **Kind**: global class  
 
 * [Skolengo](#Skolengo)
-    * [new Skolengo(oidClient, school, tokenSet, httpClient, onTokenRefresh)](#new_Skolengo_new)
+    * [new Skolengo(oidClient, school, tokenSet, onTokenRefresh, httpClient)](#new_Skolengo_new)
     * _instance_
         * [.getUserInfo(userId)](#Skolengo+getUserInfo)
         * [.downloadAttachment(attachment)](#Skolengo+downloadAttachment)
@@ -86,7 +86,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 
 <a name="new_Skolengo_new"></a>
 
-### new Skolengo(oidClient, school, tokenSet, httpClient, onTokenRefresh)
+### new Skolengo(oidClient, school, tokenSet, onTokenRefresh, httpClient)
 Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
 
 
@@ -95,8 +95,8 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 | oidClient | <code>Client</code> | Un client OpenID Connect |
 | school | <code>School</code> | Etablissement |
 | tokenSet | <code>TokenSet</code> | Jetons d'authentification OpenID Connect |
-| httpClient | <code>AxiosInstance</code> \| <code>undefined</code> | Un client HTTP (éventuellement gestion d'un cache) |
 | onTokenRefresh |  | Fonction appellée après le rafraichissement du jeton |
+| httpClient | <code>AxiosInstance</code> \| <code>undefined</code> | Un client HTTP (éventuellement gestion d'un cache) |
 
 **Example**  
 ```js

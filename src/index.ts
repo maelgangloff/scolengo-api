@@ -55,8 +55,8 @@ export class Skolengo {
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
    * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
-   * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
    * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
+   * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
    */
   public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet) => {}, httpClient?: AxiosInstance) {
     this.oidClient = oidClient
