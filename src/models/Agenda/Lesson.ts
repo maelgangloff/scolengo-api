@@ -1,4 +1,4 @@
-import { User } from '../Global/User'
+import { User } from '../Global'
 import { HomeworkAssignment } from '../Homework/HomeworkAssignment'
 
 export interface Subject {

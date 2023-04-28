@@ -1,5 +1,5 @@
 import { Subject } from '../Agenda/Lesson'
-import { Attachment } from '../School/Attachment'
+import { Attachment } from '../School'
 import { User } from '../Global'
 
 export interface HomeworkAssignment {

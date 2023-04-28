@@ -1,4 +1,4 @@
-import { User } from '../Global/User'
+import { User } from '../Global'
 
 export interface Participant {
   id: string

@@ -1,5 +1,5 @@
 import { Attachment } from './Attachment'
-import { User } from '../Global/User'
+import { User } from '../Global'
 import { School } from './School'
 
 export interface SchoolInfo {
