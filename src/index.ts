@@ -890,24 +890,25 @@ export class Skolengo {
    * @private
    */
   private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
+    const axiosConfig: AxiosRequestConfig = {
+      ...config,
+      baseURL: BASE_URL,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.tokenSet.access_token as string}`,
+        'X-Skolengo-Date-Format': 'utc',
+        'X-Skolengo-School-Id': this.school.id,
+        'X-Skolengo-Ems-Code': this.school.emsCode
+      }
+    }
     try {
-      return await this.httpClient.request<T, R, D>({
-        ...config,
-        baseURL: BASE_URL,
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${this.tokenSet.access_token as string}`,
-          'X-Skolengo-Date-Format': 'utc',
-          'X-Skolengo-School-Id': this.school.id,
-          'X-Skolengo-Ems-Code': this.school.emsCode
-        }
-      })
+      return await this.httpClient.request<T, R, D>(axiosConfig)
     } catch {
       const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
       this.onTokenRefresh(tokenSet)
       this.tokenSet = tokenSet
       this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token as string}`
-      return await this.httpClient.request<T, R, D>(config)
+      return await this.httpClient.request<T, R, D>(axiosConfig)
     }
   }
 }
