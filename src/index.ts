@@ -23,6 +23,7 @@ export class Skolengo {
   public tokenSet: TokenSet
   private readonly httpClient: AxiosInstance
   private readonly oidClient: Client
+  private readonly onTokenRefresh: (tokenSet: TokenSet) => void
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
@@ -54,11 +55,13 @@ export class Skolengo {
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
    * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
+   * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
    */
-  public constructor (oidClient: Client, school: School, tokenSet: TokenSet) {
+  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet) => {}) {
     this.oidClient = oidClient
     this.school = school
     this.tokenSet = tokenSet
+    this.onTokenRefresh = onTokenRefresh
     this.httpClient = axios.create({
       baseURL: BASE_URL,
       withCredentials: true,
@@ -184,8 +187,10 @@ export class Skolengo {
 
   /**
    * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
-   * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token)
+   * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
+   * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
    * @param {AuthConfig} config Informations d'authentification
+   * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    * const config = require('./config.json')
@@ -224,10 +229,10 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async fromConfigObject (config: AuthConfig): Promise<Skolengo> {
+  public static async fromConfigObject (config: AuthConfig, onTokenRefresh = (tokenSet: TokenSet) => {}): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet)
-    return new Skolengo(oidClient, config.school, tokenSet)
+    return new Skolengo(oidClient, config.school, tokenSet, onTokenRefresh)
   }
 
   /**
@@ -883,6 +888,7 @@ export class Skolengo {
       return await this.httpClient.request<T, R, D>(config)
     } catch {
       const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
+      this.onTokenRefresh(tokenSet)
       this.tokenSet = tokenSet
       this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token as string}`
       return await this.httpClient.request<T, R, D>(config)
