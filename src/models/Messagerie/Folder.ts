@@ -2,5 +2,5 @@ export interface Folder {
   id: string
   name: string
   position: number
-  type: string
+  type: 'INBOX' | 'SENT' | 'DRAFTS' | 'MODERATION' | 'TRASH' | 'PERSONAL' | string
 }
