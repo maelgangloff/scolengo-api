@@ -1,6 +1,6 @@
 {
   "name": "scolengo-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "types": "types/index.d.ts",
   "homepage": "https://github.com/maelgangloff/scolengo-api#readme",
   "bugs": {
