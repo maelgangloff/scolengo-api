@@ -1,15 +1,16 @@
 import { AbsenceFile } from './AbsenceFile'
 
-export class AbsenceFilesResponse {
-  public absenceFiles: AbsenceFile[]
-
+export class AbsenceFilesResponse extends Array<AbsenceFile> {
   public constructor (absenceFiles: AbsenceFile[]) {
-    this.absenceFiles = absenceFiles
+    super(absenceFiles.length)
+    for (let i = 0; i < absenceFiles.length; i++) {
+      this[i] = absenceFiles[i]
+    }
   }
 
   public toCSV (): string {
     return `created,type,status,start,end,reason,reason_label
-${this.absenceFiles.map(file => {
+${this.map(file => {
       const {
         creationDateTime,
         absenceType,

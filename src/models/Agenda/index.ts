@@ -1,14 +1,12 @@
 import { Agenda } from './Agenda'
 import { Lesson } from './Lesson'
-import { HomeworkAssignment } from '../Homework/HomeworkAssignment'
 
-export class AgendaResponse {
-  public lessons: Lesson[]
-  public homeworkAssignments: HomeworkAssignment[]
-
+export class AgendaResponse extends Array<Agenda> {
   public constructor (response: Agenda[]) {
-    this.lessons = response.map(j => j.lessons).flat()
-    this.homeworkAssignments = response.map(j => j.homeworkAssignments).flat()
+    super(response.length)
+    for (let i = 0; i < response.length; i++) {
+      this[i] = response[i]
+    }
   }
 
   public static lessonToVEVENT (lesson: Lesson, dtstamp: Date = new Date()): string {
@@ -36,6 +34,7 @@ END:VEVENT`
   }
 
   public toICalendar (dtstamp: Date = new Date()): string {
+    const lessons = this.map(j => j.lessons).flat()
     return `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//scolengo-api//ical//EN
@@ -43,7 +42,7 @@ METHOD:PUBLISH
 TZID:Europe/Paris
 NAME:Agenda Skolengo
 X-WR-CALNAME:Agenda Skolengo
-  ${this.lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n')}
+  ${lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n')}
 ` + 'END:VCALENDAR'
   }
 }
