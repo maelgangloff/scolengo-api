@@ -76,6 +76,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
         * [.postParticipation(participation)](#Skolengo+postParticipation)
         * [.getAbsenceFiles(studentId, limit, offset)](#Skolengo+getAbsenceFiles)
         * [.getAbsenceFile(folderId)](#Skolengo+getAbsenceFile)
+        * [.postAbsenceFileState(folderId, reasonId, comment)](#Skolengo+postAbsenceFileState)
         * [.getAbsenceReasons(limit, offset)](#Skolengo+getAbsenceReasons)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
@@ -486,6 +487,20 @@ Récupérer les détails d'une absence
 | Param | Type | Description |
 | --- | --- | --- |
 | folderId | <code>string</code> | Identifiant d'un dossier |
+
+<a name="Skolengo+postAbsenceFileState"></a>
+
+### skolengo.postAbsenceFileState(folderId, reasonId, comment)
+Justifier une absence avec motif et commentaire.
+_PS: La requête n'a pas été testée._
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| folderId | <code>string</code> | Identifiant d'un dossier |
+| reasonId | <code>string</code> | Identifiant d'un motif |
+| comment | <code>string</code> | Commentaire |
 
 <a name="Skolengo+getAbsenceReasons"></a>
 

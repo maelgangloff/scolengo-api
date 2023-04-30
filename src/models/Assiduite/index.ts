@@ -1,4 +1,4 @@
-import { AbsenceFile } from './AbsenceFile'
+import { AbsenceFile, AbsenceState } from './AbsenceFile'
 
 export class AbsenceFilesResponse extends Array<AbsenceFile> {
   public constructor (absenceFiles: AbsenceFile[]) {
@@ -24,4 +24,4 @@ ${this.map(file => {
   }
 }
 
-export { AbsenceFile }
+export { AbsenceFile, AbsenceState }

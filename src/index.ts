@@ -5,14 +5,14 @@ import { Stream } from 'node:stream'
 
 import { AppCurrentConfig, BaseObject, User } from './models/Global'
 import { School, SchoolFilter } from './models/School/School'
-import { AuthConfig } from './models/Auth'
+import { AuthConfig } from './models/Global/Auth'
 import { Communication, Participation, UsersMailSettings } from './models/Messagerie'
 import { Attachment, SchoolInfo } from './models/School'
 import { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Evaluation'
 import { HomeworkAssignment } from './models/Homework/HomeworkAssignment'
 import { AbsenceReason } from './models/Assiduite/AbsenceReasons'
 import { Agenda, AgendaResponse, Lesson } from './models/Agenda'
-import { AbsenceFile, AbsenceFilesResponse } from './models/Assiduite'
+import { AbsenceFile, AbsenceFilesResponse, AbsenceState } from './models/Assiduite'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -58,7 +58,7 @@ export class Skolengo {
    * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
    * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
    */
-  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet) => {}, httpClient?: AxiosInstance) {
+  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet): void => {}, httpClient?: AxiosInstance) {
     this.oidClient = oidClient
     this.school = school
     this.tokenSet = tokenSet
@@ -850,6 +850,42 @@ export class Skolengo {
       }
     })
     ).data) as AbsenceFile
+  }
+
+  /**
+   * Justifier une absence avec motif et commentaire.
+   * _PS: La requête n'a pas été testée._
+   * @param {string} folderId Identifiant d'un dossier
+   * @param {string} reasonId Identifiant d'un motif
+   * @param {string} comment Commentaire
+   */
+  public async postAbsenceFileState (folderId: string, reasonId: string, comment: string): Promise<AbsenceState> {
+    return deserialize((await this.request<DocumentObject>({
+      url: '/absence-files-states',
+      responseType: 'json',
+      data: {
+        data: {
+          type: 'absenceFileState',
+          attributes: {
+            comment
+          },
+          relationships: {
+            absenceFile: {
+              data: {
+                type: 'absenceFile',
+                id: folderId
+              }
+            },
+            absenceReason: {
+              data: {
+                type: 'absenceReason',
+                id: reasonId
+              }
+            }
+          }
+        }
+      }
+    })).data) as AbsenceState
   }
 
   /**
