@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
-import { deserialize, DocumentObject } from 'jsonapi-fractal'
+import { deserialize, DocumentObject, serialize } from 'jsonapi-fractal'
 import { Stream } from 'node:stream'
 
 import { AppCurrentConfig, BaseObject, User } from './models/Global'
@@ -863,28 +863,17 @@ export class Skolengo {
     return deserialize((await this.request<DocumentObject>({
       url: '/absence-files-states',
       responseType: 'json',
-      data: {
-        data: {
-          type: 'absenceFileState',
-          attributes: {
-            comment
-          },
-          relationships: {
-            absenceFile: {
-              data: {
-                type: 'absenceFile',
-                id: folderId
-              }
-            },
-            absenceReason: {
-              data: {
-                type: 'absenceReason',
-                id: reasonId
-              }
-            }
-          }
+      data: serialize({
+        comment,
+        absenceFile: {
+          id: folderId
+        },
+        absenceReason: {
+          id: reasonId
         }
-      }
+      }, 'absenceFileState', {
+        relationships: ['absenceFile', 'absenceReason']
+      })
     })).data) as AbsenceState
   }
 
