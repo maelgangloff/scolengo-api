@@ -304,7 +304,7 @@ export class Skolengo {
    * @param {string} schoolInfoId Identifiant d'une actualité
    * @async
    */
-  public async getSchoolInfo (schoolInfoId: string): Promise<SchoolInfo> {
+  public async getSchoolInfo (schoolInfoId: string = this.school.id): Promise<SchoolInfo> {
     return deserialize((await this.request<DocumentObject>({
       url: `/schools-info/${schoolInfoId}`,
       responseType: 'json',
@@ -933,10 +933,9 @@ export class Skolengo {
       const error = e as AxiosError<{ errors: SkolengoError[] }, D>
       const response = error.response
       if (((response?.data.errors) != null) && (response.data.errors.length > 0)) {
-        const error = response.data.errors[0]
-        throw new SkolengoError(error, error)
+        throw new SkolengoError(response.data.errors[0])
       }
-      const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
+      const tokenSet = await this.oidClient.refresh(this.tokenSet)
       this.onTokenRefresh(tokenSet)
       this.tokenSet = tokenSet
       this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token as string}`
