@@ -9,6 +9,7 @@ export class SkolengoError extends Error implements SkolengoError {
     super(error.detail)
     this.name = error.title
     this.status = error.status
+    this.detail = error.detail
     this.cause = cause
     Error.captureStackTrace(this, this.constructor)
   }
