@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
 import { deserialize, DocumentObject, serialize } from 'jsonapi-fractal'
 import { Stream } from 'node:stream'
@@ -11,6 +11,7 @@ import { Attachment, SchoolInfo } from './models/School'
 import { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Results'
 import { Agenda, AgendaResponse, Lesson, HomeworkAssignment } from './models/Calendar'
 import { AbsenceFile, AbsenceFilesResponse, AbsenceState, AbsenceReason } from './models/SchoolLife'
+import { SkolengoError } from './models/Common/SkolengoError'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -928,7 +929,13 @@ export class Skolengo {
     }
     try {
       return await this.httpClient.request<T, R, D>(axiosConfig)
-    } catch {
+    } catch (e) {
+      const error = e as AxiosError<{ errors: SkolengoError[] }, D>
+      const response = error.response
+      if (((response?.data.errors) != null) && (response.data.errors.length > 0)) {
+        const error = response.data.errors[0]
+        throw new SkolengoError(error, error)
+      }
       const tokenSet = await this.oidClient.refresh(this.tokenSet.refresh_token as string)
       this.onTokenRefresh(tokenSet)
       this.tokenSet = tokenSet
