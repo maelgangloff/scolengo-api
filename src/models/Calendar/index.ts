@@ -34,17 +34,18 @@ LOCATION:${location}
 END:VEVENT`
   }
 
-  public toICalendar (dtstamp: Date = new Date()): string {
+  public toICalendar (dtstamp: Date = new Date(), name = 'Agenda Skolengo'): string {
     const lessons = this.map(j => j.lessons).flat()
+    const calendarName = name ?? 'Agenda Skolengo'
     return `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//scolengo-api//ical//EN
 METHOD:PUBLISH
 TZID:Europe/Paris
-NAME:Agenda Skolengo
-X-WR-CALNAME:Agenda Skolengo
-  ${lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n')}
-` + 'END:VCALENDAR'
+NAME:${calendarName}
+X-WR-CALNAME:${calendarName}\n` +
+lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n') +
+'END:VCALENDAR\n'
   }
 }
 

@@ -10,8 +10,8 @@ export class AbsenceFilesResponse extends Array<AbsenceFile> {
   }
 
   public toCSV (): string {
-    return `created,type,status,start,end,reason,reason_label
-${this.map(file => {
+    return 'created,type,status,start,end,reason,reason_label\n' +
+    this.map(file => {
       const {
         creationDateTime,
         absenceType,
@@ -20,8 +20,8 @@ ${this.map(file => {
         absenceEndDateTime,
         absenceReason
       } = file.currentState
-      return `${creationDateTime},${absenceType},${absenceFileStatus},${absenceStartDateTime},${absenceEndDateTime},"${absenceReason?.code ?? ''}","${absenceReason?.longLabel ?? ''}"\n`
-    }).join('')}`
+      return `${creationDateTime},${absenceType},${absenceFileStatus},${absenceStartDateTime},${absenceEndDateTime},"${absenceReason?.code ?? ''}","${absenceReason?.longLabel ?? ''}"`
+    }).join('\n')
   }
 }
 
