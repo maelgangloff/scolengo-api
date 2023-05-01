@@ -8,7 +8,7 @@
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-# Checklist:
+## Checklist:
 - [ ] Mon code ne met pas en danger les données personnelles des utilisateurs
 - [ ] Les noms des commits suivent la convention [Conventional Commits](https://www.conventionalcommits.org/fr/v1.0.0/)
 - [ ] J'ai vérifié l'entièreté du code avant de le soumettre
