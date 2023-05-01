@@ -1,5 +1,5 @@
 import { describe } from 'node:test'
-import { Agenda } from '../../src/models/Agenda/Agenda'
+import { Agenda } from '../../src/models/Calendar/Agenda'
 
 type ExpectedType = Agenda[]
 

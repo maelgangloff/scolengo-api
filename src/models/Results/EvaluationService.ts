@@ -1,5 +1,5 @@
 import { Subject } from './Subject'
-import { User } from '../Global'
+import { User } from '../Common'
 
 export interface EvaluationService {
   id: string

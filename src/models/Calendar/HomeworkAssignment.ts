@@ -1,6 +1,6 @@
-import { Subject } from '../Agenda/Lesson'
+import { Subject } from './Lesson'
 import { Attachment } from '../School'
-import { User } from '../Global'
+import { User } from '../Common'
 
 export interface HomeworkAssignment {
   id: string
@@ -21,5 +21,4 @@ interface CorrectionWork {
   html: string
   correctionDate: string
 }
-
  */

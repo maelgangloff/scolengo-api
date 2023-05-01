@@ -1,5 +1,5 @@
 import { describe } from 'node:test'
-import { User } from '../../src/models/Global/User'
+import { User } from '../../src/models/Common/User'
 
 type ExpectedType = User
 

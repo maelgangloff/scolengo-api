@@ -1,5 +1,6 @@
 import { Agenda } from './Agenda'
 import { Lesson } from './Lesson'
+import { HomeworkAssignment } from './HomeworkAssignment'
 
 export class AgendaResponse extends Array<Agenda> {
   public constructor (response: Agenda[]) {
@@ -47,4 +48,4 @@ X-WR-CALNAME:Agenda Skolengo
   }
 }
 
-export { Agenda, Lesson }
+export { Agenda, Lesson, HomeworkAssignment }

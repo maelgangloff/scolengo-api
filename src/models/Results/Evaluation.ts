@@ -1,4 +1,4 @@
-import { User } from '../Global'
+import { User } from '../Common'
 import { EvaluationDetail } from './EvaluationDetail'
 import { Subject } from './Subject'
 

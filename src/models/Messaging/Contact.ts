@@ -1,4 +1,4 @@
-import { User } from '../Global'
+import { User } from '../Common'
 
 export interface Contact {
   id: string

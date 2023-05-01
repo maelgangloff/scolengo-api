@@ -1,5 +1,5 @@
-import { AbsenceReason, SupportedAbsenceType } from './AbsenceReasons'
-import { User } from '../Global'
+import { AbsenceReason, SupportedAbsenceType } from './AbsenceReason'
+import { User } from '../Common'
 
 export interface AbsenceFile {
   id: string
