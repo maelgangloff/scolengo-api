@@ -1,4 +1,5 @@
 import { User } from '../Common'
+import { TechnicalUser } from './TechnicalUser'
 
 export interface Participant {
   id: string
@@ -8,10 +9,4 @@ export interface Participant {
   fromGroup?: boolean
   person?: User
   technicalUser?: TechnicalUser
-}
-
-export interface TechnicalUser {
-  id: string
-  label: string
-  logoUrl: string | null
 }
