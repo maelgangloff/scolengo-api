@@ -45,7 +45,7 @@ TZID:Europe/Paris
 NAME:${calendarName}
 X-WR-CALNAME:${calendarName}\n` +
 lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n') +
-'END:VCALENDAR\n'
+'\nEND:VCALENDAR\n'
   }
 }
 
