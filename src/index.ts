@@ -935,11 +935,18 @@ export class Skolengo {
       if (((response?.data.errors) != null) && (response.data.errors.length > 0)) {
         throw new SkolengoError(response.data.errors[0])
       }
-      const tokenSet = await this.oidClient.refresh(this.tokenSet)
-      this.onTokenRefresh(tokenSet)
-      this.tokenSet = tokenSet
-      this.httpClient.defaults.headers.common.Authorization = `Bearer ${tokenSet.access_token as string}`
-      return await this.httpClient.request<T, R, D>(axiosConfig)
+      const newTokenSet = await this.oidClient.refresh(this.tokenSet)
+      this.onTokenRefresh(newTokenSet)
+      this.tokenSet = newTokenSet
+      return await this.httpClient.request<T, R, D>({
+        ...axiosConfig,
+        headers: {
+          Authorization: `Bearer ${newTokenSet.access_token as string}`,
+          'X-Skolengo-Date-Format': 'utc',
+          'X-Skolengo-School-Id': this.school.id,
+          'X-Skolengo-Ems-Code': this.school.emsCode
+        }
+      })
     }
   }
 }
