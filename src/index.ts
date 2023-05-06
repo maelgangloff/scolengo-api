@@ -322,7 +322,7 @@ export class Skolengo {
    * @param {number} offset Offset
    * @async
    */
-  public async getEvaluationSettings (studentId: string, limit = 20, offset = 0): Promise<EvaluationSettings> {
+  public async getEvaluationSettings (studentId: string, limit = 20, offset = 0): Promise<EvaluationSettings[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/evaluations-settings',
       responseType: 'json',
@@ -345,7 +345,7 @@ export class Skolengo {
                       */
       }
     })
-    ).data) as EvaluationSettings
+    ).data) as EvaluationSettings[]
   }
 
   /**
