@@ -933,15 +933,18 @@ export class Skolengo {
       const error = e as AxiosError<any>
       const response = error.response
 
-      if (response === undefined || response.status !== 401) throw error
+      if (response === undefined) throw error
+
       if (response.data.errors instanceof Array && response.data.errors.length > 0) {
         throw new SkolengoError(response.data.errors[0])
       }
+
+      if (response.status !== 401) throw error
+
       const newTokenSet = await this.oidClient.refresh(this.tokenSet)
 
       this.onTokenRefresh(newTokenSet)
       this.tokenSet = newTokenSet
-
       return await this.httpClient.request<T, R, D>({
         ...axiosConfig,
         headers: {
