@@ -135,7 +135,7 @@ Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de 
 | Param | Type | Description |
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+downloadAttachment"></a>
 
@@ -173,9 +173,9 @@ Récupérer toutes les actualités de l'établissement
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
-| Param | Type |
-| --- | --- |
-| params | <code>object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getSchoolInfo"></a>
 
@@ -187,7 +187,7 @@ Récupérer une actualité de l'établissement
 | Param | Type | Description |
 | --- | --- | --- |
 | schoolInfoId | <code>string</code> | Identifiant d'une actualité |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getEvaluationSettings"></a>
 
@@ -201,7 +201,7 @@ Statut des services d'évaluation (identifiant des périodes, ...)
 | studentId | <code>string</code> |  | Identifiant d'un étudiant |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getEvaluation"></a>
 
@@ -216,7 +216,7 @@ Récupérer les notes d'un étudiant sur une période
 | periodId | <code>string</code> |  | Identifiant de la période de notation |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getEvaluationDetail"></a>
 
@@ -229,7 +229,7 @@ Récupérer le détail d'une note d'un étudiant
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | evaluationId | <code>string</code> | Identifiant de la note |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getPeriodicReportsFiles"></a>
 
@@ -244,7 +244,7 @@ Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 | studentId | <code>string</code> |  | Identifiant d'un étudiant |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 **Example**  
 ```js
@@ -270,7 +270,7 @@ Il est possible de le convertir au format iCalendar.
 | endDate | <code>string</code> |  | Date de fin - Format : YYYY-MM-DD |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 **Example**  
 ```js
@@ -295,7 +295,7 @@ Récupérer les données d'un cours/leçon
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | lessonId | <code>string</code> | Identifiant d'un cours/leçon |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getHomeworkAssignments"></a>
 
@@ -311,7 +311,7 @@ Récupérer les devoirs d'un étudiant
 | endDate | <code>string</code> |  | Date de fin - Format : YYYY-MM-DD |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 **Example**  
 ```js
@@ -336,7 +336,7 @@ Récupérer les données d'un devoir
 | --- | --- | --- |
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant du devoir |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 **Example**  
 ```js
@@ -363,7 +363,7 @@ Modifier le statut d'un travail à faire
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant d'un devoir à modifier |
 | attributes | <code>Partial.&lt;HomeworkAssignment&gt;</code> | Devoir modifié |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 **Example**  
 ```js
@@ -384,7 +384,7 @@ Récupérer les informations du service de communication (identifiants des dossi
 | Param | Type | Description |
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant d'un utilisateur |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getCommunicationsFolder"></a>
 
@@ -398,7 +398,7 @@ Récupérer les communication d'un dossier
 | folderId | <code>string</code> |  | Identifiant d'un dossier |
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getCommunication"></a>
 
@@ -410,7 +410,7 @@ Récupérer une communication à partir de son identifiant
 | Param | Type | Description |
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getCommunicationParticipations"></a>
 
@@ -422,7 +422,7 @@ Récupérer les participations d'un fil de discussion (communication)
 | Param | Type | Description |
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getCommunicationParticipants"></a>
 
@@ -435,7 +435,7 @@ Récupérer tous les participants d'un fil de discussion (communication)
 | --- | --- | --- | --- |
 | communicationId | <code>string</code> |  | Identifiant d'une communication |
 | fromGroup | <code>boolean</code> | <code>true</code> | Afficher le détail des groupes |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 <a name="Skolengo+patchCommunicationFolders"></a>
 
@@ -449,7 +449,7 @@ Déplacer une communication dans un dossier
 | communicationId | <code>string</code> | Identifiant d'une communication |
 | folders |  | Liste contenant l'identifiant du dossier |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+postCommunication"></a>
 
@@ -461,7 +461,7 @@ Envoyer un message dans un nouveau fil de discussion
 | Param | Type | Description |
 | --- | --- | --- |
 | newCommunication | <code>Partial.&lt;Communication&gt;</code> | La nouvelle communication |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+postParticipation"></a>
 
@@ -473,7 +473,7 @@ Envoyer un message dans un fil de discussion existant
 | Param | Type | Description |
 | --- | --- | --- |
 | participation | <code>Partial.&lt;Participation&gt;</code> | La nouvelle participation |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getAbsenceFiles"></a>
 
@@ -488,7 +488,7 @@ Il est possible d'exporter les absences au format CSV.
 | studentId | <code>string</code> |  | Identifiant d'un étudiant |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>offset</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 **Example**  
 ```js
@@ -512,7 +512,7 @@ Récupérer les détails d'une absence
 | Param | Type | Description |
 | --- | --- | --- |
 | folderId | <code>string</code> | Identifiant d'un dossier |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+postAbsenceFileState"></a>
 
@@ -527,7 +527,7 @@ _PS: La requête n'a pas été testée._
 | folderId | <code>string</code> | Identifiant d'un dossier |
 | reasonId | <code>string</code> | Identifiant d'un motif |
 | comment | <code>string</code> | Commentaire |
-| params | <code>object</code> |  |
+| params | <code>object</code> | Modifier les paramètres de la requête |
 
 <a name="Skolengo+getAbsenceReasons"></a>
 
@@ -541,7 +541,7 @@ Cette liste peut être différente pour chaque établissement.
 | --- | --- | --- | --- |
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| params | <code>object</code> |  |  |
+| params | <code>object</code> |  | Modifier les paramètres de la requête |
 
 **Example**  
 ```js

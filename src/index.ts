@@ -232,7 +232,7 @@ export class Skolengo {
   /**
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    * @param {string|undefined} userId Identifiant de l'utilisateur
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getUserInfo (userId?: string, params?: object): Promise<User> {
@@ -288,7 +288,7 @@ export class Skolengo {
 
   /**
    * Récupérer toutes les actualités de l'établissement
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getSchoolInfos (params?: object): Promise<SchoolInfo[]> {
@@ -306,7 +306,7 @@ export class Skolengo {
   /**
    * Récupérer une actualité de l'établissement
    * @param {string} schoolInfoId Identifiant d'une actualité
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getSchoolInfo (schoolInfoId: string = this.school.id, params?: object): Promise<SchoolInfo> {
@@ -326,7 +326,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getEvaluationSettings (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object): Promise<EvaluationSettings[]> {
@@ -362,7 +362,7 @@ export class Skolengo {
    * @param {string} periodId Identifiant de la période de notation
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getEvaluation (studentId: string = this.tokenSet.claims().sub, periodId: string, limit = 20, offset = 0, params?: object): Promise<Evaluation[]> {
@@ -400,7 +400,7 @@ export class Skolengo {
    * Récupérer le détail d'une note d'un étudiant
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} evaluationId Identifiant de la note
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getEvaluationDetail (studentId: string = this.tokenSet.claims().sub, evaluationId: string, params?: object): Promise<EvaluationDetail> {
@@ -436,7 +436,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -479,7 +479,7 @@ export class Skolengo {
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -529,7 +529,7 @@ export class Skolengo {
    * Récupérer les données d'un cours/leçon
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} lessonId Identifiant d'un cours/leçon
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getLesson (studentId: string = this.tokenSet.claims().sub, lessonId: string, params?: object): Promise<Lesson> {
@@ -554,7 +554,7 @@ export class Skolengo {
    * @param {string} endDate Date de fin - Format : YYYY-MM-DD
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -600,7 +600,7 @@ export class Skolengo {
    * Récupérer les données d'un devoir
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant du devoir
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -635,7 +635,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant d'un devoir à modifier
    * @param {Partial<HomeworkAssignment>} attributes Devoir modifié
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -672,7 +672,7 @@ export class Skolengo {
   /**
    * Récupérer les informations du service de communication (identifiants des dossiers, ...)
    * @param {string|undefined} userId Identifiant d'un utilisateur
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getUsersMailSettings (userId?: string, params?: object): Promise<UsersMailSettings> {
@@ -701,7 +701,7 @@ export class Skolengo {
    * @param {string} folderId Identifiant d'un dossier
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0, params?: object): Promise<Communication[]> {
@@ -726,7 +726,7 @@ export class Skolengo {
   /**
    * Récupérer une communication à partir de son identifiant
    * @param {string} communicationId Identifiant d'une communication
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getCommunication (communicationId: string, params?: object): Promise<Communication> {
@@ -741,7 +741,7 @@ export class Skolengo {
   /**
    * Récupérer les participations d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getCommunicationParticipations (communicationId: string, params?: object): Promise<Participation[]> {
@@ -760,7 +760,7 @@ export class Skolengo {
    * Récupérer tous les participants d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
    * @param {boolean} fromGroup Afficher le détail des groupes
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getCommunicationParticipants (communicationId: string, fromGroup = true, params?: object): Promise<any> {
@@ -781,7 +781,7 @@ export class Skolengo {
    * @param {string} communicationId Identifiant d'une communication
    * @param folders Liste contenant l'identifiant du dossier
    * @param {string|undefined} userId Identifiant de l'utilisateur
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async patchCommunicationFolders (communicationId: string, folders: Array<BaseObject<'folders'>>, userId?: string, params?: object): Promise<void> {
@@ -803,7 +803,7 @@ export class Skolengo {
   /**
    * Envoyer un message dans un nouveau fil de discussion
    * @param {Partial<Communication>} newCommunication La nouvelle communication
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async postCommunication (newCommunication: Partial<Communication>, params?: object): Promise<Communication> {
@@ -822,7 +822,7 @@ export class Skolengo {
   /**
    * Envoyer un message dans un fil de discussion existant
    * @param {Partial<Participation>} participation La nouvelle participation
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async postParticipation (participation: Partial<Participation>, params?: object): Promise<Participation> {
@@ -844,7 +844,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {number} limit Limite
    * @param {offset} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -880,7 +880,7 @@ export class Skolengo {
   /**
    * Récupérer les détails d'une absence
    * @param {string} folderId Identifiant d'un dossier
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    */
   public async getAbsenceFile (folderId: string, params?: object): Promise<AbsenceFile> {
@@ -901,7 +901,7 @@ export class Skolengo {
    * @param {string} folderId Identifiant d'un dossier
    * @param {string} reasonId Identifiant d'un motif
    * @param {string} comment Commentaire
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    */
   public async postAbsenceFileState (folderId: string, reasonId: string, comment: string, params?: object): Promise<AbsenceState> {
     return deserialize((await this.request<DocumentObject>({
@@ -927,7 +927,7 @@ export class Skolengo {
    * Cette liste peut être différente pour chaque établissement.
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {object} params
+   * @param {object} params Modifier les paramètres de la requête
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
