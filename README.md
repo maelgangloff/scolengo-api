@@ -96,7 +96,7 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 | oidClient | <code>Client</code> | Un client OpenID Connect |
 | school | <code>School</code> | Etablissement |
 | tokenSet | <code>TokenSet</code> | Jetons d'authentification OpenID Connect |
-| config | <code>OptionalConfig</code> | Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...) |
+| config | <code>SkolengoConfig</code> | Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...) |
 
 **Example**  
 ```js
@@ -661,7 +661,7 @@ La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (po
 | Param | Type | Description |
 | --- | --- | --- |
 | config | <code>AuthConfig</code> | Informations d'authentification |
-| skolengoConfig | <code>OptionalConfig</code> | Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...) |
+| skolengoConfig | <code>SkolengoConfig</code> | Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...) |
 
 **Example**  
 ```js
