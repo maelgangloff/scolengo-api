@@ -1,6 +1,6 @@
 export interface SkolengoErrorBody {
-  status: 'PRONOTE_RESOURCES_NOT_READY' | string
-  title: string
+  status: string
+  title: string // Exemples : PRONOTE_RESOURCES_NOT_READY
   detail: string
 }
 
