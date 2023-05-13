@@ -1,1 +1,1 @@
-export { SkolengoError } from './SkolengoError'
+export * from './SkolengoError'

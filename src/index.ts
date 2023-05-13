@@ -59,13 +59,13 @@ export class Skolengo {
    * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
    * @param {OptionalConfig} config Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    */
-  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, config: OptionalConfig) {
+  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, config?: OptionalConfig) {
     this.oidClient = oidClient
     this.school = school
     this.tokenSet = tokenSet
-    this.onTokenRefresh = config.onTokenRefresh ?? (() => {})
-    this.httpClient = config.httpClient ?? axios.create()
-    this.handlePronoteError = config.handlePronoteError ?? false
+    this.onTokenRefresh = config?.onTokenRefresh ?? (() => {})
+    this.httpClient = config?.httpClient ?? axios.create()
+    this.handlePronoteError = config?.handlePronoteError ?? false
   }
 
   /**
@@ -184,7 +184,6 @@ export class Skolengo {
    * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
    * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
    * @param {AuthConfig} config Informations d'authentification
-   * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
    * @param {OptionalConfig} skolengoConfig Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -224,7 +223,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async fromConfigObject (config: AuthConfig, skolengoConfig: OptionalConfig): Promise<Skolengo> {
+  public static async fromConfigObject (config: AuthConfig, skolengoConfig?: OptionalConfig): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet)
     return new Skolengo(oidClient, config.school, tokenSet, skolengoConfig)
