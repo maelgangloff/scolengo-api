@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
 import { deserialize, DocumentObject, serialize } from 'jsonapi-fractal'
 import { Stream } from 'node:stream'
@@ -11,7 +11,8 @@ import { Attachment, SchoolInfo } from './models/School'
 import { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Results'
 import { Agenda, AgendaResponse, Lesson, HomeworkAssignment } from './models/Calendar'
 import { AbsenceFile, AbsenceFilesResponse, AbsenceState, AbsenceReason } from './models/SchoolLife'
-import { SkolengoError } from './models/Common/SkolengoError'
+import { SkolengoError, SkolengoErrorBody } from './models/Errors'
+import { SkolengoConfig } from './models/Common/SkolengoConfig'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -20,9 +21,8 @@ const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4N
 export class Skolengo {
   public readonly school: School
   public tokenSet: TokenSet
-  private readonly httpClient: AxiosInstance
   private readonly oidClient: Client
-  private readonly onTokenRefresh: (tokenSet: TokenSet) => void
+  private readonly config: SkolengoConfig
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
@@ -54,16 +54,17 @@ export class Skolengo {
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
    * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
-   * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
-   * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
+   * @param {SkolengoConfig} config Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    */
-  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, onTokenRefresh = (tokenSet: TokenSet): void => {
-  }, httpClient?: AxiosInstance) {
+  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, config?: Partial<SkolengoConfig>) {
     this.oidClient = oidClient
     this.school = school
     this.tokenSet = tokenSet
-    this.onTokenRefresh = onTokenRefresh
-    this.httpClient = httpClient ?? axios.create()
+    this.config = {
+      httpClient: config?.httpClient ?? axios.create(),
+      onTokenRefresh: config?.onTokenRefresh ?? (() => {}),
+      handlePronoteError: config?.handlePronoteError ?? false
+    }
   }
 
   /**
@@ -182,8 +183,7 @@ export class Skolengo {
    * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
    * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
    * @param {AuthConfig} config Informations d'authentification
-   * @param onTokenRefresh Fonction appellée après le rafraichissement du jeton
-   * @param {AxiosInstance|undefined} httpClient Un client HTTP (éventuellement gestion d'un cache)
+   * @param {SkolengoConfig} skolengoConfig Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    * const config = require('./config.json')
@@ -222,11 +222,10 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async fromConfigObject (config: AuthConfig, onTokenRefresh = (tokenSet: TokenSet) => {
-  }, httpClient?: AxiosInstance): Promise<Skolengo> {
+  public static async fromConfigObject (config: AuthConfig, skolengoConfig?: Partial<SkolengoConfig>): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet)
-    return new Skolengo(oidClient, config.school, tokenSet, onTokenRefresh, httpClient)
+    return new Skolengo(oidClient, config.school, tokenSet, skolengoConfig)
   }
 
   /**
@@ -956,6 +955,25 @@ export class Skolengo {
   }
 
   /**
+   * Gérer l'erreur *PRONOTE_RESOURCES_NOT_READY* obtenue lorsque Skolengo tente d'obtenir les dernières notes d'un élève.
+   * Ce comportement peut être activé en modifiant le paramètre optionnel correspondant.
+   * @param {AxiosRequestConfig} requestConfig
+   * @param {number} maxRetries
+   * @private
+   */
+  private async onPronoteError<T, R, D>(requestConfig: AxiosRequestConfig, maxRetries: number = 5): Promise<R> {
+    for (let i = 0; i < maxRetries - 1; i++) {
+      try {
+        return await this.config.httpClient.request<T, R, D>(requestConfig)
+      } catch (e) {
+        const err = e as Error
+        if (err.name !== 'PRONOTE_RESOURCES_NOT_READY') throw err
+      }
+    }
+    return await this.config.httpClient.request<T, R, D>(requestConfig)
+  }
+
+  /**
    * Effectuer une requête authentifiée auprès de l'API.
    * Si la requête échoue, on rafraichit le jeton et on retente.
    * @param {AxiosRequestConfig} config
@@ -974,32 +992,32 @@ export class Skolengo {
       }
     }
     try {
-      return await this.httpClient.request<T, R, D>(axiosConfig)
+      return await this.config.httpClient.request<T, R, D>(axiosConfig)
     } catch (e) {
       const error = e as AxiosError<any>
       const response = error.response
-
       if (response === undefined) throw error
-
-      if (response.data.errors instanceof Array && response.data.errors.length > 0) {
-        throw new SkolengoError(response.data.errors[0])
+      if (response.status === 401) {
+        const newTokenSet = await this.oidClient.refresh(this.tokenSet)
+        this.config.onTokenRefresh(newTokenSet)
+        this.tokenSet = newTokenSet
+        return await this.config.httpClient.request<T, R, D>({
+          ...axiosConfig,
+          headers: {
+            Authorization: `Bearer ${newTokenSet.access_token as string}`,
+            'X-Skolengo-Date-Format': 'utc',
+            'X-Skolengo-School-Id': this.school.id,
+            'X-Skolengo-Ems-Code': this.school.emsCode
+          }
+        })
       }
-
-      if (response.status !== 401) throw error
-
-      const newTokenSet = await this.oidClient.refresh(this.tokenSet)
-
-      this.onTokenRefresh(newTokenSet)
-      this.tokenSet = newTokenSet
-      return await this.httpClient.request<T, R, D>({
-        ...axiosConfig,
-        headers: {
-          Authorization: `Bearer ${newTokenSet.access_token as string}`,
-          'X-Skolengo-Date-Format': 'utc',
-          'X-Skolengo-School-Id': this.school.id,
-          'X-Skolengo-Ems-Code': this.school.emsCode
-        }
-      })
+      if (response.data.errors instanceof Array && response.data.errors.length > 0) {
+        const [firstError] = response.data.errors as SkolengoErrorBody[]
+        const skolengoError = new SkolengoError(firstError)
+        if (this.config.handlePronoteError && skolengoError.name === 'PRONOTE_RESOURCES_NOT_READY') return await this.onPronoteError<T, R, D>(axiosConfig)
+        throw skolengoError
+      }
+      throw error
     }
   }
 }
