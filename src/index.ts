@@ -955,6 +955,73 @@ export class Skolengo {
   }
 
   /**
+   *
+   * @param {object} params Modifier les paramètres de la requête
+   */
+  public async getPaymentsDueDates (params: object): Promise<object[] | object | undefined> {
+    return deserialize((await this.request<DocumentObject>({
+      url: '/payments-due-dates',
+      responseType: 'json',
+      params: {
+        include: 'amountsSetting',
+        ...params
+      }
+    })
+    ).data)
+  }
+
+  /**
+   *
+   * @param {object} params Modifier les paramètres de la requête
+   */
+  public async getPayments (params: object): Promise<object[] | object | undefined> {
+    return deserialize((await this.request<DocumentObject>({
+      url: '/payments',
+      responseType: 'json',
+      params: {
+        include: 'amountsSetting',
+        ...params
+      }
+    })
+    ).data)
+  }
+
+  /**
+   *
+   * @param {object} params Modifier les paramètres de la requête
+   */
+  public async getInvoices (params: object): Promise<object[] | object | undefined> {
+    return deserialize((await this.request<DocumentObject>({
+      url: '/invoices',
+      responseType: 'json',
+      params: {
+        include: 'file',
+        ...params
+      }
+    })
+    ).data)
+  }
+
+  /**
+   *
+   * @param {object} params Modifier les paramètres de la requête
+   */
+  public async getWallets (params: object): Promise<object[] | object | undefined> {
+    return deserialize((await this.request<DocumentObject>({
+      url: '/wallets',
+      responseType: 'json',
+      params: {
+        include: 'amountsSetting',
+        filter: {
+          schoolId: this.school.id
+        },
+        ...params
+      }
+    })
+    ).data)
+  }
+
+  /**
    * Gérer l'erreur *PRONOTE_RESOURCES_NOT_READY* obtenue lorsque Skolengo tente d'obtenir les dernières notes d'un élève.
    * Ce comportement peut être activé en modifiant le paramètre optionnel correspondant.
    * @param {AxiosRequestConfig} requestConfig
