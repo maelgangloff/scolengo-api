@@ -39,6 +39,6 @@ export interface User {
   school?: {
     name: string
     timeZone: string
-    subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | string>
+    subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | 'FACT' | 'REST' | string>
   }
 }
