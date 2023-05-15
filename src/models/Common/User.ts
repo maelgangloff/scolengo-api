@@ -23,11 +23,14 @@ export interface User {
   profile?: string
   source?: string
   mobilePhone?: string
-  permissions?: Array<UserPermission<'EVAL', 'READ_EVALUATIONS'> |
-  UserPermission<'CDT', 'READ_LESSONS'> |
-  UserPermission<'TAF', 'READ_HOMEWORK_ASSIGNMENTS' | 'MARK_HOMEWORK_ASSIGNMENT_AS_DONE'> |
-  UserPermission<'ABS', 'READ_ABSENCE_FILES' | 'READ_ABSENCE_FILES_DETAILS' | 'COMPLETE_ABSENCE_FILES'> |
-  UserPermission<'MSG', 'READ_MESSAGES' | 'WRITE_MESSAGES'> | UserPermission<string, string>>
+  permissions?: Array<UserPermission<'EVAL', 'READ_EVALUATIONS'> | // Résultats - Grading
+  UserPermission<'FACT', string> | // Finances - Billing
+  UserPermission<'REST', string> | // Porte-Monnaie - Catering
+  UserPermission<'CDT', 'READ_LESSONS'> | // Agenda - Organizer
+  UserPermission<'TAF', 'READ_HOMEWORK_ASSIGNMENTS' | 'MARK_HOMEWORK_ASSIGNMENT_AS_DONE'> | // Travail à faire
+  UserPermission<'ABS', 'READ_ABSENCE_FILES' | 'READ_ABSENCE_FILES_DETAILS' | 'COMPLETE_ABSENCE_FILES'> | // Vie Scolaire - Absences
+  UserPermission<'MSG', 'READ_MESSAGES' | 'WRITE_MESSAGES'> | // Messagerie
+  UserPermission<string, string>>
   addressLines?: string[]
   postalCode?: string
   city?: string
