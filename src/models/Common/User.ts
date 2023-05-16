@@ -37,6 +37,7 @@ export interface User {
   country?: string
   students?: User[]
   school?: {
+    id: string
     name: string
     timeZone: string
     subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | 'FACT' | 'REST' | string>
