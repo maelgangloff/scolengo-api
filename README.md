@@ -705,6 +705,7 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 
 ## Liens utiles
+- [Wiki](https://github.com/maelgangloff/scolengo-api/wiki)
+- [Serveur Discord](https://discord.gg/9u69mxsFT6)
 - [JSON:API Specification](https://jsonapi.org/format)
 - [OpenID Connect Specification](https://openid.net/connect)
-- [Serveur Discord](https://discord.gg/9u69mxsFT6)
