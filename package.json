@@ -2,6 +2,14 @@
   "name": "scolengo-api",
   "version": "2.0.0",
   "types": "types/index.d.ts",
+  "readme": "README.md",
+  "maintainers": [
+    {
+      "name": "Maël Gangloff",
+      "email": "contact@maelgangloff.fr",
+      "url": "https://github.com/maelgangloff"
+    }
+  ],
   "homepage": "https://github.com/maelgangloff/scolengo-api#readme",
   "bugs": {
     "url": "https://github.com/maelgangloff/scolengo-api/issues"
@@ -12,7 +20,11 @@
     "type": "git",
     "url": "https://github.com/maelgangloff/scolengo-api.git"
   },
-  "author": "Maël Gangloff <contact@maelgangloff.fr>",
+  "author": {
+    "name": "Maël Gangloff",
+    "email": "contact@maelgangloff.fr",
+    "url": "https://github.com/maelgangloff"
+  },
   "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "tsc -p tsconfig.json",
