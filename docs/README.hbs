@@ -5,6 +5,10 @@
 [![Discord](https://img.shields.io/discord/1095829734211977276?label=Discord&style=flat-square)](https://discord.gg/9u69mxsFT6)
 [![npm](https://img.shields.io/npm/dm/scolengo-api?style=flat-square)](https://npm-stat.com/charts.html?package=scolengo-api)
 
+<p align="center">
+  <img src="https://github.com/maelgangloff/scolengo-api/assets/51171251/6b89800f-71fd-494b-a978-0e803f67e507" />
+</p>
+
 Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme. Ce module permet de récupérer les données de l'ENT de manière automatique. De plus, certaines fonctions implémentées permettent de prétraiter les données (conversion de l'emploi du temps au format iCalendar par exemple).
 
 Ce module est destiné à devenir le successeur de [kdecole-api](https://github.com/maelgangloff/kdecole-api) dans l'éventualité où l'accès à l'ancienne API serait définitivement clos.
