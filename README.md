@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dm/scolengo-api?style=flat-square)](https://npm-stat.com/charts.html?package=scolengo-api)
 
 <p align="center">
-  <img src="https://github.com/maelgangloff/scolengo-api/assets/51171251/96948695-e927-48b4-979a-bc8b4f16af18" />
+  <img src="https://github.com/The-Rabbit-Team/.github/blob/master/banners/scolengo-api.png?raw=true" />
 </p>
 
 Support non officiel de l'API Skolengo. Il s'agit de l'API utilisée par la nouvelle application mobile éponyme. Ce module permet de récupérer les données de l'ENT de manière automatique. De plus, certaines fonctions implémentées permettent de prétraiter les données (conversion de l'emploi du temps au format iCalendar par exemple).
