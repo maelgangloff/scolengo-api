@@ -30,8 +30,8 @@ export class Skolengo {
    * const {Skolengo, TokenSet} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
+   *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school)
    *
    *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
@@ -47,7 +47,7 @@ export class Skolengo {
    *
    *   const user = new Skolengo(oidClient, school, tokenSet)
    *   const infoUser = await user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
    * })
    *
    * ```
@@ -143,8 +143,8 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
+   *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *   console.log(oidClient.authorizationUrl())
    *   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
@@ -154,7 +154,7 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *
@@ -933,7 +933,7 @@ export class Skolengo {
    *
    * Skolengo.fromConfigObject(config).then(async user => {
    *   user.getAbsenceReasons().then(response => {
-   *     console.log(`Liste des motifs: ${response.data.map(r => r.longLabel).join(';')}`)
+   *     console.log(`Liste des motifs: ${response.map(r => r.longLabel).join(';')}`)
    *   })
    * })
 
