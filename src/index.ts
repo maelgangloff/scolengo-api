@@ -26,7 +26,41 @@ export class Skolengo {
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
+   * 
    * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+   * // L'objet de configuration ci-dessous peut être généré à partir de l'utilitaire scolengo-token (https://github.com/maelgangloff/scolengo-token)
+   * const config = {
+   *   "tokenSet": {
+   *     "access_token": "<access_token_here>",
+   *     "id_token": "<id_token_here>",
+   *     "refresh_token": "RT-<refresh_token_here>",
+   *     "token_type": "bearer",
+   *     "expires_at": 1234567890,
+   *     "scope": "openid"
+   *   },
+   *   "school": {
+   *     "id": "SKO-E-<school_id>",
+   *     "name": "<school_name>",
+   *     "addressLine1": "<school_address>",
+   *     "addressLine2": null,
+   *     "addressLine3": null,
+   *     "zipCode": "<school_zip_code>",
+   *     "city": "<school_city>",
+   *     "country": "France",
+   *     "homePageUrl": "<cas_login_url>",
+   *     "emsCode": "<school_ems_code>",
+   *     "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
+   *   }
+   * }
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
+   * })
+   * ```
+   * ```js
    * const {Skolengo, TokenSet} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
@@ -49,7 +83,6 @@ export class Skolengo {
    *   const infoUser = await user.getUserInfo()
    *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
    * })
-   *
    * ```
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
@@ -179,7 +212,7 @@ export class Skolengo {
   }
 
   /**
-   * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
+   * Créer un client Scolengo à partir d'un objet contenant les informations d'authentification.
    * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
    * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
    * @param {AuthConfig} config Informations d'authentification
