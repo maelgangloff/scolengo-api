@@ -26,7 +26,7 @@ export class Skolengo {
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
-   * 
+   *
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
