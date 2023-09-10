@@ -173,7 +173,7 @@ Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de 
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+downloadAttachment"></a>
 
@@ -214,7 +214,7 @@ Récupérer toutes les actualités de l'établissement
 | Param | Type | Description |
 | --- | --- | --- |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getSchoolInfo"></a>
 
@@ -227,7 +227,7 @@ Récupérer une actualité de l'établissement
 | --- | --- | --- |
 | schoolInfoId | <code>string</code> | Identifiant d'une actualité |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getEvaluationSettings"></a>
 
@@ -242,7 +242,7 @@ Statut des services d'évaluation (identifiant des périodes, ...)
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getEvaluation"></a>
 
@@ -258,7 +258,7 @@ Récupérer les notes d'un étudiant sur une période
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getEvaluationDetail"></a>
 
@@ -272,7 +272,7 @@ Récupérer le détail d'une note d'un étudiant
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | evaluationId | <code>string</code> | Identifiant de la note |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getPeriodicReportsFiles"></a>
 
@@ -288,7 +288,7 @@ Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -315,7 +315,7 @@ Il est possible de le convertir au format iCalendar.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -341,7 +341,7 @@ Récupérer les données d'un cours/leçon
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | lessonId | <code>string</code> | Identifiant d'un cours/leçon |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getHomeworkAssignments"></a>
 
@@ -358,7 +358,7 @@ Récupérer les devoirs d'un étudiant
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -384,7 +384,7 @@ Récupérer les données d'un devoir
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant du devoir |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -412,7 +412,7 @@ Modifier le statut d'un travail à faire
 | homeworkId | <code>string</code> | Identifiant d'un devoir à modifier |
 | attributes | <code>Partial.&lt;HomeworkAssignment&gt;</code> | Devoir modifié |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -434,7 +434,7 @@ Récupérer les informations du service de communication (identifiants des dossi
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant d'un utilisateur |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getCommunicationsFolder"></a>
 
@@ -449,7 +449,7 @@ Récupérer les communication d'un dossier
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getCommunication"></a>
 
@@ -474,7 +474,7 @@ Récupérer les participations d'un fil de discussion (communication)
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getCommunicationParticipants"></a>
 
@@ -488,7 +488,7 @@ Récupérer tous les participants d'un fil de discussion (communication)
 | communicationId | <code>string</code> |  | Identifiant d'une communication |
 | fromGroup | <code>boolean</code> | <code>true</code> | Afficher le détail des groupes |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+patchCommunicationFolders"></a>
 
@@ -542,7 +542,7 @@ Il est possible d'exporter les absences au format CSV.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>offset</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
-| includes | <code>array</code> |  | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -567,7 +567,7 @@ Récupérer les détails d'une absence
 | --- | --- | --- |
 | folderId | <code>string</code> | Identifiant d'un dossier |
 | params | <code>object</code> | Modifier les paramètres de la requête |
-| includes | <code>array</code> | Ressources JSON:API à inclure |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+postAbsenceFileState"></a>
 
