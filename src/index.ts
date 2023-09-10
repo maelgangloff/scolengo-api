@@ -475,6 +475,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -485,7 +486,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object): Promise<Attachment[]> {
+  public async getPeriodicReportsFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: String[] = ['period']): Promise<Attachment[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/periodic-reports-files',
       responseType: 'json',
@@ -493,7 +494,7 @@ export class Skolengo {
         filter: {
           'student.id': studentId
         },
-        include: 'period',
+        include: includes.join(','),
         page: {
           limit,
           offset

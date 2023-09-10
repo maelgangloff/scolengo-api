@@ -66,7 +66,7 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
         * [.getEvaluationSettings(studentId, limit, offset, params, includes)](#Skolengo+getEvaluationSettings)
         * [.getEvaluation(studentId, periodId, limit, offset, params, includes)](#Skolengo+getEvaluation)
         * [.getEvaluationDetail(studentId, evaluationId, params, includes)](#Skolengo+getEvaluationDetail)
-        * [.getPeriodicReportsFiles(studentId, limit, offset, params)](#Skolengo+getPeriodicReportsFiles)
+        * [.getPeriodicReportsFiles(studentId, limit, offset, params, includes)](#Skolengo+getPeriodicReportsFiles)
         * [.getAgenda(studentId, startDate, endDate, limit, offset, params, includes)](#Skolengo+getAgenda)
         * [.getLesson(studentId, lessonId, params, includes)](#Skolengo+getLesson)
         * [.getHomeworkAssignments(studentId, startDate, endDate, limit, offset, params, includes)](#Skolengo+getHomeworkAssignments)
@@ -276,7 +276,7 @@ Récupérer le détail d'une note d'un étudiant
 
 <a name="Skolengo+getPeriodicReportsFiles"></a>
 
-### skolengo.getPeriodicReportsFiles(studentId, limit, offset, params)
+### skolengo.getPeriodicReportsFiles(studentId, limit, offset, params, includes)
 Récupérer la liste des bilans périodiques disponibles pour un étudiant.
 Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 
@@ -288,6 +288,7 @@ Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>array</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
