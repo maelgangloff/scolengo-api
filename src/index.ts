@@ -265,6 +265,7 @@ export class Skolengo {
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    * @param {string|undefined} userId Identifiant de l'utilisateur
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getUserInfo (userId?: string, params?: object, includes: String[] = ['school', 'students', 'students.school']): Promise<User> {
@@ -321,6 +322,7 @@ export class Skolengo {
   /**
    * Récupérer toutes les actualités de l'établissement
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getSchoolInfos (params?: object, includes: String[] = ['illustration', 'school', 'author', 'author.person', 'author.technicalUser', 'attachments']): Promise<SchoolInfo[]> {
@@ -339,6 +341,7 @@ export class Skolengo {
    * Récupérer une actualité de l'établissement
    * @param {string} schoolInfoId Identifiant d'une actualité
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getSchoolInfo (schoolInfoId: string = this.school.id, params?: object, includes: String[] = ['illustration', 'school', 'author', 'author.person', 'author.technicalUser', 'attachments']): Promise<SchoolInfo> {
@@ -359,6 +362,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getEvaluationSettings (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: String[] = ['periods', 'skillsSetting', 'skillsSetting.skillAcquisitionColors']): Promise<EvaluationSettings[]> {
@@ -395,6 +399,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getEvaluation (studentId: string = this.tokenSet.claims().sub, periodId: string, limit = 20, offset = 0, params?: object, includes: String[] = ['subject', 'evaluations', 'evaluations.evaluationResult', 'evaluations.evaluationResult.subSkillsEvaluationResults', 'evaluations.evaluationResult.subSkillsEvaluationResults.subSkill', 'evaluations.subSkills', 'teachers']): Promise<Evaluation[]> {
@@ -433,6 +438,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} evaluationId Identifiant de la note
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getEvaluationDetail (studentId: string = this.tokenSet.claims().sub, evaluationId: string, params?: object, includes: String[] = ['evaluationService', 'evaluationService.subject', 'evaluationService.teachers', 'subSubject', 'subSkills', 'evaluationResult', 'evaluationResult.subSkillsEvaluationResults', 'evaluationResult.subSkillsEvaluationResults.subSkill']): Promise<EvaluationDetail> {
@@ -512,6 +518,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -562,6 +569,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} lessonId Identifiant d'un cours/leçon
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getLesson (studentId: string = this.tokenSet.claims().sub, lessonId: string, params?: object, includes: String[] = ['teachers', 'contents', 'contents.attachments', 'subject', 'toDoForTheLesson', 'toDoForTheLesson.subject', 'toDoAfterTheLesson', 'toDoAfterTheLesson.subject']): Promise<Lesson> {
@@ -587,6 +595,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -634,6 +643,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant du devoir
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -669,6 +679,7 @@ export class Skolengo {
    * @param {string} homeworkId Identifiant d'un devoir à modifier
    * @param {Partial<HomeworkAssignment>} attributes Devoir modifié
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -706,6 +717,7 @@ export class Skolengo {
    * Récupérer les informations du service de communication (identifiants des dossiers, ...)
    * @param {string|undefined} userId Identifiant d'un utilisateur
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getUsersMailSettings (userId?: string, params?: object, includes: String[] = ['signature', 'folders', 'folders.parent', 'contacts', 'contacts.person', 'contacts.personContacts']): Promise<UsersMailSettings> {
@@ -736,6 +748,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0, params?: object, includes: String[] = ['lastParticipation', 'lastParticipation.sender', 'lastParticipation.sender.person', 'lastParticipation.sender.technicalUser']): Promise<Communication[]> {
@@ -776,6 +789,7 @@ export class Skolengo {
    * Récupérer les participations d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getCommunicationParticipations (communicationId: string, params?: object, includes: String[] = ['sender', 'sender.person', 'sender.technicalUser', 'attachments']): Promise<Participation[]> {
@@ -795,6 +809,7 @@ export class Skolengo {
    * @param {string} communicationId Identifiant d'une communication
    * @param {boolean} fromGroup Afficher le détail des groupes
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getCommunicationParticipants (communicationId: string, fromGroup = true, params?: object, includes: String[] = ['person', 'technicalUser']): Promise<any> {
@@ -879,6 +894,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {offset} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -915,6 +931,7 @@ export class Skolengo {
    * Récupérer les détails d'une absence
    * @param {string} folderId Identifiant d'un dossier
    * @param {object} params Modifier les paramètres de la requête
+   * @param {array} includes Ressources JSON:API à inclure
    * @async
    */
   public async getAbsenceFile (folderId: string, params?: object, includes: String[] = ['currentState', 'currentState.absenceReason', 'currentState.absenceRecurrence', 'history', 'history.creator']): Promise<AbsenceFile> {
