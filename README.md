@@ -59,29 +59,29 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
 * [Skolengo](#Skolengo)
     * [new Skolengo(oidClient, school, tokenSet, config)](#new_Skolengo_new)
     * _instance_
-        * [.getUserInfo(userId, params)](#Skolengo+getUserInfo)
+        * [.getUserInfo(userId, params, includes)](#Skolengo+getUserInfo)
         * [.downloadAttachment(attachment)](#Skolengo+downloadAttachment)
-        * [.getSchoolInfos(params)](#Skolengo+getSchoolInfos)
-        * [.getSchoolInfo(schoolInfoId, params)](#Skolengo+getSchoolInfo)
-        * [.getEvaluationSettings(studentId, limit, offset, params)](#Skolengo+getEvaluationSettings)
-        * [.getEvaluation(studentId, periodId, limit, offset, params)](#Skolengo+getEvaluation)
-        * [.getEvaluationDetail(studentId, evaluationId, params)](#Skolengo+getEvaluationDetail)
-        * [.getPeriodicReportsFiles(studentId, limit, offset, params)](#Skolengo+getPeriodicReportsFiles)
-        * [.getAgenda(studentId, startDate, endDate, limit, offset, params)](#Skolengo+getAgenda)
-        * [.getLesson(studentId, lessonId, params)](#Skolengo+getLesson)
-        * [.getHomeworkAssignments(studentId, startDate, endDate, limit, offset, params)](#Skolengo+getHomeworkAssignments)
-        * [.getHomeworkAssignment(studentId, homeworkId, params)](#Skolengo+getHomeworkAssignment)
-        * [.patchHomeworkAssignment(studentId, homeworkId, attributes, params)](#Skolengo+patchHomeworkAssignment)
-        * [.getUsersMailSettings(userId, params)](#Skolengo+getUsersMailSettings)
-        * [.getCommunicationsFolder(folderId, limit, offset, params)](#Skolengo+getCommunicationsFolder)
+        * [.getSchoolInfos(params, includes)](#Skolengo+getSchoolInfos)
+        * [.getSchoolInfo(schoolInfoId, params, includes)](#Skolengo+getSchoolInfo)
+        * [.getEvaluationSettings(studentId, limit, offset, params, includes)](#Skolengo+getEvaluationSettings)
+        * [.getEvaluation(studentId, periodId, limit, offset, params, includes)](#Skolengo+getEvaluation)
+        * [.getEvaluationDetail(studentId, evaluationId, params, includes)](#Skolengo+getEvaluationDetail)
+        * [.getPeriodicReportsFiles(studentId, limit, offset, params, includes)](#Skolengo+getPeriodicReportsFiles)
+        * [.getAgenda(studentId, startDate, endDate, limit, offset, params, includes)](#Skolengo+getAgenda)
+        * [.getLesson(studentId, lessonId, params, includes)](#Skolengo+getLesson)
+        * [.getHomeworkAssignments(studentId, startDate, endDate, limit, offset, params, includes)](#Skolengo+getHomeworkAssignments)
+        * [.getHomeworkAssignment(studentId, homeworkId, params, includes)](#Skolengo+getHomeworkAssignment)
+        * [.patchHomeworkAssignment(studentId, homeworkId, attributes, params, includes)](#Skolengo+patchHomeworkAssignment)
+        * [.getUsersMailSettings(userId, params, includes)](#Skolengo+getUsersMailSettings)
+        * [.getCommunicationsFolder(folderId, limit, offset, params, includes)](#Skolengo+getCommunicationsFolder)
         * [.getCommunication(communicationId, params)](#Skolengo+getCommunication)
-        * [.getCommunicationParticipations(communicationId, params)](#Skolengo+getCommunicationParticipations)
-        * [.getCommunicationParticipants(communicationId, fromGroup, params)](#Skolengo+getCommunicationParticipants)
+        * [.getCommunicationParticipations(communicationId, params, includes)](#Skolengo+getCommunicationParticipations)
+        * [.getCommunicationParticipants(communicationId, fromGroup, params, includes)](#Skolengo+getCommunicationParticipants)
         * [.patchCommunicationFolders(communicationId, folders, userId, params)](#Skolengo+patchCommunicationFolders)
         * [.postCommunication(newCommunication, params)](#Skolengo+postCommunication)
         * [.postParticipation(participation, params)](#Skolengo+postParticipation)
-        * [.getAbsenceFiles(studentId, limit, offset, params)](#Skolengo+getAbsenceFiles)
-        * [.getAbsenceFile(folderId, params)](#Skolengo+getAbsenceFile)
+        * [.getAbsenceFiles(studentId, limit, offset, params, includes)](#Skolengo+getAbsenceFiles)
+        * [.getAbsenceFile(folderId, params, includes)](#Skolengo+getAbsenceFile)
         * [.postAbsenceFileState(folderId, reasonId, comment, params)](#Skolengo+postAbsenceFileState)
         * [.getAbsenceReasons(limit, offset, params)](#Skolengo+getAbsenceReasons)
     * _static_
@@ -164,7 +164,7 @@ Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
 ```
 <a name="Skolengo+getUserInfo"></a>
 
-### skolengo.getUserInfo(userId, params)
+### skolengo.getUserInfo(userId, params, includes)
 Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -173,6 +173,7 @@ Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de 
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant de l'utilisateur |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+downloadAttachment"></a>
 
@@ -205,7 +206,7 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+getSchoolInfos"></a>
 
-### skolengo.getSchoolInfos(params)
+### skolengo.getSchoolInfos(params, includes)
 Récupérer toutes les actualités de l'établissement
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -213,10 +214,11 @@ Récupérer toutes les actualités de l'établissement
 | Param | Type | Description |
 | --- | --- | --- |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getSchoolInfo"></a>
 
-### skolengo.getSchoolInfo(schoolInfoId, params)
+### skolengo.getSchoolInfo(schoolInfoId, params, includes)
 Récupérer une actualité de l'établissement
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -225,10 +227,11 @@ Récupérer une actualité de l'établissement
 | --- | --- | --- |
 | schoolInfoId | <code>string</code> | Identifiant d'une actualité |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getEvaluationSettings"></a>
 
-### skolengo.getEvaluationSettings(studentId, limit, offset, params)
+### skolengo.getEvaluationSettings(studentId, limit, offset, params, includes)
 Statut des services d'évaluation (identifiant des périodes, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -239,10 +242,11 @@ Statut des services d'évaluation (identifiant des périodes, ...)
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getEvaluation"></a>
 
-### skolengo.getEvaluation(studentId, periodId, limit, offset, params)
+### skolengo.getEvaluation(studentId, periodId, limit, offset, params, includes)
 Récupérer les notes d'un étudiant sur une période
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -254,10 +258,11 @@ Récupérer les notes d'un étudiant sur une période
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getEvaluationDetail"></a>
 
-### skolengo.getEvaluationDetail(studentId, evaluationId, params)
+### skolengo.getEvaluationDetail(studentId, evaluationId, params, includes)
 Récupérer le détail d'une note d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -267,10 +272,11 @@ Récupérer le détail d'une note d'un étudiant
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | evaluationId | <code>string</code> | Identifiant de la note |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getPeriodicReportsFiles"></a>
 
-### skolengo.getPeriodicReportsFiles(studentId, limit, offset, params)
+### skolengo.getPeriodicReportsFiles(studentId, limit, offset, params, includes)
 Récupérer la liste des bilans périodiques disponibles pour un étudiant.
 Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 
@@ -282,6 +288,7 @@ Pour chaque bulletin, une adresse est disponible pour le téléchargement.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -294,7 +301,7 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+getAgenda"></a>
 
-### skolengo.getAgenda(studentId, startDate, endDate, limit, offset, params)
+### skolengo.getAgenda(studentId, startDate, endDate, limit, offset, params, includes)
 Récupérer l'agenda d'un étudiant.
 Il est possible de le convertir au format iCalendar.
 
@@ -308,6 +315,7 @@ Il est possible de le convertir au format iCalendar.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -323,7 +331,7 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+getLesson"></a>
 
-### skolengo.getLesson(studentId, lessonId, params)
+### skolengo.getLesson(studentId, lessonId, params, includes)
 Récupérer les données d'un cours/leçon
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -333,10 +341,11 @@ Récupérer les données d'un cours/leçon
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | lessonId | <code>string</code> | Identifiant d'un cours/leçon |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getHomeworkAssignments"></a>
 
-### skolengo.getHomeworkAssignments(studentId, startDate, endDate, limit, offset, params)
+### skolengo.getHomeworkAssignments(studentId, startDate, endDate, limit, offset, params, includes)
 Récupérer les devoirs d'un étudiant
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -349,6 +358,7 @@ Récupérer les devoirs d'un étudiant
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -364,7 +374,7 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+getHomeworkAssignment"></a>
 
-### skolengo.getHomeworkAssignment(studentId, homeworkId, params)
+### skolengo.getHomeworkAssignment(studentId, homeworkId, params, includes)
 Récupérer les données d'un devoir
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -374,6 +384,7 @@ Récupérer les données d'un devoir
 | studentId | <code>string</code> | Identifiant d'un étudiant |
 | homeworkId | <code>string</code> | Identifiant du devoir |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -390,7 +401,7 @@ user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
 ```
 <a name="Skolengo+patchHomeworkAssignment"></a>
 
-### skolengo.patchHomeworkAssignment(studentId, homeworkId, attributes, params)
+### skolengo.patchHomeworkAssignment(studentId, homeworkId, attributes, params, includes)
 Modifier le statut d'un travail à faire
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -401,6 +412,7 @@ Modifier le statut d'un travail à faire
 | homeworkId | <code>string</code> | Identifiant d'un devoir à modifier |
 | attributes | <code>Partial.&lt;HomeworkAssignment&gt;</code> | Devoir modifié |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -413,7 +425,7 @@ user.patchHomeworkAssignment('ESKO-P-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', '123
 ```
 <a name="Skolengo+getUsersMailSettings"></a>
 
-### skolengo.getUsersMailSettings(userId, params)
+### skolengo.getUsersMailSettings(userId, params, includes)
 Récupérer les informations du service de communication (identifiants des dossiers, ...)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -422,10 +434,11 @@ Récupérer les informations du service de communication (identifiants des dossi
 | --- | --- | --- |
 | userId | <code>string</code> \| <code>undefined</code> | Identifiant d'un utilisateur |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getCommunicationsFolder"></a>
 
-### skolengo.getCommunicationsFolder(folderId, limit, offset, params)
+### skolengo.getCommunicationsFolder(folderId, limit, offset, params, includes)
 Récupérer les communication d'un dossier
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -436,6 +449,7 @@ Récupérer les communication d'un dossier
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getCommunication"></a>
 
@@ -451,7 +465,7 @@ Récupérer une communication à partir de son identifiant
 
 <a name="Skolengo+getCommunicationParticipations"></a>
 
-### skolengo.getCommunicationParticipations(communicationId, params)
+### skolengo.getCommunicationParticipations(communicationId, params, includes)
 Récupérer les participations d'un fil de discussion (communication)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -460,10 +474,11 @@ Récupérer les participations d'un fil de discussion (communication)
 | --- | --- | --- |
 | communicationId | <code>string</code> | Identifiant d'une communication |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+getCommunicationParticipants"></a>
 
-### skolengo.getCommunicationParticipants(communicationId, fromGroup, params)
+### skolengo.getCommunicationParticipants(communicationId, fromGroup, params, includes)
 Récupérer tous les participants d'un fil de discussion (communication)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -473,6 +488,7 @@ Récupérer tous les participants d'un fil de discussion (communication)
 | communicationId | <code>string</code> |  | Identifiant d'une communication |
 | fromGroup | <code>boolean</code> | <code>true</code> | Afficher le détail des groupes |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 <a name="Skolengo+patchCommunicationFolders"></a>
 
@@ -514,7 +530,7 @@ Envoyer un message dans un fil de discussion existant
 
 <a name="Skolengo+getAbsenceFiles"></a>
 
-### skolengo.getAbsenceFiles(studentId, limit, offset, params)
+### skolengo.getAbsenceFiles(studentId, limit, offset, params, includes)
 Récupérer les absences et retards d'un étudiant.
 Il est possible d'exporter les absences au format CSV.
 
@@ -526,6 +542,7 @@ Il est possible d'exporter les absences au format CSV.
 | limit | <code>number</code> | <code>20</code> | Limite |
 | offset | <code>offset</code> | <code>0</code> | Offset |
 | params | <code>object</code> |  | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> |  | Ressources JSON:API à inclure |
 
 **Example**  
 ```js
@@ -541,7 +558,7 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+getAbsenceFile"></a>
 
-### skolengo.getAbsenceFile(folderId, params)
+### skolengo.getAbsenceFile(folderId, params, includes)
 Récupérer les détails d'une absence
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
@@ -550,6 +567,7 @@ Récupérer les détails d'une absence
 | --- | --- | --- |
 | folderId | <code>string</code> | Identifiant d'un dossier |
 | params | <code>object</code> | Modifier les paramètres de la requête |
+| includes | <code>Array.&lt;string&gt;</code> | Ressources JSON:API à inclure |
 
 <a name="Skolengo+postAbsenceFileState"></a>
 
