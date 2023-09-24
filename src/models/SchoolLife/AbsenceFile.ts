@@ -1,5 +1,10 @@
 import { AbsenceReason, SupportedAbsenceType } from './AbsenceReason'
 
+export interface AbsenceFile {
+  id: string
+  currentState: AbsenceState
+}
+
 export interface AbsenceState {
   id: string
   creationDateTime: string
