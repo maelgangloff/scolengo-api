@@ -5,6 +5,7 @@
   },
   "rules": {
     "@typescript-eslint/space-before-function-paren": "off",
-    "@typescript-eslint/indent": "off"
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/member-delimiter-style": "off"
   }
 }
