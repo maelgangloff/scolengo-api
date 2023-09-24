@@ -1,18 +1,18 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Client, Issuer, TokenSet } from 'openid-client'
 import { deserialize, DocumentObject, serialize } from 'jsonapi-fractal'
-import { Stream } from 'node:stream'
+import type { Stream } from 'node:stream'
 
-import { AppCurrentConfig, BaseObject, User } from './models/Common'
-import { School, SchoolFilter } from './models/School/School'
-import { AuthConfig } from './models/Common/Auth'
-import {
+import type { AppCurrentConfig, BaseObject, User } from './models/Common'
+import type { School, SchoolFilter } from './models/School/School'
+import type { AuthConfig } from './models/Common/Auth'
+import type {
   Communication,
   Participation,
   UsersMailSettings
 } from './models/Messaging'
-import { Attachment, SchoolInfo } from './models/School'
-import {
+import type { Attachment, SchoolInfo } from './models/School'
+import type {
   Evaluation,
   EvaluationDetail,
   EvaluationSettings
@@ -30,8 +30,8 @@ import {
   AbsenceReason
 } from './models/SchoolLife'
 import { SkolengoError, SkolengoErrorBody } from './models/Errors'
-import { SkolengoConfig } from './models/Common/SkolengoConfig'
-import { SupportedAbsenceType } from './models/SchoolLife/AbsenceReason'
+import type { SkolengoConfig } from './models/Common/SkolengoConfig'
+import type { SupportedAbsenceType } from './models/SchoolLife/AbsenceReason'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from(
