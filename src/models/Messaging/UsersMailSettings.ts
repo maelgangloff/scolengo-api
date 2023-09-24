@@ -1,6 +1,6 @@
-import { Folder } from './Folder'
-import { Signature } from './Signature'
-import { Contact } from './Contact'
+import type { Folder } from './Folder'
+import type { Signature } from './Signature'
+import type { Contact } from './Contact'
 
 export interface UsersMailSettings {
   id: string

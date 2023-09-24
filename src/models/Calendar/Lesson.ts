@@ -1,5 +1,5 @@
-import { User } from '../Common'
-import { HomeworkAssignment } from './HomeworkAssignment'
+import type { User } from '../Common'
+import type { HomeworkAssignment } from './HomeworkAssignment'
 
 export interface Subject {
   id: string

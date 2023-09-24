@@ -4,3 +4,5 @@ gulpfile.js
 *.js
 bin
 types
+*.md
+*.hbs

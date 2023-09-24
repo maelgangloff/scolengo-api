@@ -1,4 +1,4 @@
-import { AbsenceReason, SupportedAbsenceType } from './AbsenceReason'
+import type { AbsenceReason, SupportedAbsenceType } from './AbsenceReason'
 
 export interface AbsenceFile {
   id: string

@@ -1,4 +1,4 @@
-import { Participation } from './Participation'
+import type { Participation } from './Participation'
 
 export interface Communication<Part = Participation> {
   id: string
