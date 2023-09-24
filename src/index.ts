@@ -1,6 +1,9 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { Client, Issuer, TokenSet } from 'openid-client'
-import { deserialize, DocumentObject, serialize } from 'jsonapi-fractal'
+import axios from 'axios'
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { Issuer, TokenSet } from 'openid-client'
+import type { Client } from 'openid-client'
+import { deserialize, serialize } from 'jsonapi-fractal'
+import type { DocumentObject } from 'jsonapi-fractal'
 import type { Stream } from 'node:stream'
 
 import type { AppCurrentConfig, BaseObject, User } from './models/Common'
@@ -17,19 +20,16 @@ import type {
   EvaluationDetail,
   EvaluationSettings
 } from './models/Results'
-import {
-  Agenda,
-  AgendaResponse,
-  Lesson,
-  HomeworkAssignment
-} from './models/Calendar'
-import {
+import { AgendaResponse } from './models/Calendar'
+import type { Agenda, Lesson, HomeworkAssignment } from './models/Calendar'
+import { AbsenceFilesResponse } from './models/SchoolLife'
+import type {
   AbsenceFile,
-  AbsenceFilesResponse,
   AbsenceState,
   AbsenceReason
 } from './models/SchoolLife'
-import { SkolengoError, SkolengoErrorBody } from './models/Errors'
+import { SkolengoError } from './models/Errors'
+import type { SkolengoErrorBody } from './models/Errors'
 import type { SkolengoConfig } from './models/Common/SkolengoConfig'
 import type { SupportedAbsenceType } from './models/SchoolLife/AbsenceReason'
 
