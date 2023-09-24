@@ -12,7 +12,7 @@ export interface UsersMailSettings {
 }
 
 export type PersonType =
-  'person'
+  | 'person'
   | 'student'
   | 'personInContactWithStudent'
   | 'nonTeachingStaff'

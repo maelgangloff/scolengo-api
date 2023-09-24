@@ -9,7 +9,7 @@ export class SkolengoError extends Error implements SkolengoErrorBody {
   public readonly detail: string
   public readonly title: string
 
-  public constructor (error: SkolengoErrorBody) {
+  public constructor(error: SkolengoErrorBody) {
     super(error.detail)
     this.name = error.title
     this.title = error.title

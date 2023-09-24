@@ -1,4 +1,3 @@
-
 # Charte Code de Conduite Contributeurs
 
 ## Notre engagement
@@ -15,22 +14,22 @@ nationalité.
 
 Exemples de comportements qui contribuent à créer un environnement positif :
 
-* l'utilisation d'un langage ouvert et accueillant
-* le respect des différents points de vue et expériences vécues
-* accepter poliment les critiques constructives
-* se concentrer sur ce qui est meilleur pour la communauté
-* faire preuve d'empathie envers les autres membres de la communauté
+- l'utilisation d'un langage ouvert et accueillant
+- le respect des différents points de vue et expériences vécues
+- accepter poliment les critiques constructives
+- se concentrer sur ce qui est meilleur pour la communauté
+- faire preuve d'empathie envers les autres membres de la communauté
 
 Exemples de comportements non acceptables :
 
-* l'utilisation de langage ou d'imagerie sexualisés et les avances sexuelles non
+- l'utilisation de langage ou d'imagerie sexualisés et les avances sexuelles non
   sollicitées
-* le _trolling_, les commentaires insultants ou désobligeants, et les attaques
+- le _trolling_, les commentaires insultants ou désobligeants, et les attaques
   personnelles ou d'ordre politique
-* le harcèlement en public ou en privé
-* la publication d'informations privées de tierces personnes, telles que des
+- le harcèlement en public ou en privé
+- la publication d'informations privées de tierces personnes, telles que des
   adresses physiques ou électroniques, sans permission explicite
-* toute conduite qui pourrait être raisonnablement considérée comme inappropriée
+- toute conduite qui pourrait être raisonnablement considérée comme inappropriée
   dans le milieu professionnel
 
 ## Nos responsabilités
@@ -77,4 +76,3 @@ Ce Code de Conduite est adapté du
 [Contributor Covenant](https://www.contributor-covenant.org), version 1.4,
 disponible à
 <https://www.contributor-covenant.org/fr/version/1/4/code-of-conduct>
-

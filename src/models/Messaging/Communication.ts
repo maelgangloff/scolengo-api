@@ -1,6 +1,6 @@
 import { Participation } from './Participation'
 
-export interface Communication {
+export interface Communication<Part = Participation> {
   id: string
   subject: string
   participationsNumber: number | null
@@ -9,6 +9,5 @@ export interface Communication {
   replyToAllAllowed: boolean | null
   replyToSenderAllowed: boolean | null
   readTrackingEnabled: boolean | null
-  firstParticipationContent: string | null
-  lastParticipation?: Participation
+  lastParticipation?: Part
 }

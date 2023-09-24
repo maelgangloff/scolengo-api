@@ -4,6 +4,7 @@ import { School } from './School'
 
 export interface SchoolInfo {
   id: string
+  level: 'INFO' | string | null
   publicationDateTime: string
   title: string
   shortContent: string

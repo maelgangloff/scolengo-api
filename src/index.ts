@@ -6,17 +6,42 @@ import { Stream } from 'node:stream'
 import { AppCurrentConfig, BaseObject, User } from './models/Common'
 import { School, SchoolFilter } from './models/School/School'
 import { AuthConfig } from './models/Common/Auth'
-import { Communication, Participation, UsersMailSettings } from './models/Messaging'
+import {
+  Communication,
+  Participation,
+  UsersMailSettings
+} from './models/Messaging'
 import { Attachment, SchoolInfo } from './models/School'
-import { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Results'
-import { Agenda, AgendaResponse, Lesson, HomeworkAssignment } from './models/Calendar'
-import { AbsenceFile, AbsenceFilesResponse, AbsenceState, AbsenceReason } from './models/SchoolLife'
+import {
+  Evaluation,
+  EvaluationDetail,
+  EvaluationSettings
+} from './models/Results'
+import {
+  Agenda,
+  AgendaResponse,
+  Lesson,
+  HomeworkAssignment
+} from './models/Calendar'
+import {
+  AbsenceFile,
+  AbsenceFilesResponse,
+  AbsenceState,
+  AbsenceReason
+} from './models/SchoolLife'
 import { SkolengoError, SkolengoErrorBody } from './models/Errors'
 import { SkolengoConfig } from './models/Common/SkolengoConfig'
+import { SupportedAbsenceType } from './models/SchoolLife/AbsenceReason'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
-const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
-const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
+const OID_CLIENT_ID = Buffer.from(
+  'U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0',
+  'base64'
+).toString('ascii') // base64 du client ID de l'app mobile
+const OID_CLIENT_SECRET = Buffer.from(
+  'N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm',
+  'base64'
+).toString('ascii') // base64 du client Secret de l'app mobile
 
 export class Skolengo {
   public readonly school: School
@@ -89,7 +114,12 @@ export class Skolengo {
    * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
    * @param {SkolengoConfig} config Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    */
-  public constructor (oidClient: Client, school: School, tokenSet: TokenSet, config?: Partial<SkolengoConfig>) {
+  public constructor(
+    oidClient: Client,
+    school: School,
+    tokenSet: TokenSet,
+    config?: Partial<SkolengoConfig>
+  ) {
     this.oidClient = oidClient
     this.school = school
     this.tokenSet = tokenSet
@@ -106,7 +136,10 @@ export class Skolengo {
    * @param {string} token Un jeton
    * @async
    */
-  public static async revokeToken (oidClient: Client, token: string): Promise<undefined> {
+  public static async revokeToken(
+    oidClient: Client,
+    token: string
+  ): Promise<undefined> {
     return await oidClient.revoke(token)
   }
 
@@ -122,13 +155,17 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async getAppCurrentConfig (): Promise<AppCurrentConfig> {
-    return deserialize((await axios.request<DocumentObject>({
-      baseURL: BASE_URL,
-      url: '/sko-app-configs/current',
-      method: 'get',
-      responseType: 'json'
-    })).data) as AppCurrentConfig
+  public static async getAppCurrentConfig(): Promise<AppCurrentConfig> {
+    return deserialize(
+      (
+        await axios.request<DocumentObject>({
+          baseURL: BASE_URL,
+          url: '/sko-app-configs/current',
+          method: 'get',
+          responseType: 'json'
+        })
+      ).data
+    ) as AppCurrentConfig
   }
 
   /**
@@ -152,20 +189,28 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<School[]> {
-    return deserialize((await axios.request<DocumentObject>({
-      baseURL: BASE_URL,
-      url: '/schools',
-      method: 'get',
-      responseType: 'json',
-      params: {
-        page: {
-          limit,
-          offset
-        },
-        filter
-      }
-    })).data) as School[]
+  public static async searchSchool(
+    filter: SchoolFilter,
+    limit = 10,
+    offset = 0
+  ): Promise<School[]> {
+    return deserialize(
+      (
+        await axios.request<DocumentObject>({
+          baseURL: BASE_URL,
+          url: '/schools',
+          method: 'get',
+          responseType: 'json',
+          params: {
+            page: {
+              limit,
+              offset
+            },
+            filter
+          }
+        })
+      ).data
+    ) as School[]
   }
 
   /**
@@ -201,7 +246,10 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
+  public static async getOIDClient(
+    school: School,
+    redirectUri = 'skoapp-prod://sign-in-callback'
+  ): Promise<Client> {
     const skolengoIssuer = await Issuer.discover(school.emsOIDCWellKnownUrl)
     return new skolengoIssuer.Client({
       client_id: OID_CLIENT_ID,
@@ -255,7 +303,10 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async fromConfigObject (config: AuthConfig, skolengoConfig?: Partial<SkolengoConfig>): Promise<Skolengo> {
+  public static async fromConfigObject(
+    config: AuthConfig,
+    skolengoConfig?: Partial<SkolengoConfig>
+  ): Promise<Skolengo> {
     const oidClient = await Skolengo.getOIDClient(config.school)
     const tokenSet = new TokenSet(config.tokenSet)
     return new Skolengo(oidClient, config.school, tokenSet, skolengoConfig)
@@ -268,12 +319,18 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getUserInfo (userId?: string, params?: object, includes: string[] = ['school', 'students', 'students.school']): Promise<User> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/users-info/${userId ?? this.tokenSet.claims().sub}`,
-      responseType: 'json',
-      params: {
-        /*
+  public async getUserInfo(
+    userId?: string,
+    params?: object,
+    includes: string[] = ['school', 'students', 'students.school']
+  ): Promise<User> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/users-info/${userId ?? this.tokenSet.claims().sub}`,
+          responseType: 'json',
+          params: {
+            /*
                       fields: {
                         userInfo: 'lastName,firstName,photoUrl,externalMail,mobilephone,permissions',
                         school: 'name,timeZone,subscribedServices',
@@ -282,11 +339,12 @@ export class Skolengo {
                         student: 'firstName,lastName,photoUrl,className,dateOfBirth,regime,school'
                       },
                       */
-        ...params,
-        include: includes.join(',')
-      }
-    })
-    ).data) as User
+            ...params,
+            include: includes.join(',')
+          }
+        })
+      ).data
+    ) as User
   }
 
   /**
@@ -311,11 +369,12 @@ export class Skolengo {
    * ```
    * @param {Attachment} attachment La pièce jointe
    */
-  public async downloadAttachment (attachment: Attachment): Promise<Stream> {
-    return (await this.request<Stream>({
-      url: attachment.url,
-      responseType: 'stream'
-    })
+  public async downloadAttachment(attachment: Attachment): Promise<Stream> {
+    return (
+      await this.request<Stream>({
+        url: attachment.url,
+        responseType: 'stream'
+      })
     ).data
   }
 
@@ -325,16 +384,29 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getSchoolInfos (params?: object, includes: string[] = ['illustration', 'school', 'author', 'author.person', 'author.technicalUser', 'attachments']): Promise<SchoolInfo[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/schools-info',
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        ...params
-      }
-    })
-    ).data) as SchoolInfo[]
+  public async getSchoolInfos(
+    params?: object,
+    includes: string[] = [
+      'illustration',
+      'school',
+      'author',
+      'author.person',
+      'author.technicalUser',
+      'attachments'
+    ]
+  ): Promise<SchoolInfo[]> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/schools-info',
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            ...params
+          }
+        })
+      ).data
+    ) as SchoolInfo[]
   }
 
   /**
@@ -344,16 +416,30 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getSchoolInfo (schoolInfoId: string = this.school.id, params?: object, includes: string[] = ['illustration', 'school', 'author', 'author.person', 'author.technicalUser', 'attachments']): Promise<SchoolInfo> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/schools-info/${schoolInfoId}`,
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        ...params
-      }
-    })
-    ).data) as SchoolInfo
+  public async getSchoolInfo(
+    schoolInfoId: string = this.school.id,
+    params?: object,
+    includes: string[] = [
+      'illustration',
+      'school',
+      'author',
+      'author.person',
+      'author.technicalUser',
+      'attachments'
+    ]
+  ): Promise<SchoolInfo> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/schools-info/${schoolInfoId}`,
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            ...params
+          }
+        })
+      ).data
+    ) as SchoolInfo
   }
 
   /**
@@ -365,21 +451,33 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getEvaluationSettings (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: string[] = ['periods', 'skillsSetting', 'skillsSetting.skillAcquisitionColors']): Promise<EvaluationSettings[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/evaluations-settings',
-      responseType: 'json',
-      params: {
-        filter: {
-          'student.id': studentId
-        },
-        page: {
-          limit,
-          offset
-        },
-        include: includes.join(','),
-        ...params
-        /*
+  public async getEvaluationSettings(
+    studentId: string = this.tokenSet.claims().sub,
+    limit = 20,
+    offset = 0,
+    params?: object,
+    includes: string[] = [
+      'periods',
+      'skillsSetting',
+      'skillsSetting.skillAcquisitionColors'
+    ]
+  ): Promise<EvaluationSettings[]> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/evaluations-settings',
+          responseType: 'json',
+          params: {
+            filter: {
+              'student.id': studentId
+            },
+            page: {
+              limit,
+              offset
+            },
+            include: includes.join(','),
+            ...params
+            /*
                       fields: {
                         evaluationsSetting: 'periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable',
                         period: 'label,startDate,endDate',
@@ -387,9 +485,10 @@ export class Skolengo {
                         skillAcquisitionColors: 'colorLevelMappings'
                       }
                       */
-      }
-    })
-    ).data) as EvaluationSettings[]
+          }
+        })
+      ).data
+    ) as EvaluationSettings[]
   }
 
   /**
@@ -402,22 +501,41 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getEvaluation (studentId: string = this.tokenSet.claims().sub, periodId: string, limit = 20, offset = 0, params?: object, includes: string[] = ['subject', 'evaluations', 'evaluations.evaluationResult', 'evaluations.evaluationResult.subSkillsEvaluationResults', 'evaluations.evaluationResult.subSkillsEvaluationResults.subSkill', 'evaluations.subSkills', 'teachers']): Promise<Evaluation[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/evaluation-services',
-      responseType: 'json',
-      params: {
-        filter: {
-          'student.id': studentId,
-          'period.id': periodId
-        },
-        page: {
-          limit,
-          offset
-        },
-        include: includes.join(','),
-        ...params
-        /*
+  public async getEvaluation(
+    studentId: string = this.tokenSet.claims().sub,
+    periodId: string,
+    limit = 20,
+    offset = 0,
+    params?: object,
+    includes: string[] = [
+      'subject',
+      'evaluations',
+      'evaluations.evaluationResult',
+      'evaluations.evaluationResult.subSkillsEvaluationResults',
+      'evaluations.evaluationResult.subSkillsEvaluationResults.subSkill',
+      'evaluations.subSkills',
+      'teachers'
+    ]
+  ): Promise<
+    Array<Evaluation<Omit<EvaluationDetail, 'title' | 'topic' | 'min' | 'max'>>>
+  > {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/evaluation-services',
+          responseType: 'json',
+          params: {
+            filter: {
+              'student.id': studentId,
+              'period.id': periodId
+            },
+            page: {
+              limit,
+              offset
+            },
+            include: includes.join(','),
+            ...params
+            /*
                       fields: {
                         evaluationService: 'coefficient,average,studentAverage,scale',
                         subject: 'label,color',
@@ -428,9 +546,10 @@ export class Skolengo {
                         subSkill: 'shortLabel'
                       }
                       */
-      }
-    })
-    ).data) as Evaluation[]
+          }
+        })
+      ).data
+    ) as Evaluation[]
   }
 
   /**
@@ -441,17 +560,33 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getEvaluationDetail (studentId: string = this.tokenSet.claims().sub, evaluationId: string, params?: object, includes: string[] = ['evaluationService', 'evaluationService.subject', 'evaluationService.teachers', 'subSubject', 'subSkills', 'evaluationResult', 'evaluationResult.subSkillsEvaluationResults', 'evaluationResult.subSkillsEvaluationResults.subSkill']): Promise<EvaluationDetail> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/evaluations/${evaluationId}`,
-      responseType: 'json',
-      params: {
-        filter: {
-          'student.id': studentId
-        },
-        include: includes.join(','),
-        ...params
-        /*
+  public async getEvaluationDetail(
+    studentId: string = this.tokenSet.claims().sub,
+    evaluationId: string,
+    params?: object,
+    includes: string[] = [
+      'evaluationService',
+      'evaluationService.subject',
+      'evaluationService.teachers',
+      'subSubject',
+      'subSkills',
+      'evaluationResult',
+      'evaluationResult.subSkillsEvaluationResults',
+      'evaluationResult.subSkillsEvaluationResults.subSkill'
+    ]
+  ): Promise<EvaluationDetail> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/evaluations/${evaluationId}`,
+          responseType: 'json',
+          params: {
+            filter: {
+              'student.id': studentId
+            },
+            include: includes.join(','),
+            ...params
+            /*
                       fields: {
                         evaluationService: 'subject,teachers',
                         subject: 'label,color',
@@ -463,9 +598,10 @@ export class Skolengo {
                         teacher: 'firstName,lastName,title'
                       }
                       */
-      }
-    })
-    ).data) as EvaluationDetail
+          }
+        })
+      ).data
+    ) as EvaluationDetail
   }
 
   /**
@@ -486,28 +622,37 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: string[] = ['period']): Promise<Attachment[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/periodic-reports-files',
-      responseType: 'json',
-      params: {
-        filter: {
-          'student.id': studentId
-        },
-        include: includes.join(','),
-        page: {
-          limit,
-          offset
-        },
-        ...params
-        /*
+  public async getPeriodicReportsFiles(
+    studentId: string = this.tokenSet.claims().sub,
+    limit = 20,
+    offset = 0,
+    params?: object,
+    includes: string[] = ['period']
+  ): Promise<Attachment[]> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/periodic-reports-files',
+          responseType: 'json',
+          params: {
+            filter: {
+              'student.id': studentId
+            },
+            include: includes.join(','),
+            page: {
+              limit,
+              offset
+            },
+            ...params
+            /*
                   fields: {
                     periodicReportFile: 'name,mimeType,size,url,mimeTypeLabel'
                   }
                    */
-      }
-    })
-    ).data) as Attachment[]
+          }
+        })
+      ).data
+    ) as Attachment[]
   }
 
   /**
@@ -533,25 +678,42 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAgenda (studentId: string = this.tokenSet.claims().sub, startDate: string, endDate: string, limit = 20, offset = 0, params?: object, includes: string[] = ['lessons', 'lessons.subject', 'lessons.teachers', 'homeworkAssignments', 'homeworkAssignments.subject']): Promise<AgendaResponse> {
-    return new AgendaResponse(deserialize((await this.request<DocumentObject>({
-      url: '/agendas',
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        filter: {
-          'student.id': studentId,
-          date: {
-            GE: startDate,
-            LE: endDate
-          }
-        },
-        page: {
-          limit,
-          offset
-        },
-        ...params
-        /*
+  public async getAgenda(
+    studentId: string = this.tokenSet.claims().sub,
+    startDate: string,
+    endDate: string,
+    limit = 20,
+    offset = 0,
+    params?: object,
+    includes: string[] = [
+      'lessons',
+      'lessons.subject',
+      'lessons.teachers',
+      'homeworkAssignments',
+      'homeworkAssignments.subject'
+    ]
+  ): Promise<AgendaResponse> {
+    return new AgendaResponse(
+      deserialize(
+        (
+          await this.request<DocumentObject>({
+            url: '/agendas',
+            responseType: 'json',
+            params: {
+              include: includes.join(','),
+              filter: {
+                'student.id': studentId,
+                date: {
+                  GE: startDate,
+                  LE: endDate
+                }
+              },
+              page: {
+                limit,
+                offset
+              },
+              ...params
+              /*
                   fields: {
                     lesson: 'title,startDateTime,endDateTime,location,canceled,subject,teachers',
                     homework: 'title,done,dueDateTime,subject',
@@ -560,9 +722,11 @@ export class Skolengo {
                     subject: 'label,color'
                   }
                    */
-      }
-    })
-    ).data) as Agenda[])
+            }
+          })
+        ).data
+      ) as Agenda[]
+    )
   }
 
   /**
@@ -573,19 +737,36 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getLesson (studentId: string = this.tokenSet.claims().sub, lessonId: string, params?: object, includes: string[] = ['teachers', 'contents', 'contents.attachments', 'subject', 'toDoForTheLesson', 'toDoForTheLesson.subject', 'toDoAfterTheLesson', 'toDoAfterTheLesson.subject']): Promise<Lesson> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/lessons/${lessonId}`,
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        filter: {
-          'student.id': studentId
-        },
-        ...params
-      }
-    })
-    ).data) as Lesson
+  public async getLesson(
+    studentId: string = this.tokenSet.claims().sub,
+    lessonId: string,
+    params?: object,
+    includes: string[] = [
+      'teachers',
+      'contents',
+      'contents.attachments',
+      'subject',
+      'toDoForTheLesson',
+      'toDoForTheLesson.subject',
+      'toDoAfterTheLesson',
+      'toDoAfterTheLesson.subject'
+    ]
+  ): Promise<Lesson> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/lessons/${lessonId}`,
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            filter: {
+              'student.id': studentId
+            },
+            ...params
+          }
+        })
+      ).data
+    ) as Lesson
   }
 
   /**
@@ -610,33 +791,44 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async getHomeworkAssignments (studentId: string = this.tokenSet.claims().sub, startDate: string, endDate: string, limit = 20, offset = 0, params?: object, includes: string[] = ['subject', 'teacher', 'teacher.person']): Promise<HomeworkAssignment[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/homework-assignments',
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        filter: {
-          'student.id': studentId,
-          dueDate: {
-            GE: startDate,
-            LE: endDate
-          }
-        },
-        page: {
-          limit,
-          offset
-        },
-        ...params
-        /*
+  public async getHomeworkAssignments(
+    studentId: string = this.tokenSet.claims().sub,
+    startDate: string,
+    endDate: string,
+    limit = 20,
+    offset = 0,
+    params?: object,
+    includes: string[] = ['subject', 'teacher', 'teacher.person']
+  ): Promise<HomeworkAssignment[]> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/homework-assignments',
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            filter: {
+              'student.id': studentId,
+              dueDate: {
+                GE: startDate,
+                LE: endDate
+              }
+            },
+            page: {
+              limit,
+              offset
+            },
+            ...params
+            /*
                   fields: {
                     homework: 'title,done,dueDateTime',
                     subject: 'label,color'
                   }
                    */
-      }
-    })
-    ).data) as HomeworkAssignment[]
+          }
+        })
+      ).data
+    ) as HomeworkAssignment[]
   }
 
   /**
@@ -659,19 +851,41 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async getHomeworkAssignment (studentId: string = this.tokenSet.claims().sub, homeworkId: string, params?: object, includes: string[] = ['subject', 'teacher', 'pedagogicContent', 'individualCorrectedWork', 'individualCorrectedWork.attachments', 'individualCorrectedWork.audio', 'commonCorrectedWork', 'commonCorrectedWork.attachments', 'commonCorrectedWork.audio', 'commonCorrectedWork.pedagogicContent', 'attachments', 'audio', 'teacher.person']): Promise<HomeworkAssignment> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/homework-assignments/${homeworkId}`,
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        filter: {
-          'student.id': studentId
-        },
-        ...params
-      }
-    })
-    ).data) as HomeworkAssignment
+  public async getHomeworkAssignment(
+    studentId: string = this.tokenSet.claims().sub,
+    homeworkId: string,
+    params?: object,
+    includes: string[] = [
+      'subject',
+      'teacher',
+      'pedagogicContent',
+      'individualCorrectedWork',
+      'individualCorrectedWork.attachments',
+      'individualCorrectedWork.audio',
+      'commonCorrectedWork',
+      'commonCorrectedWork.attachments',
+      'commonCorrectedWork.audio',
+      'commonCorrectedWork.pedagogicContent',
+      'attachments',
+      'audio',
+      'teacher.person'
+    ]
+  ): Promise<HomeworkAssignment> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/homework-assignments/${homeworkId}`,
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            filter: {
+              'student.id': studentId
+            },
+            ...params
+          }
+        })
+      ).data
+    ) as HomeworkAssignment
   }
 
   /**
@@ -691,27 +905,50 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async patchHomeworkAssignment (studentId: string = this.tokenSet.claims().sub, homeworkId: string, attributes: Partial<HomeworkAssignment>, params?: object, includes: string[] = ['subject', 'teacher', 'pedagogicContent', 'individualCorrectedWork', 'individualCorrectedWork.attachments', 'individualCorrectedWork.audio', 'commonCorrectedWork', 'commonCorrectedWork.attachments', 'commonCorrectedWork.audio', 'commonCorrectedWork.pedagogicContent', 'attachments', 'audio', 'teacher.person']): Promise<HomeworkAssignment> {
-    return deserialize((await this.request<DocumentObject>({
-      method: 'patch',
-      url: `/homework-assignments/${homeworkId}`,
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        filter: {
-          'student.id': studentId
-        },
-        ...params
-      },
-      data: {
-        data: {
-          type: 'homework',
-          id: homeworkId,
-          attributes
-        }
-      }
-    })
-    ).data) as HomeworkAssignment
+  public async patchHomeworkAssignment(
+    studentId: string = this.tokenSet.claims().sub,
+    homeworkId: string,
+    attributes: Partial<HomeworkAssignment>,
+    params?: object,
+    includes: string[] = [
+      'subject',
+      'teacher',
+      'pedagogicContent',
+      'individualCorrectedWork',
+      'individualCorrectedWork.attachments',
+      'individualCorrectedWork.audio',
+      'commonCorrectedWork',
+      'commonCorrectedWork.attachments',
+      'commonCorrectedWork.audio',
+      'commonCorrectedWork.pedagogicContent',
+      'attachments',
+      'audio',
+      'teacher.person'
+    ]
+  ): Promise<HomeworkAssignment> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          method: 'patch',
+          url: `/homework-assignments/${homeworkId}`,
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            filter: {
+              'student.id': studentId
+            },
+            ...params
+          },
+          data: {
+            data: {
+              type: 'homework',
+              id: homeworkId,
+              attributes
+            }
+          }
+        })
+      ).data
+    ) as HomeworkAssignment
   }
 
   /**
@@ -721,13 +958,26 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getUsersMailSettings (userId?: string, params?: object, includes: string[] = ['signature', 'folders', 'folders.parent', 'contacts', 'contacts.person', 'contacts.personContacts']): Promise<UsersMailSettings> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
-      params: {
-        include: includes.join(','),
-        ...params
-        /*
+  public async getUsersMailSettings(
+    userId?: string,
+    params?: object,
+    includes: string[] = [
+      'signature',
+      'folders',
+      'folders.parent',
+      'contacts',
+      'contacts.person',
+      'contacts.personContacts'
+    ]
+  ): Promise<UsersMailSettings> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
+          params: {
+            include: includes.join(','),
+            ...params
+            /*
                         fields: {
                           personContact: 'person,linksWithUser',
                           groupContact: 'label,personContacts,linksWithUser',
@@ -737,10 +987,11 @@ export class Skolengo {
                           folder: 'name,position,type,parent'
                         }
                         */
-      },
-      responseType: 'json'
-    })
-    ).data) as UsersMailSettings
+          },
+          responseType: 'json'
+        })
+      ).data
+    ) as UsersMailSettings
   }
 
   /**
@@ -752,23 +1003,39 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0, params?: object, includes: string[] = ['lastParticipation', 'lastParticipation.sender', 'lastParticipation.sender.person', 'lastParticipation.sender.technicalUser']): Promise<Communication[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/communications',
-      responseType: 'json',
-      params: {
-        filter: {
-          'folders.id': folderId
-        },
-        include: includes.join(','),
-        page: {
-          limit,
-          offset
-        },
-        ...params
-      }
-    })
-    ).data) as Communication[]
+  public async getCommunicationsFolder(
+    folderId: string,
+    limit = 10,
+    offset = 0,
+    params?: object,
+    includes: string[] = [
+      'lastParticipation',
+      'lastParticipation.sender',
+      'lastParticipation.sender.person',
+      'lastParticipation.sender.technicalUser'
+    ]
+  ): Promise<
+    Array<Communication<Omit<Participation, 'read' | 'attachments'>>>
+  > {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/communications',
+          responseType: 'json',
+          params: {
+            filter: {
+              'folders.id': folderId
+            },
+            include: includes.join(','),
+            page: {
+              limit,
+              offset
+            },
+            ...params
+          }
+        })
+      ).data
+    ) as Communication[]
   }
 
   /**
@@ -777,13 +1044,19 @@ export class Skolengo {
    * @param {object} params Modifier les paramètres de la requête
    * @async
    */
-  public async getCommunication (communicationId: string, params?: object): Promise<Communication> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `communications/${communicationId}`,
-      params,
-      responseType: 'json'
-    })
-    ).data) as Communication
+  public async getCommunication(
+    communicationId: string,
+    params?: object
+  ): Promise<Communication> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `communications/${communicationId}`,
+          params,
+          responseType: 'json'
+        })
+      ).data
+    ) as Communication
   }
 
   /**
@@ -793,16 +1066,28 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getCommunicationParticipations (communicationId: string, params?: object, includes: string[] = ['sender', 'sender.person', 'sender.technicalUser', 'attachments']): Promise<Participation[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `communications/${communicationId}/participations`,
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        ...params
-      }
-    })
-    ).data) as Participation[]
+  public async getCommunicationParticipations(
+    communicationId: string,
+    params?: object,
+    includes: string[] = [
+      'sender',
+      'sender.person',
+      'sender.technicalUser',
+      'attachments'
+    ]
+  ): Promise<Participation[]> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `communications/${communicationId}/participations`,
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            ...params
+          }
+        })
+      ).data
+    ) as Participation[]
   }
 
   /**
@@ -813,17 +1098,25 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getCommunicationParticipants (communicationId: string, fromGroup = true, params?: object, includes: string[] = ['person', 'technicalUser']): Promise<any> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `communications/${communicationId}/participants`,
-      responseType: 'json',
-      params: {
-        include: includes.join(','),
-        filter: { fromGroup },
-        ...params
-      }
-    })
-    ).data)
+  public async getCommunicationParticipants(
+    communicationId: string,
+    fromGroup = true,
+    params?: object,
+    includes: string[] = ['person', 'technicalUser']
+  ): Promise<any> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `communications/${communicationId}/participants`,
+          responseType: 'json',
+          params: {
+            include: includes.join(','),
+            filter: { fromGroup },
+            ...params
+          }
+        })
+      ).data
+    )
   }
 
   /**
@@ -834,19 +1127,25 @@ export class Skolengo {
    * @param {object} params Modifier les paramètres de la requête
    * @async
    */
-  public async patchCommunicationFolders (communicationId: string, folders: Array<BaseObject<'folders'>>, userId?: string, params?: object): Promise<void> {
-    return (await this.request({
-      url: `communications/${communicationId}/relationships/folders`,
-      method: 'patch',
-      responseType: 'json',
-      params: {
-        filter: {
-          'user.id': userId ?? this.tokenSet.claims().sub
+  public async patchCommunicationFolders(
+    communicationId: string,
+    folders: Array<BaseObject<'folders'>>,
+    userId?: string,
+    params?: object
+  ): Promise<void> {
+    return (
+      await this.request({
+        url: `communications/${communicationId}/relationships/folders`,
+        method: 'patch',
+        responseType: 'json',
+        params: {
+          filter: {
+            'user.id': userId ?? this.tokenSet.claims().sub
+          },
+          ...params
         },
-        ...params
-      },
-      data: { data: folders }
-    })
+        data: { data: folders }
+      })
     ).data
   }
 
@@ -856,17 +1155,23 @@ export class Skolengo {
    * @param {object} params Modifier les paramètres de la requête
    * @async
    */
-  public async postCommunication (newCommunication: Partial<Communication>, params?: object): Promise<Communication> {
-    return deserialize((await this.request<DocumentObject>({
-      url: 'communications',
-      method: 'post',
-      params,
-      responseType: 'json',
-      data: {
-        data: newCommunication
-      }
-    })
-    ).data) as Communication
+  public async postCommunication(
+    newCommunication: Partial<Communication>,
+    params?: object
+  ): Promise<Communication> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: 'communications',
+          method: 'post',
+          params,
+          responseType: 'json',
+          data: {
+            data: newCommunication
+          }
+        })
+      ).data
+    ) as Communication
   }
 
   /**
@@ -875,17 +1180,23 @@ export class Skolengo {
    * @param {object} params Modifier les paramètres de la requête
    * @async
    */
-  public async postParticipation (participation: Partial<Participation>, params?: object): Promise<Participation> {
-    return deserialize((await this.request<DocumentObject>({
-      url: 'participations',
-      method: 'post',
-      responseType: 'json',
-      params,
-      data: {
-        data: participation
-      }
-    })
-    ).data) as Participation
+  public async postParticipation(
+    participation: Partial<Participation>,
+    params?: object
+  ): Promise<Participation> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: 'participations',
+          method: 'post',
+          responseType: 'json',
+          params,
+          data: {
+            data: participation
+          }
+        })
+      ).data
+    ) as Participation
   }
 
   /**
@@ -896,6 +1207,7 @@ export class Skolengo {
    * @param {offset} offset Offset
    * @param {object} params Modifier les paramètres de la requête
    * @param {string[]} includes Ressources JSON:API à inclure
+   * @param {SupportedAbsenceType[]} filterAbsenceType Filtrer les types d'absence
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -909,23 +1221,57 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAbsenceFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: string[] = ['currentState', 'currentState.absenceReason', 'currentState.absenceRecurrence']): Promise<AbsenceFilesResponse> {
-    return new AbsenceFilesResponse(deserialize((await this.request<DocumentObject>({
-      url: '/absence-files',
-      responseType: 'json',
-      params: {
-        filter: {
-          'student.id': studentId
-        },
-        page: {
-          limit,
-          offset
-        },
-        include: includes.join(','),
-        ...params
-      }
-    })
-    ).data) as AbsenceFile[])
+  public async getAbsenceFiles(
+    studentId: string = this.tokenSet.claims().sub,
+    limit = 20,
+    offset = 0,
+    params?: object,
+    includes: string[] = [
+      'currentState',
+      'currentState.absenceReason',
+      'currentState.absenceRecurrence'
+    ],
+    filterAbsenceType: SupportedAbsenceType[] = [
+      'ABSENCE',
+      'LATENESS',
+      'DEPARTURE',
+      'EXEMPTION'
+    ]
+  ): Promise<AbsenceFilesResponse> {
+    return new AbsenceFilesResponse(
+      deserialize(
+        (
+          await this.request<DocumentObject>({
+            url: '/absence-files',
+            responseType: 'json',
+            params: {
+              filter: {
+                'student.id': studentId,
+                'currentState.absenceType': filterAbsenceType
+              },
+              page: {
+                limit,
+                offset
+              },
+              include: includes.join(','),
+              /* fields: {
+                absenceFile: 'currentState',
+                absenceFileState: [
+                  'creationDateTime',
+                  'absenceStartDateTime',
+                  'absenceEndDateTime',
+                  'absenceType',
+                  'absenceFileStatus',
+                  'absenceReason',
+                  'absenceRecurrence'
+                ]
+              }, */
+              ...params
+            }
+          })
+        ).data
+      ) as AbsenceFile[]
+    )
   }
 
   /**
@@ -935,16 +1281,42 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getAbsenceFile (folderId: string, params?: object, includes: string[] = ['currentState', 'currentState.absenceReason', 'currentState.absenceRecurrence', 'history', 'history.creator']): Promise<AbsenceFile> {
-    return deserialize((await this.request<DocumentObject>({
-      url: `/absence-files/${folderId}`,
-      responseType: 'json',
-      params: {
-        include: includes,
-        ...params
-      }
-    })
-    ).data) as AbsenceFile
+  public async getAbsenceFile(
+    folderId: string,
+    params?: object,
+    includes: string[] = [
+      'currentState',
+      'currentState.absenceReason',
+      'currentState.absenceRecurrence'
+    ]
+  ): Promise<AbsenceFile> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: `/absence-files/${folderId}`,
+          responseType: 'json',
+          params: {
+            include: includes,
+            // Obligatoire
+            fields: {
+              absenceFile: 'currentState',
+              absenceFileState: [
+                'creationDateTime',
+                'absenceStartDateTime',
+                'absenceEndDateTime',
+                'absenceType',
+                'absenceFileStatus',
+                'absenceReason',
+                'absenceRecurrence'
+              ],
+              absenceReason: 'code,longLabel',
+              absenceRecurrence: ''
+            },
+            ...params
+          }
+        })
+      ).data
+    ) as AbsenceFile
   }
 
   /**
@@ -955,23 +1327,36 @@ export class Skolengo {
    * @param {string} comment Commentaire
    * @param {object} params Modifier les paramètres de la requête
    */
-  public async postAbsenceFileState (folderId: string, reasonId: string, comment: string, params?: object): Promise<AbsenceState> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/absence-files-states',
-      responseType: 'json',
-      params,
-      data: serialize({
-        comment,
-        absenceFile: {
-          id: folderId
-        },
-        absenceReason: {
-          id: reasonId
-        }
-      }, 'absenceFileState', {
-        relationships: ['absenceFile', 'absenceReason']
-      })
-    })).data) as AbsenceState
+  public async postAbsenceFileState(
+    folderId: string,
+    reasonId: string,
+    comment: string,
+    params?: object
+  ): Promise<AbsenceState> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/absence-files-states',
+          responseType: 'json',
+          params,
+          data: serialize(
+            {
+              comment,
+              absenceFile: {
+                id: folderId
+              },
+              absenceReason: {
+                id: reasonId
+              }
+            },
+            'absenceFileState',
+            {
+              relationships: ['absenceFile', 'absenceReason']
+            }
+          )
+        })
+      ).data
+    ) as AbsenceState
   }
 
   /**
@@ -992,19 +1377,26 @@ export class Skolengo {
 
    * ```
    */
-  public async getAbsenceReasons (limit = 20, offset = 0, params?: object): Promise<AbsenceReason[]> {
-    return deserialize((await this.request<DocumentObject>({
-      url: '/absence-reasons',
-      responseType: 'json',
-      params: {
-        page: {
-          limit,
-          offset
-        },
-        ...params
-      }
-    })
-    ).data) as AbsenceReason[]
+  public async getAbsenceReasons(
+    limit = 20,
+    offset = 0,
+    params?: object
+  ): Promise<AbsenceReason[]> {
+    return deserialize(
+      (
+        await this.request<DocumentObject>({
+          url: '/absence-reasons',
+          responseType: 'json',
+          params: {
+            page: {
+              limit,
+              offset
+            },
+            ...params
+          }
+        })
+      ).data
+    ) as AbsenceReason[]
   }
 
   /**
@@ -1014,7 +1406,10 @@ export class Skolengo {
    * @param {number} maxRetries
    * @private
    */
-  private async onPronoteError<T, R, D>(requestConfig: AxiosRequestConfig, maxRetries: number = 5): Promise<R> {
+  private async onPronoteError<T, R, D>(
+    requestConfig: AxiosRequestConfig,
+    maxRetries: number = 5
+  ): Promise<R> {
     for (let i = 0; i < maxRetries - 1; i++) {
       try {
         return await this.config.httpClient.request<T, R, D>(requestConfig)
@@ -1032,7 +1427,9 @@ export class Skolengo {
    * @param {AxiosRequestConfig} config
    * @private
    */
-  private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
+  private async request<T = any, R = AxiosResponse<T>, D = any>(
+    config: AxiosRequestConfig
+  ): Promise<R> {
     const axiosConfig: AxiosRequestConfig = {
       ...config,
       baseURL: BASE_URL,
@@ -1064,10 +1461,18 @@ export class Skolengo {
           }
         })
       }
-      if (response.data.errors instanceof Array && response.data.errors.length > 0) {
+      if (
+        response.data.errors instanceof Array &&
+        response.data.errors.length > 0
+      ) {
         const [firstError] = response.data.errors as SkolengoErrorBody[]
         const skolengoError = new SkolengoError(firstError)
-        if (this.config.handlePronoteError && skolengoError.name === 'PRONOTE_RESOURCES_NOT_READY') return await this.onPronoteError<T, R, D>(axiosConfig)
+        if (
+          this.config.handlePronoteError &&
+          skolengoError.name === 'PRONOTE_RESOURCES_NOT_READY'
+        ) {
+          return await this.onPronoteError<T, R, D>(axiosConfig)
+        }
         throw skolengoError
       }
       throw error

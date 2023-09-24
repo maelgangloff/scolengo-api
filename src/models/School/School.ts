@@ -1,4 +1,4 @@
-export type SchoolFilter = { text: string } | { lat: number, lon: number }
+export type SchoolFilter = { text: string } | { lat: number; lon: number }
 
 export interface School {
   id: string
