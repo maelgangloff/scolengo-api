@@ -1008,6 +1008,22 @@ export class Skolengo {
   }
 
   /**
+   * Demande un renouvellement du jeu de jetons
+   * @param {boolean} triggerListener Si appeler la fonction définie par onTokenRefresh
+   * @returns Le nouveau token set
+   */
+  public async refreshToken (triggerListener = true): Promise<TokenSet> {
+    const newTokenSet = await this.oidClient.refresh(this.tokenSet)
+
+    if (triggerListener) {
+      this.config.onTokenRefresh(newTokenSet)
+    }
+
+    this.tokenSet = newTokenSet
+    return newTokenSet
+  }
+
+  /**
    * Gérer l'erreur *PRONOTE_RESOURCES_NOT_READY* obtenue lorsque Skolengo tente d'obtenir les dernières notes d'un élève.
    * Ce comportement peut être activé en modifiant le paramètre optionnel correspondant.
    * @param {AxiosRequestConfig} requestConfig
@@ -1051,9 +1067,7 @@ export class Skolengo {
       const response = error.response
       if (response === undefined) throw error
       if (response.status === 401) {
-        const newTokenSet = await this.oidClient.refresh(this.tokenSet)
-        this.config.onTokenRefresh(newTokenSet)
-        this.tokenSet = newTokenSet
+        const newTokenSet = await this.refreshToken()
         return await this.config.httpClient.request<T, R, D>({
           ...axiosConfig,
           headers: {
