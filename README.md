@@ -84,7 +84,7 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
         * [.getAbsenceFile(folderId, params, includes)](#Skolengo+getAbsenceFile)
         * [.postAbsenceFileState(folderId, reasonId, comment, params)](#Skolengo+postAbsenceFileState)
         * [.getAbsenceReasons(limit, offset, params)](#Skolengo+getAbsenceReasons)
-        * [.refreshToken(triggerListener)](#Skolengo+refreshToken) ⇒ <code>TokenSet</code>
+        * [.refreshToken(triggerListener)](#Skolengo+refreshToken)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -611,11 +611,10 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+refreshToken"></a>
 
-### skolengo.refreshToken(triggerListener) ⇒ <code>TokenSet</code>
+### skolengo.refreshToken(triggerListener)
 Demande un renouvellement du jeu de jeton (tokenSet)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-**Returns**: <code>TokenSet</code> - Le nouveau tokenSet  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |

@@ -1010,7 +1010,6 @@ export class Skolengo {
   /**
    * Demande un renouvellement du jeu de jeton (tokenSet)
    * @param {boolean} triggerListener Si oui, appeler la fonction onTokenRefresh
-   * @returns {TokenSet} Le nouveau tokenSet
    */
   public async refreshToken (triggerListener: boolean = true): Promise<TokenSet> {
     const newTokenSet = await this.oidClient.refresh(this.tokenSet)
