@@ -1,6 +1,6 @@
 {
   "name": "scolengo-api",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "types": "types/index.d.ts",
   "readme": "README.md",
   "maintainers": [
