@@ -84,7 +84,7 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
         * [.getAbsenceFile(folderId, params, includes)](#Skolengo+getAbsenceFile)
         * [.postAbsenceFileState(folderId, reasonId, comment, params)](#Skolengo+postAbsenceFileState)
         * [.getAbsenceReasons(limit, offset, params)](#Skolengo+getAbsenceReasons)
-        * [.refreshToken(triggerListener)](#Skolengo+refreshToken) ⇒
+        * [.refreshToken(triggerListener)](#Skolengo+refreshToken) ⇒ <code>TokenSet</code>
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
@@ -611,15 +611,15 @@ Skolengo.fromConfigObject(config).then(async user => {
 ```
 <a name="Skolengo+refreshToken"></a>
 
-### skolengo.refreshToken(triggerListener) ⇒
-Demande un renouvellement du jeu de jetons
+### skolengo.refreshToken(triggerListener) ⇒ <code>TokenSet</code>
+Demande un renouvellement du jeu de jeton (tokenSet)
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
-**Returns**: Le nouveau token set  
+**Returns**: <code>TokenSet</code> - Le nouveau tokenSet  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| triggerListener | <code>boolean</code> | <code>true</code> | Si appeler la fonction définie par onTokenRefresh |
+| triggerListener | <code>boolean</code> | <code>true</code> | Si oui, appeler la fonction onTokenRefresh |
 
 <a name="Skolengo.revokeToken"></a>
 

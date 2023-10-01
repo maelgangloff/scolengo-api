@@ -1008,16 +1008,14 @@ export class Skolengo {
   }
 
   /**
-   * Demande un renouvellement du jeu de jetons
-   * @param {boolean} triggerListener Si appeler la fonction définie par onTokenRefresh
-   * @returns Le nouveau token set
+   * Demande un renouvellement du jeu de jeton (tokenSet)
+   * @param {boolean} triggerListener Si oui, appeler la fonction onTokenRefresh
+   * @returns {TokenSet} Le nouveau tokenSet
    */
-  public async refreshToken (triggerListener = true): Promise<TokenSet> {
+  public async refreshToken (triggerListener: boolean = true): Promise<TokenSet> {
     const newTokenSet = await this.oidClient.refresh(this.tokenSet)
 
-    if (triggerListener) {
-      this.config.onTokenRefresh(newTokenSet)
-    }
+    if (triggerListener) this.config.onTokenRefresh(newTokenSet)
 
     this.tokenSet = newTokenSet
     return newTokenSet
