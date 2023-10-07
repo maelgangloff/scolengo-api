@@ -1,4 +1,5 @@
 import { User } from '../Common'
+import { Attachment } from '../School'
 import { HomeworkAssignment } from './HomeworkAssignment'
 
 export interface Subject {
@@ -13,9 +14,18 @@ export interface Lesson {
   endDateTime: string
   title: string
   location: string
-  locationComplement: any
+  locationComplement?: any
+  anyHomeworkToDoForTheLesson: boolean
+  anyHomeworkToDoAfterTheLesson: boolean
+  anyContent: boolean
   canceled: boolean
-  contents?: any
+  contents?: Array<{
+    id: string
+    html: string
+    title: string
+    url: string | null
+    attachments: Attachment[]
+  }>
   teachers: User[]
   subject: Subject
   toDoForTheLesson?: HomeworkAssignment[]
