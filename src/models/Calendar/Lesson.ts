@@ -17,7 +17,7 @@ export interface Lesson {
   anyHomeworkToDoForTheLesson: boolean
   anyHomeworkToDoAfterTheLesson: boolean
   anyContent: boolean
-  locationComplement: any
+  locationComplement: string | null
   canceled: boolean
   contents?: Array<{
     id: string

@@ -14,7 +14,7 @@ export interface HomeworkAssignment {
   subject?: Subject
   attachments?: Attachment[]
   teacher?: User
-  submissionAllowed: null | any
+  submissionAllowed: boolean | null
 }
 
 /*
