@@ -1,3 +1,3 @@
-export { Attachment } from './Attachment'
-export { School } from './School'
-export { SchoolInfo } from './SchoolInfo'
+export type { Attachment } from './Attachment'
+export type { School } from './School'
+export type { SchoolInfo } from './SchoolInfo'

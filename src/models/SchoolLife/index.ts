@@ -1,5 +1,5 @@
-import { AbsenceFile, AbsenceState } from './AbsenceFile'
-import { AbsenceReason } from './AbsenceReason'
+import type { AbsenceFile, AbsenceState } from './AbsenceFile'
+import type { AbsenceReason } from './AbsenceReason'
 
 export class AbsenceFilesResponse extends Array<AbsenceFile> {
   public constructor (absenceFiles: AbsenceFile[]) {
@@ -25,4 +25,4 @@ export class AbsenceFilesResponse extends Array<AbsenceFile> {
   }
 }
 
-export { AbsenceFile, AbsenceState, AbsenceReason }
+export type { AbsenceFile, AbsenceState, AbsenceReason }
