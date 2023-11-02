@@ -1,6 +1,6 @@
-import { User } from '../Common'
-import { EvaluationDetail } from './EvaluationDetail'
-import { Subject } from './Subject'
+import type { User } from '../Common'
+import type { EvaluationDetail } from './EvaluationDetail'
+import type { Subject } from './Subject'
 
 export interface Evaluation {
   id: string

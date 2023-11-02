@@ -1,5 +1,5 @@
-import { Lesson } from './Lesson'
-import { HomeworkAssignment } from './HomeworkAssignment'
+import type { Lesson } from './Lesson'
+import type { HomeworkAssignment } from './HomeworkAssignment'
 
 export interface Agenda {
   id: string

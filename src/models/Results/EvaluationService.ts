@@ -1,5 +1,5 @@
-import { Subject } from './Subject'
-import { User } from '../Common'
+import type { Subject } from './Subject'
+import type { User } from '../Common'
 
 export interface EvaluationService {
   id: string

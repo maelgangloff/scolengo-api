@@ -1,5 +1,5 @@
-import { Participant } from './Participant'
-import { Attachment } from '../School'
+import type { Participant } from './Participant'
+import type { Attachment } from '../School'
 
 export interface Participation {
   id: string

@@ -1,5 +1,5 @@
-import { TokenSetParameters } from 'openid-client'
-import { School } from '../School'
+import type { TokenSetParameters } from 'openid-client'
+import type { School } from '../School'
 
 export interface AuthConfig {
   tokenSet: TokenSetParameters
