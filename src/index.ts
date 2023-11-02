@@ -268,7 +268,7 @@ export class Skolengo {
    * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getUserInfo (userId?: string, params?: object, includes: string[] = ['school', 'students', 'students.school']): Promise<User> {
+  public async getUserInfo (userId?: string, params?: object, includes: string[] = ['school', 'students', 'students.school', 'schools', 'prioritySchool']): Promise<User> {
     return deserialize((await this.request<DocumentObject>({
       url: `/users-info/${userId ?? this.tokenSet.claims().sub}`,
       responseType: 'json',
@@ -667,6 +667,10 @@ export class Skolengo {
         include: includes.join(','),
         filter: {
           'student.id': studentId
+        },
+        fields: {
+          homework: 'title,done,dueDateTime',
+          subject: 'label,color'
         },
         ...params
       }

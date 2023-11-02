@@ -6,6 +6,7 @@ export interface UserPermission<Service extends string, Operation extends string
 
 export interface User {
   id: string
+  audienceId?: string
   title?: string
   className?: string
   dateOfBirth?: string | null
@@ -41,5 +42,11 @@ export interface User {
     name: string
     timeZone: string
     subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | 'FACT' | 'REST' | string>
+  }
+  administrativeId?: string
+  schoolAudience?: {
+    enabled: boolean
+    audienceId: string
+    projectId: string
   }
 }
