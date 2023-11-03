@@ -1,19 +1,20 @@
-import { Subject } from './Lesson'
-import { Attachment } from '../School'
-import { User } from '../Common'
+import type { Subject } from './Lesson'
+import type { Attachment } from '../School'
+import type { User } from '../Common'
 
 export interface HomeworkAssignment {
   id: string
-  title: string
-  html: string
-  dueDateTime: string
+  title: string | null
+  html: string | null
+  dueDateTime: string | null
   dueDate: string | null
   done: boolean
   deliverWorkOnline: boolean
   onlineDeliveryUrl: null | string
-  subject: Subject
+  subject?: Subject
   attachments?: Attachment[]
   teacher?: User
+  submissionAllowed: boolean | null
 }
 
 /*

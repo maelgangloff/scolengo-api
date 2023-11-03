@@ -1,18 +1,24 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { Client, Issuer, TokenSet } from 'openid-client'
-import { deserialize, DocumentObject, serialize } from 'jsonapi-fractal'
-import { Stream } from 'node:stream'
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
+import type { Client } from 'openid-client'
+import { Issuer, TokenSet } from 'openid-client'
+import type { DocumentObject } from 'jsonapi-fractal'
+import { deserialize, serialize } from 'jsonapi-fractal'
+import type { Stream } from 'node:stream'
 
-import { AppCurrentConfig, BaseObject, User } from './models/Common'
-import { School, SchoolFilter } from './models/School/School'
-import { AuthConfig } from './models/Common/Auth'
-import { Communication, Participation, UsersMailSettings } from './models/Messaging'
-import { Attachment, SchoolInfo } from './models/School'
-import { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Results'
-import { Agenda, AgendaResponse, Lesson, HomeworkAssignment } from './models/Calendar'
-import { AbsenceFile, AbsenceFilesResponse, AbsenceState, AbsenceReason } from './models/SchoolLife'
-import { SkolengoError, SkolengoErrorBody } from './models/Errors'
-import { SkolengoConfig } from './models/Common/SkolengoConfig'
+import type { AppCurrentConfig, BaseObject, User } from './models/Common'
+import type { School, SchoolFilter } from './models/School/School'
+import type { AuthConfig } from './models/Common/Auth'
+import type { Communication, Participation, UsersMailSettings } from './models/Messaging'
+import type { Attachment, SchoolInfo } from './models/School'
+import type { Evaluation, EvaluationDetail, EvaluationSettings } from './models/Results'
+import type { Agenda, Lesson, HomeworkAssignment } from './models/Calendar'
+import { AgendaResponse } from './models/Calendar'
+import type { AbsenceFile, AbsenceState, AbsenceReason } from './models/SchoolLife'
+import { AbsenceFilesResponse } from './models/SchoolLife'
+import type { SkolengoErrorBody } from './models/Errors'
+import { SkolengoError } from './models/Errors'
+import type { SkolengoConfig } from './models/Common/SkolengoConfig'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
@@ -26,12 +32,46 @@ export class Skolengo {
 
   /**
    * Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.0
+   *
    * @example ```js
+   * const {Skolengo} = require('scolengo-api')
+   *
+   * // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
+   * // L'objet de configuration ci-dessous peut être généré à partir de l'utilitaire scolengo-token (https://github.com/maelgangloff/scolengo-token)
+   * const config = {
+   *   "tokenSet": {
+   *     "access_token": "<access_token_here>",
+   *     "id_token": "<id_token_here>",
+   *     "refresh_token": "RT-<refresh_token_here>",
+   *     "token_type": "bearer",
+   *     "expires_at": 1234567890,
+   *     "scope": "openid"
+   *   },
+   *   "school": {
+   *     "id": "SKO-E-<school_id>",
+   *     "name": "<school_name>",
+   *     "addressLine1": "<school_address>",
+   *     "addressLine2": null,
+   *     "addressLine3": null,
+   *     "zipCode": "<school_zip_code>",
+   *     "city": "<school_city>",
+   *     "country": "France",
+   *     "homePageUrl": "<cas_login_url>",
+   *     "emsCode": "<school_ems_code>",
+   *     "emsOIDCWellKnownUrl": "<school_ems_oidc_well_known_url>"
+   *   }
+   * }
+   * Skolengo.fromConfigObject(config).then(async user => {
+   *   const infoUser = await user.getUserInfo()
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
+   * })
+   * ```
+   * ```js
    * const {Skolengo, TokenSet} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
+   *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school)
    *
    *   // 🚨 ATTENTION: Ne communiquez jamais vos jetons à un tiers. Ils vous sont strictement personnels. Si vous pensez que vos jetons ont été dérobés, révoquez-les immédiatement.
@@ -47,9 +87,8 @@ export class Skolengo {
    *
    *   const user = new Skolengo(oidClient, school, tokenSet)
    *   const infoUser = await user.getUserInfo()
-   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.data.id}`)
+   *   console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`)
    * })
-   *
    * ```
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
@@ -143,8 +182,8 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
-   *   const school = schools.data[0]
+   *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *   console.log(oidClient.authorizationUrl())
    *   // Lorsque l'authentification est effectuée, le CAS redirige vers le callback indiqué avec le code. Ce code permet d'obtenir les refresh token et access token (cf. mécanismes OAuth 2.0 et OID Connect)
@@ -154,7 +193,7 @@ export class Skolengo {
    * const {Skolengo} = require('scolengo-api')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
-   *   if(!schools.data.length) throw new Error('Aucun établissement n\'a été trouvé.')
+   *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
    *   const school = schools[0]
    *   const oidClient = await Skolengo.getOIDClient(school, 'skoapp-prod://sign-in-callback')
    *
@@ -179,7 +218,7 @@ export class Skolengo {
   }
 
   /**
-   * Créer un client Skolengo à partir d'un objet contenant les informations d'authentification.
+   * Créer un client Scolengo à partir d'un objet contenant les informations d'authentification.
    * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
    * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
    * @param {AuthConfig} config Informations d'authentification
@@ -232,9 +271,10 @@ export class Skolengo {
    * Informations sur l'utilisateur actuellement authentifié (nom, prénom, date de naissance, adresse postale, courriel, téléphone, permissions, ...)
    * @param {string|undefined} userId Identifiant de l'utilisateur
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getUserInfo (userId?: string, params?: object): Promise<User> {
+  public async getUserInfo (userId?: string, params?: object, includes: string[] = ['school', 'students', 'students.school', 'schools', 'prioritySchool']): Promise<User> {
     return deserialize((await this.request<DocumentObject>({
       url: `/users-info/${userId ?? this.tokenSet.claims().sub}`,
       responseType: 'json',
@@ -249,7 +289,7 @@ export class Skolengo {
                       },
                       */
         ...params,
-        include: 'school,students,students.school'
+        include: includes.join(',')
       }
     })
     ).data) as User
@@ -288,14 +328,15 @@ export class Skolengo {
   /**
    * Récupérer toutes les actualités de l'établissement
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getSchoolInfos (params?: object): Promise<SchoolInfo[]> {
+  public async getSchoolInfos (params?: object, includes: string[] = ['illustration', 'school', 'author', 'author.person', 'author.technicalUser', 'attachments']): Promise<SchoolInfo[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/schools-info',
       responseType: 'json',
       params: {
-        include: 'illustration,school,author,author.person,author.technicalUser,attachments',
+        include: includes.join(','),
         ...params
       }
     })
@@ -306,14 +347,15 @@ export class Skolengo {
    * Récupérer une actualité de l'établissement
    * @param {string} schoolInfoId Identifiant d'une actualité
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getSchoolInfo (schoolInfoId: string = this.school.id, params?: object): Promise<SchoolInfo> {
+  public async getSchoolInfo (schoolInfoId: string = this.school.id, params?: object, includes: string[] = ['illustration', 'school', 'author', 'author.person', 'author.technicalUser', 'attachments']): Promise<SchoolInfo> {
     return deserialize((await this.request<DocumentObject>({
       url: `/schools-info/${schoolInfoId}`,
       responseType: 'json',
       params: {
-        include: 'illustration,school,author,author.person,author.technicalUser,attachments',
+        include: includes.join(','),
         ...params
       }
     })
@@ -326,9 +368,10 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getEvaluationSettings (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object): Promise<EvaluationSettings[]> {
+  public async getEvaluationSettings (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: string[] = ['periods', 'skillsSetting', 'skillsSetting.skillAcquisitionColors']): Promise<EvaluationSettings[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/evaluations-settings',
       responseType: 'json',
@@ -340,7 +383,7 @@ export class Skolengo {
           limit,
           offset
         },
-        include: 'periods,skillsSetting,skillsSetting.skillAcquisitionColors',
+        include: includes.join(','),
         ...params
         /*
                       fields: {
@@ -362,9 +405,10 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getEvaluation (studentId: string = this.tokenSet.claims().sub, periodId: string, limit = 20, offset = 0, params?: object): Promise<Evaluation[]> {
+  public async getEvaluation (studentId: string = this.tokenSet.claims().sub, periodId: string, limit = 20, offset = 0, params?: object, includes: string[] = ['subject', 'evaluations', 'evaluations.evaluationResult', 'evaluations.evaluationResult.subSkillsEvaluationResults', 'evaluations.evaluationResult.subSkillsEvaluationResults.subSkill', 'evaluations.subSkills', 'teachers']): Promise<Evaluation[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/evaluation-services',
       responseType: 'json',
@@ -377,7 +421,7 @@ export class Skolengo {
           limit,
           offset
         },
-        include: 'subject,evaluations,evaluations.evaluationResult,evaluations.evaluationResult.subSkillsEvaluationResults,evaluations.evaluationResult.subSkillsEvaluationResults.subSkill,evaluations.subSkills,teachers',
+        include: includes.join(','),
         ...params
         /*
                       fields: {
@@ -400,9 +444,10 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} evaluationId Identifiant de la note
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getEvaluationDetail (studentId: string = this.tokenSet.claims().sub, evaluationId: string, params?: object): Promise<EvaluationDetail> {
+  public async getEvaluationDetail (studentId: string = this.tokenSet.claims().sub, evaluationId: string, params?: object, includes: string[] = ['evaluationService', 'evaluationService.subject', 'evaluationService.teachers', 'subSubject', 'subSkills', 'evaluationResult', 'evaluationResult.subSkillsEvaluationResults', 'evaluationResult.subSkillsEvaluationResults.subSkill']): Promise<EvaluationDetail> {
     return deserialize((await this.request<DocumentObject>({
       url: `/evaluations/${evaluationId}`,
       responseType: 'json',
@@ -410,7 +455,7 @@ export class Skolengo {
         filter: {
           'student.id': studentId
         },
-        include: 'evaluationService,evaluationService.subject,evaluationService.teachers,subSubject,subSkills,evaluationResult,evaluationResult.subSkillsEvaluationResults,evaluationResult.subSkillsEvaluationResults.subSkill',
+        include: includes.join(','),
         ...params
         /*
                       fields: {
@@ -436,6 +481,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
@@ -446,7 +492,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getPeriodicReportsFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object): Promise<Attachment[]> {
+  public async getPeriodicReportsFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: string[] = ['period']): Promise<Attachment[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/periodic-reports-files',
       responseType: 'json',
@@ -454,7 +500,7 @@ export class Skolengo {
         filter: {
           'student.id': studentId
         },
-        include: 'period',
+        include: includes.join(','),
         page: {
           limit,
           offset
@@ -479,6 +525,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -492,12 +539,12 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAgenda (studentId: string = this.tokenSet.claims().sub, startDate: string, endDate: string, limit = 20, offset = 0, params?: object): Promise<AgendaResponse> {
+  public async getAgenda (studentId: string = this.tokenSet.claims().sub, startDate: string, endDate: string, limit = 20, offset = 0, params?: object, includes: string[] = ['lessons', 'lessons.subject', 'lessons.teachers', 'homeworkAssignments', 'homeworkAssignments.subject']): Promise<AgendaResponse> {
     return new AgendaResponse(deserialize((await this.request<DocumentObject>({
       url: '/agendas',
       responseType: 'json',
       params: {
-        include: 'lessons,lessons.subject,lessons.teachers,homeworkAssignments,homeworkAssignments.subject',
+        include: includes.join(','),
         filter: {
           'student.id': studentId,
           date: {
@@ -529,14 +576,15 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} lessonId Identifiant d'un cours/leçon
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getLesson (studentId: string = this.tokenSet.claims().sub, lessonId: string, params?: object): Promise<Lesson> {
+  public async getLesson (studentId: string = this.tokenSet.claims().sub, lessonId: string, params?: object, includes: string[] = ['teachers', 'contents', 'contents.attachments', 'subject', 'toDoForTheLesson', 'toDoForTheLesson.subject', 'toDoAfterTheLesson', 'toDoAfterTheLesson.subject']): Promise<Lesson> {
     return deserialize((await this.request<DocumentObject>({
       url: `/lessons/${lessonId}`,
       responseType: 'json',
       params: {
-        include: 'teachers,contents,contents.attachments,subject,toDoForTheLesson,toDoForTheLesson.subject,toDoAfterTheLesson,toDoAfterTheLesson.subject',
+        include: includes.join(','),
         filter: {
           'student.id': studentId
         },
@@ -554,6 +602,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -567,12 +616,12 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async getHomeworkAssignments (studentId: string = this.tokenSet.claims().sub, startDate: string, endDate: string, limit = 20, offset = 0, params?: object): Promise<HomeworkAssignment[]> {
+  public async getHomeworkAssignments (studentId: string = this.tokenSet.claims().sub, startDate: string, endDate: string, limit = 20, offset = 0, params?: object, includes: string[] = ['subject', 'teacher', 'teacher.person']): Promise<HomeworkAssignment[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/homework-assignments',
       responseType: 'json',
       params: {
-        include: 'subject,teacher,attachments,teacher.person',
+        include: includes.join(','),
         filter: {
           'student.id': studentId,
           dueDate: {
@@ -583,7 +632,8 @@ export class Skolengo {
         page: {
           limit,
           offset
-        }
+        },
+        ...params
         /*
                   fields: {
                     homework: 'title,done,dueDateTime',
@@ -600,6 +650,7 @@ export class Skolengo {
    * @param {string} studentId Identifiant d'un étudiant
    * @param {string} homeworkId Identifiant du devoir
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -614,14 +665,18 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async getHomeworkAssignment (studentId: string = this.tokenSet.claims().sub, homeworkId: string, params?: object): Promise<HomeworkAssignment> {
+  public async getHomeworkAssignment (studentId: string = this.tokenSet.claims().sub, homeworkId: string, params?: object, includes: string[] = ['subject', 'teacher', 'pedagogicContent', 'individualCorrectedWork', 'individualCorrectedWork.attachments', 'individualCorrectedWork.audio', 'commonCorrectedWork', 'commonCorrectedWork.attachments', 'commonCorrectedWork.audio', 'commonCorrectedWork.pedagogicContent', 'attachments', 'audio', 'teacher.person']): Promise<HomeworkAssignment> {
     return deserialize((await this.request<DocumentObject>({
       url: `/homework-assignments/${homeworkId}`,
       responseType: 'json',
       params: {
-        include: 'subject,teacher,pedagogicContent,individualCorrectedWork,individualCorrectedWork.attachments,individualCorrectedWork.audio,commonCorrectedWork,commonCorrectedWork.attachments,commonCorrectedWork.audio,commonCorrectedWork.pedagogicContent,attachments,audio,teacher.person',
+        include: includes.join(','),
         filter: {
           'student.id': studentId
+        },
+        fields: {
+          homework: 'title,done,dueDateTime',
+          subject: 'label,color'
         },
         ...params
       }
@@ -635,6 +690,7 @@ export class Skolengo {
    * @param {string} homeworkId Identifiant d'un devoir à modifier
    * @param {Partial<HomeworkAssignment>} attributes Devoir modifié
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -645,13 +701,13 @@ export class Skolengo {
    * ```
    * @async
    */
-  public async patchHomeworkAssignment (studentId: string = this.tokenSet.claims().sub, homeworkId: string, attributes: Partial<HomeworkAssignment>, params?: object): Promise<HomeworkAssignment> {
+  public async patchHomeworkAssignment (studentId: string = this.tokenSet.claims().sub, homeworkId: string, attributes: Partial<HomeworkAssignment>, params?: object, includes: string[] = ['subject', 'teacher', 'pedagogicContent', 'individualCorrectedWork', 'individualCorrectedWork.attachments', 'individualCorrectedWork.audio', 'commonCorrectedWork', 'commonCorrectedWork.attachments', 'commonCorrectedWork.audio', 'commonCorrectedWork.pedagogicContent', 'attachments', 'audio', 'teacher.person']): Promise<HomeworkAssignment> {
     return deserialize((await this.request<DocumentObject>({
       method: 'patch',
       url: `/homework-assignments/${homeworkId}`,
       responseType: 'json',
       params: {
-        include: 'subject,teacher,pedagogicContent,individualCorrectedWork,individualCorrectedWork.attachments,individualCorrectedWork.audio,commonCorrectedWork,commonCorrectedWork.attachments,commonCorrectedWork.audio,commonCorrectedWork.pedagogicContent,attachments,audio,teacher.person',
+        include: includes.join(','),
         filter: {
           'student.id': studentId
         },
@@ -672,13 +728,15 @@ export class Skolengo {
    * Récupérer les informations du service de communication (identifiants des dossiers, ...)
    * @param {string|undefined} userId Identifiant d'un utilisateur
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getUsersMailSettings (userId?: string, params?: object): Promise<UsersMailSettings> {
+  public async getUsersMailSettings (userId?: string, params?: object, includes: string[] = ['signature', 'folders', 'folders.parent', 'contacts', 'contacts.person', 'contacts.personContacts']): Promise<UsersMailSettings> {
     return deserialize((await this.request<DocumentObject>({
       url: `/users-mail-settings/${userId ?? this.tokenSet.claims().sub}`,
       params: {
-        include: 'signature,folders,folders.parent,contacts,contacts.person,contacts.personContacts'
+        include: includes.join(','),
+        ...params
         /*
                         fields: {
                           personContact: 'person,linksWithUser',
@@ -701,9 +759,10 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {number} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0, params?: object): Promise<Communication[]> {
+  public async getCommunicationsFolder (folderId: string, limit = 10, offset = 0, params?: object, includes: string[] = ['lastParticipation', 'lastParticipation.sender', 'lastParticipation.sender.person', 'lastParticipation.sender.technicalUser']): Promise<Communication[]> {
     return deserialize((await this.request<DocumentObject>({
       url: '/communications',
       responseType: 'json',
@@ -711,7 +770,7 @@ export class Skolengo {
         filter: {
           'folders.id': folderId
         },
-        include: 'lastParticipation,lastParticipation.sender,lastParticipation.sender.person,lastParticipation.sender.technicalUser',
+        include: includes.join(','),
         page: {
           limit,
           offset
@@ -741,14 +800,15 @@ export class Skolengo {
    * Récupérer les participations d'un fil de discussion (communication)
    * @param {string} communicationId Identifiant d'une communication
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getCommunicationParticipations (communicationId: string, params?: object): Promise<Participation[]> {
+  public async getCommunicationParticipations (communicationId: string, params?: object, includes: string[] = ['sender', 'sender.person', 'sender.technicalUser', 'attachments']): Promise<Participation[]> {
     return deserialize((await this.request<DocumentObject>({
       url: `communications/${communicationId}/participations`,
       responseType: 'json',
       params: {
-        include: 'sender,sender.person,sender.technicalUser,attachments',
+        include: includes.join(','),
         ...params
       }
     })
@@ -760,14 +820,15 @@ export class Skolengo {
    * @param {string} communicationId Identifiant d'une communication
    * @param {boolean} fromGroup Afficher le détail des groupes
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getCommunicationParticipants (communicationId: string, fromGroup = true, params?: object): Promise<any> {
+  public async getCommunicationParticipants (communicationId: string, fromGroup = true, params?: object, includes: string[] = ['person', 'technicalUser']): Promise<any> {
     return deserialize((await this.request<DocumentObject>({
       url: `communications/${communicationId}/participants`,
       responseType: 'json',
       params: {
-        include: 'person,technicalUser',
+        include: includes.join(','),
         filter: { fromGroup },
         ...params
       }
@@ -844,6 +905,7 @@ export class Skolengo {
    * @param {number} limit Limite
    * @param {offset} offset Offset
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    * @example ```js
    * const { writeFileSync } = require('node:fs')
@@ -857,7 +919,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public async getAbsenceFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object): Promise<AbsenceFilesResponse> {
+  public async getAbsenceFiles (studentId: string = this.tokenSet.claims().sub, limit = 20, offset = 0, params?: object, includes: string[] = ['currentState', 'currentState.absenceReason', 'currentState.absenceRecurrence']): Promise<AbsenceFilesResponse> {
     return new AbsenceFilesResponse(deserialize((await this.request<DocumentObject>({
       url: '/absence-files',
       responseType: 'json',
@@ -869,7 +931,7 @@ export class Skolengo {
           limit,
           offset
         },
-        include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence',
+        include: includes.join(','),
         ...params
       }
     })
@@ -880,14 +942,15 @@ export class Skolengo {
    * Récupérer les détails d'une absence
    * @param {string} folderId Identifiant d'un dossier
    * @param {object} params Modifier les paramètres de la requête
+   * @param {string[]} includes Ressources JSON:API à inclure
    * @async
    */
-  public async getAbsenceFile (folderId: string, params?: object): Promise<AbsenceFile> {
+  public async getAbsenceFile (folderId: string, params?: object, includes: string[] = ['currentState', 'currentState.absenceReason', 'currentState.absenceRecurrence', 'history', 'history.creator']): Promise<AbsenceFile> {
     return deserialize((await this.request<DocumentObject>({
       url: `/absence-files/${folderId}`,
       responseType: 'json',
       params: {
-        include: 'currentState,currentState.absenceReason,currentState.absenceRecurrence,history,history.creator',
+        include: includes,
         ...params
       }
     })
@@ -933,7 +996,7 @@ export class Skolengo {
    *
    * Skolengo.fromConfigObject(config).then(async user => {
    *   user.getAbsenceReasons().then(response => {
-   *     console.log(`Liste des motifs: ${response.data.map(r => r.longLabel).join(';')}`)
+   *     console.log(`Liste des motifs: ${response.map(r => r.longLabel).join(';')}`)
    *   })
    * })
 
@@ -955,7 +1018,8 @@ export class Skolengo {
   }
 
   /**
-   *
+   * Récupérer la liste des prochaines échéances des paiements.
+   * ⚗️ Non testé
    * @param {object} params Modifier les paramètres de la requête
    */
   public async getPaymentsDueDates (params: object): Promise<object[] | object | undefined> {
@@ -971,7 +1035,8 @@ export class Skolengo {
   }
 
   /**
-   *
+   * Récupérer la liste des paiements.
+   * ⚗️ Non testé
    * @param {object} params Modifier les paramètres de la requête
    */
   public async getPayments (params: object): Promise<object[] | object | undefined> {
@@ -987,7 +1052,8 @@ export class Skolengo {
   }
 
   /**
-   *
+   * Récupérer les factures.
+   * ⚗️ Non testé
    * @param {object} params Modifier les paramètres de la requête
    */
   public async getInvoices (params: object): Promise<object[] | object | undefined> {
@@ -1003,7 +1069,8 @@ export class Skolengo {
   }
 
   /**
-   *
+   * Récupérer les informations des comptes de paiement.
+   * ⚗️ Non testé
    * @param {object} params Modifier les paramètres de la requête
    */
   public async getWallets (params: object): Promise<object[] | object | undefined> {
@@ -1019,6 +1086,19 @@ export class Skolengo {
       }
     })
     ).data)
+  }
+
+  /**
+   * Demande un renouvellement du jeu de jeton (tokenSet)
+   * @param {boolean} triggerListener Si oui, appeler la fonction onTokenRefresh
+   */
+  public async refreshToken (triggerListener: boolean = true): Promise<TokenSet> {
+    const newTokenSet = await this.oidClient.refresh(this.tokenSet)
+
+    if (triggerListener) this.config.onTokenRefresh(newTokenSet)
+
+    this.tokenSet = newTokenSet
+    return newTokenSet
   }
 
   /**
@@ -1065,9 +1145,7 @@ export class Skolengo {
       const response = error.response
       if (response === undefined) throw error
       if (response.status === 401) {
-        const newTokenSet = await this.oidClient.refresh(this.tokenSet)
-        this.config.onTokenRefresh(newTokenSet)
-        this.tokenSet = newTokenSet
+        const newTokenSet = await this.refreshToken()
         return await this.config.httpClient.request<T, R, D>({
           ...axiosConfig,
           headers: {

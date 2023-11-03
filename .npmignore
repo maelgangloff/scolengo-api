@@ -14,3 +14,4 @@ openapi
 jest.config.js
 Makefile
 docs/
+examples/

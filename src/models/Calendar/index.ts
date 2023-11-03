@@ -1,6 +1,6 @@
-import { Agenda } from './Agenda'
-import { Lesson } from './Lesson'
-import { HomeworkAssignment } from './HomeworkAssignment'
+import type { Agenda } from './Agenda'
+import type { Lesson } from './Lesson'
+import type { HomeworkAssignment } from './HomeworkAssignment'
 
 export class AgendaResponse extends Array<Agenda> {
   public constructor (response: Agenda[]) {
@@ -49,4 +49,4 @@ lessons.map(lesson => AgendaResponse.lessonToVEVENT(lesson, dtstamp)).join('\n')
   }
 }
 
-export { Agenda, Lesson, HomeworkAssignment }
+export type { Agenda, Lesson, HomeworkAssignment }

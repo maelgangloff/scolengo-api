@@ -1,6 +1,6 @@
-import { SubSkill } from './SubSkill'
-import { EvaluationResult } from './EvaluationResult'
-import { EvaluationService } from './EvaluationService'
+import type { SubSkill } from './SubSkill'
+import type { EvaluationResult } from './EvaluationResult'
+import type { EvaluationService } from './EvaluationService'
 
 export interface EvaluationDetail {
   id: string

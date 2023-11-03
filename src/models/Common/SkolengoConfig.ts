@@ -1,5 +1,5 @@
-import { AxiosInstance } from 'axios'
-import { TokenSet } from 'openid-client'
+import type { AxiosInstance } from 'axios'
+import type { TokenSet } from 'openid-client'
 
 export interface SkolengoConfig {
   onTokenRefresh: (tokenSet: TokenSet) => void

@@ -1,6 +1,6 @@
-import { Attachment } from './Attachment'
-import { User } from '../Common'
-import { School } from './School'
+import type { Attachment } from './Attachment'
+import type { User } from '../Common'
+import type { School } from './School'
 
 export interface SchoolInfo {
   id: string

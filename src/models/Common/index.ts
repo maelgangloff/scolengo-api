@@ -3,5 +3,5 @@ export interface BaseObject<Type = string> {
   type: Type
 }
 
-export { AppCurrentConfig } from './CurrentConfig'
-export { User } from './User'
+export type { AppCurrentConfig } from './CurrentConfig'
+export type { User } from './User'

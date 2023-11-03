@@ -1,5 +1,5 @@
-import { User } from '../Common'
-import { TechnicalUser } from './TechnicalUser'
+import type { User } from '../Common'
+import type { TechnicalUser } from './TechnicalUser'
 
 export interface Participant {
   id: string

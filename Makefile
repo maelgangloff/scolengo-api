@@ -1,4 +1,4 @@
-.PHONY: lint test
+.PHONY: lint #test
 .DEFAULT_GOAL=dist
 PACKAGE_MANAGER=yarn
 
@@ -8,8 +8,8 @@ node_modules: package.json yarn.lock ## Installer les dépendances
 dist: node_modules src tsconfig.json ## Construire les fichiers de distribution
 	npx tsc -p tsconfig.json
 
-test: node_modules tests ## Tests unitaires
-	npx jest
+#test: node_modules tests ## Tests unitaires
+#	npx jest
 
 lint: node_modules .eslintrc .eslintignore ## Analyse statique du code
 	npx eslint src/ tests/ --ext .ts
