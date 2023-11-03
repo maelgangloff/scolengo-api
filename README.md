@@ -84,6 +84,10 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
         * [.getAbsenceFile(folderId, params, includes)](#Skolengo+getAbsenceFile)
         * [.postAbsenceFileState(folderId, reasonId, comment, params)](#Skolengo+postAbsenceFileState)
         * [.getAbsenceReasons(limit, offset, params)](#Skolengo+getAbsenceReasons)
+        * [.getPaymentsDueDates(params)](#Skolengo+getPaymentsDueDates)
+        * [.getPayments(params)](#Skolengo+getPayments)
+        * [.getInvoices(params)](#Skolengo+getInvoices)
+        * [.getWallets(params)](#Skolengo+getWallets)
         * [.refreshToken(triggerListener)](#Skolengo+refreshToken)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
@@ -609,6 +613,54 @@ Skolengo.fromConfigObject(config).then(async user => {
   })
 })
 ```
+<a name="Skolengo+getPaymentsDueDates"></a>
+
+### skolengo.getPaymentsDueDates(params)
+Récupérer la liste des prochaines échéances des paiements.
+⚗️ Non testé
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | Modifier les paramètres de la requête |
+
+<a name="Skolengo+getPayments"></a>
+
+### skolengo.getPayments(params)
+Récupérer la liste des paiements.
+⚗️ Non testé
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | Modifier les paramètres de la requête |
+
+<a name="Skolengo+getInvoices"></a>
+
+### skolengo.getInvoices(params)
+Récupérer les factures.
+⚗️ Non testé
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | Modifier les paramètres de la requête |
+
+<a name="Skolengo+getWallets"></a>
+
+### skolengo.getWallets(params)
+Récupérer les informations des comptes de paiement.
+⚗️ Non testé
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | Modifier les paramètres de la requête |
+
 <a name="Skolengo+refreshToken"></a>
 
 ### skolengo.refreshToken(triggerListener)
