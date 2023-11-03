@@ -11,7 +11,7 @@ export class AbsenceFilesResponse extends Array<AbsenceFile> {
 
   public toCSV (): string {
     return 'created,type,status,start,end,reason,reason_label\n' +
-    this.map(file => {
+    [...this].map(file => {
       const {
         creationDateTime,
         absenceType,

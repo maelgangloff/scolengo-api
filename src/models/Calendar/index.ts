@@ -35,7 +35,7 @@ END:VEVENT`
   }
 
   public toICalendar (dtstamp: Date = new Date(), name = 'Agenda Skolengo'): string {
-    const lessons = this.map(j => j.lessons).flat()
+    const lessons = [...this].map(j => j.lessons).flat()
     const calendarName = name ?? 'Agenda Skolengo'
     return `BEGIN:VCALENDAR
 VERSION:2.0
