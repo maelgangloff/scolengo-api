@@ -42,7 +42,7 @@ Pour participer et se tenir informé, **rejoins le serveur Discord: https://disc
 | Webcollège Seine-Saint-Denis | cg93     | https://sso.webcollege.seinesaintdenis.fr/oidc/.well-known |
 | Eclat-BFC                    | bfc      | https://sso.eclat-bfc.fr/oidc/.well-known                  |
 | @ucollège84                  | cg84     | https://sso.aucollege84.vaucluse.fr/oidc/.well-known       |
-| ENT Val de Marne             | cg94     | https://sso.entvaldemarne.skolengo.com/oidc/.well-known    |
+| ENT Val de Marne             | cg94     | https://sso.moncollege.valdemarne.fr/oidc/.well-known      |
 | Skolengo-Écoles primaires    | metab1d  | https://sso.skolengo.com/oidc/.well-known                  |
 | Skolengo-Collèges et Lycées  | mpdl     | https://sso.pdl.kosmoseducation.com/oidc/.well-known       |
 | AEFE                         | metab    | https://sso1.skolengo.com/oidc/.well-known                 |
