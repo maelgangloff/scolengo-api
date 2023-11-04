@@ -633,13 +633,11 @@ export class Skolengo {
           limit,
           offset
         },
+        fields: {
+          homework: 'title,done,dueDateTime',
+          subject: 'label,color'
+        },
         ...params
-        /*
-                  fields: {
-                    homework: 'title,done,dueDateTime',
-                    subject: 'label,color'
-                  }
-                   */
       }
     })
     ).data) as HomeworkAssignment[]
