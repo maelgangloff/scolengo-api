@@ -1,5 +1,5 @@
 # Politique de sécurité
- - Il est clairement mentionné que cette librairie est n'est pas officielle.
+ - Il est clairement mentionné que cette librairie n'est pas officielle.
  - Ce module n'est pas une contrefaçon car il n'existe pas de module similaire édité officiellement.
  - Les utilisateurs ne peuvent accéder qu'à leurs propres données. Ils sont soumis au même processus d'authentification que celui implémenté dans l'application.
  - Les données des utilisateurs ne sont pas davantage exposées puisqu'un utilisateur ne peut accéder qu'à ses propres données. Personne n'a le contrôle sur cette limitation qui est inhérente au fonctionnement de l'API des serveurs de Skolengo.
