@@ -780,7 +780,8 @@ export class Skolengo {
   }
 
   /**
-   * Récupérer une communication à partir de son identifiant
+   * Récupérer une communication à partir de son identifiant.
+   * Marque la communication comme lu.
    * @param {string} communicationId Identifiant d'une communication
    * @param {object} params Modifier les paramètres de la requête
    * @async
