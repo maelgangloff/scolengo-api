@@ -455,7 +455,8 @@ Récupérer les communication d'un dossier
 <a name="Skolengo+getCommunication"></a>
 
 ### skolengo.getCommunication(communicationId, params)
-Récupérer une communication à partir de son identifiant
+Récupérer une communication à partir de son identifiant.
+Marque la communication comme lu.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
