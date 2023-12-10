@@ -456,7 +456,6 @@ Récupérer les communication d'un dossier
 
 ### skolengo.getCommunication(communicationId, params)
 Récupérer une communication à partir de son identifiant.
-Marque la communication comme lu.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 
@@ -469,6 +468,7 @@ Marque la communication comme lu.
 
 ### skolengo.getCommunicationParticipations(communicationId, params, includes)
 Récupérer les participations d'un fil de discussion (communication)
+Marque la communication comme lue.
 
 **Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 

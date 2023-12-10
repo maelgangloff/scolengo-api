@@ -781,7 +781,6 @@ export class Skolengo {
 
   /**
    * Récupérer une communication à partir de son identifiant.
-   * Marque la communication comme lu.
    * @param {string} communicationId Identifiant d'une communication
    * @param {object} params Modifier les paramètres de la requête
    * @async
@@ -797,6 +796,7 @@ export class Skolengo {
 
   /**
    * Récupérer les participations d'un fil de discussion (communication)
+   * Marque la communication comme lue.
    * @param {string} communicationId Identifiant d'une communication
    * @param {object} params Modifier les paramètres de la requête
    * @param {string[]} includes Ressources JSON:API à inclure
