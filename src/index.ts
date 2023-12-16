@@ -100,7 +100,7 @@ export class Skolengo {
     this.school = school
     this.tokenSet = tokenSet
     this.config = {
-      httpClient: config?.httpClient ?? axios.create(),
+      httpClient: config?.httpClient ?? axios.create({ baseURL: BASE_URL }),
       onTokenRefresh: config?.onTokenRefresh ?? (() => {}),
       handlePronoteError: config?.handlePronoteError ?? false
     }
@@ -118,6 +118,7 @@ export class Skolengo {
 
   /**
    * Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
+   * @param {AxiosRequestConfig|undefined} httpConfig Configuration facultative du client HTTP
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -128,12 +129,13 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async getAppCurrentConfig (): Promise<AppCurrentConfig> {
+  public static async getAppCurrentConfig (httpConfig?: AxiosRequestConfig): Promise<AppCurrentConfig> {
     return deserialize((await axios.request<DocumentObject>({
       baseURL: BASE_URL,
       url: '/sko-app-configs/current',
       method: 'get',
-      responseType: 'json'
+      responseType: 'json',
+      ...httpConfig
     })).data) as AppCurrentConfig
   }
 
@@ -142,6 +144,7 @@ export class Skolengo {
    * @param {SchoolFilter} filter Le filtre de recherche
    * @param {number} limit Limite
    * @param {number} offset Offset
+   * @param {AxiosRequestConfig|undefined} httpConfig Configuration facultative du client HTTP
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -158,7 +161,7 @@ export class Skolengo {
    * ```
    * @async
    */
-  public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<School[]> {
+  public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0, httpConfig?: AxiosRequestConfig): Promise<School[]> {
     return deserialize((await axios.request<DocumentObject>({
       baseURL: BASE_URL,
       url: '/schools',
@@ -170,7 +173,8 @@ export class Skolengo {
           offset
         },
         filter
-      }
+      },
+      ...httpConfig
     })).data) as School[]
   }
 
@@ -1057,7 +1061,6 @@ export class Skolengo {
   private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
     const axiosConfig: AxiosRequestConfig = {
       ...config,
-      baseURL: BASE_URL,
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${this.tokenSet.access_token as string}`,

@@ -87,8 +87,8 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
         * [.refreshToken(triggerListener)](#Skolengo+refreshToken)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
-        * [.getAppCurrentConfig()](#Skolengo.getAppCurrentConfig)
-        * [.searchSchool(filter, limit, offset)](#Skolengo.searchSchool)
+        * [.getAppCurrentConfig(httpConfig)](#Skolengo.getAppCurrentConfig)
+        * [.searchSchool(filter, limit, offset, httpConfig)](#Skolengo.searchSchool)
         * [.getOIDClient(school, redirectUri)](#Skolengo.getOIDClient)
         * [.fromConfigObject(config, skolengoConfig)](#Skolengo.fromConfigObject)
 
@@ -635,10 +635,15 @@ Révoquer un jeton
 
 <a name="Skolengo.getAppCurrentConfig"></a>
 
-### Skolengo.getAppCurrentConfig()
+### Skolengo.getAppCurrentConfig(httpConfig)
 Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| httpConfig | <code>AxiosRequestConfig</code> \| <code>undefined</code> | Configuration facultative du client HTTP |
+
 **Example**  
 ```js
 const {Skolengo} = require('scolengo-api')
@@ -650,7 +655,7 @@ Skolengo.getAppCurrentConfig().then(config => {
 ```
 <a name="Skolengo.searchSchool"></a>
 
-### Skolengo.searchSchool(filter, limit, offset)
+### Skolengo.searchSchool(filter, limit, offset, httpConfig)
 Rechercher un établissement scolaire
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
@@ -660,6 +665,7 @@ Rechercher un établissement scolaire
 | filter | <code>SchoolFilter</code> |  | Le filtre de recherche |
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
+| httpConfig | <code>AxiosRequestConfig</code> \| <code>undefined</code> |  | Configuration facultative du client HTTP |
 
 **Example**  
 ```js
