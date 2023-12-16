@@ -638,7 +638,7 @@ export class Skolengo {
           offset
         },
         fields: {
-          homework: 'title,done,dueDateTime',
+          homework: 'title,done,dueDateTime,html',
           subject: 'label,color'
         },
         ...params
@@ -677,7 +677,7 @@ export class Skolengo {
           'student.id': studentId
         },
         fields: {
-          homework: 'title,done,dueDateTime',
+          homework: 'title,done,dueDateTime,html',
           subject: 'label,color'
         },
         ...params
