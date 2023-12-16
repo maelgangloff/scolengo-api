@@ -118,7 +118,7 @@ export class Skolengo {
 
   /**
    * Configuration actuelle de l'application mobile (dernière version déployée, dernière version supportée, ...)
-   * @param {AxiosRequestConfig} httpConfig Configuration facultative du client HTTP
+   * @param {AxiosRequestConfig|undefined} httpConfig Configuration facultative du client HTTP
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *
@@ -144,7 +144,7 @@ export class Skolengo {
    * @param {SchoolFilter} filter Le filtre de recherche
    * @param {number} limit Limite
    * @param {number} offset Offset
-   * @param {AxiosRequestConfig} httpConfig Configuration facultative du client HTTP
+   * @param {AxiosRequestConfig|undefined} httpConfig Configuration facultative du client HTTP
    * @example ```js
    * const {Skolengo} = require('scolengo-api')
    *

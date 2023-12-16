@@ -642,7 +642,7 @@ Configuration actuelle de l'application mobile (dernière version déployée, de
 
 | Param | Type | Description |
 | --- | --- | --- |
-| httpConfig | <code>AxiosRequestConfig</code> | Configuration facultative du client HTTP |
+| httpConfig | <code>AxiosRequestConfig</code> \| <code>undefined</code> | Configuration facultative du client HTTP |
 
 **Example**  
 ```js
@@ -665,7 +665,7 @@ Rechercher un établissement scolaire
 | filter | <code>SchoolFilter</code> |  | Le filtre de recherche |
 | limit | <code>number</code> | <code>10</code> | Limite |
 | offset | <code>number</code> | <code>0</code> | Offset |
-| httpConfig | <code>AxiosRequestConfig</code> |  | Configuration facultative du client HTTP |
+| httpConfig | <code>AxiosRequestConfig</code> \| <code>undefined</code> |  | Configuration facultative du client HTTP |
 
 **Example**  
 ```js
