@@ -100,7 +100,7 @@ export class Skolengo {
     this.school = school
     this.tokenSet = tokenSet
     this.config = {
-      httpClient: config?.httpClient ?? axios.create(),
+      httpClient: config?.httpClient ?? axios.create({ baseURL: BASE_URL }),
       onTokenRefresh: config?.onTokenRefresh ?? (() => {}),
       handlePronoteError: config?.handlePronoteError ?? false
     }
@@ -130,7 +130,6 @@ export class Skolengo {
    */
   public static async getAppCurrentConfig (): Promise<AppCurrentConfig> {
     return deserialize((await axios.request<DocumentObject>({
-      baseURL: BASE_URL,
       url: '/sko-app-configs/current',
       method: 'get',
       responseType: 'json'
@@ -160,7 +159,6 @@ export class Skolengo {
    */
   public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<School[]> {
     return deserialize((await axios.request<DocumentObject>({
-      baseURL: BASE_URL,
       url: '/schools',
       method: 'get',
       responseType: 'json',
@@ -1057,7 +1055,6 @@ export class Skolengo {
   private async request<T = any, R = AxiosResponse<T>, D = any> (config: AxiosRequestConfig): Promise<R> {
     const axiosConfig: AxiosRequestConfig = {
       ...config,
-      baseURL: BASE_URL,
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${this.tokenSet.access_token as string}`,
