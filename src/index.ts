@@ -130,6 +130,7 @@ export class Skolengo {
    */
   public static async getAppCurrentConfig (): Promise<AppCurrentConfig> {
     return deserialize((await axios.request<DocumentObject>({
+      baseURL: BASE_URL,
       url: '/sko-app-configs/current',
       method: 'get',
       responseType: 'json'
@@ -159,6 +160,7 @@ export class Skolengo {
    */
   public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0): Promise<School[]> {
     return deserialize((await axios.request<DocumentObject>({
+      baseURL: BASE_URL,
       url: '/schools',
       method: 'get',
       responseType: 'json',
