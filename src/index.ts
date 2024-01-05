@@ -226,7 +226,8 @@ export class Skolengo {
   /**
    * Créer un client Scolengo à partir d'un objet contenant les informations d'authentification.
    * Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
-   * La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
+   * Le callback optionnel `onTokenRefresh` est appellé lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
+   * La callback optionnel `tokenRefresh` permet d'outrepasser l'utilisation de la librairie `openid-client` pour le rafraîchissement des jetons. La délégation de cette tâche permet l'utilisation de cette librairie dans des environnements externes à Node.js.
    * @param {AuthConfig} config Informations d'authentification
    * @param {SkolengoConfig} skolengoConfig Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    * @example ```js
@@ -1031,18 +1032,18 @@ export class Skolengo {
   public async refreshToken (triggerListener: boolean = true): Promise<TokenSetParameters> {
     if (this.config.refreshToken !== undefined) {
       this.tokenSet = await this.config.refreshToken(this.tokenSet)
+      if (triggerListener) this.config.onTokenRefresh(this.tokenSet)
       return this.tokenSet
     }
 
     if (this.oidClient === null) throw new Error('Impossible de rafraîchir le jeton sans le client OpenID Connect.')
 
     const { TokenSet } = await import('openid-client')
-    const newTokenSet = await this.oidClient.refresh(new TokenSet(this.tokenSet))
 
-    if (triggerListener) this.config.onTokenRefresh(newTokenSet)
+    this.tokenSet = await this.oidClient.refresh(new TokenSet(this.tokenSet))
+    if (triggerListener) this.config.onTokenRefresh(this.tokenSet)
 
-    this.tokenSet = newTokenSet
-    return newTokenSet
+    return this.tokenSet
   }
 
   /**

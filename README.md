@@ -737,7 +737,8 @@ Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
 ### Skolengo.fromConfigObject(config, skolengoConfig)
 Créer un client Scolengo à partir d'un objet contenant les informations d'authentification.
 Cet objet de configuration peut être généré à partir de l'utilitaire [scolengo-token](https://github.com/maelgangloff/scolengo-token).
-La fonction `onTokenRefresh` est appellée lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
+Le callback optionnel `onTokenRefresh` est appellé lors du rafraichissement du jeton (pour éventuellement stocker en mémoire le nouveau tokenSet).
+La callback optionnel `tokenRefresh` permet d'outrepasser l'utilisation de la librairie `openid-client` pour le rafraîchissement des jetons. La délégation de cette tâche permet l'utilisation de cette librairie dans des environnements externes à Node.js.
 
 **Kind**: static method of [<code>Skolengo</code>](#Skolengo)  
 
