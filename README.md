@@ -85,6 +85,7 @@ Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonct
         * [.postAbsenceFileState(folderId, reasonId, comment, params)](#Skolengo+postAbsenceFileState)
         * [.getAbsenceReasons(limit, offset, params)](#Skolengo+getAbsenceReasons)
         * [.refreshToken(triggerListener)](#Skolengo+refreshToken)
+        * [.getTokenClaims()](#Skolengo+getTokenClaims)
     * _static_
         * [.revokeToken(oidClient, token)](#Skolengo.revokeToken)
         * [.getAppCurrentConfig(httpConfig)](#Skolengo.getAppCurrentConfig)
@@ -368,7 +369,7 @@ const {Skolengo} = require('scolengo-api')
 Skolengo.fromConfigObject(config).then(async user => {
   const startDate = new Date().toISOString().split('T')[0] // Aujourd'hui
   const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1e3).toISOString().split('T')[0] // Aujourd'hui + 15 jours
-  const homework = await user.getHomeworkAssignments(user.tokenSet.claims().sub, startDate, endDate)
+  const homework = await user.getHomeworkAssignments(user.getTokenClaims().sub, startDate, endDate)
 
   console.log("Voici les exercices à faire pour les 2 prochaines semaines :", homework)
 })
@@ -393,7 +394,7 @@ const {Skolengo} = require('scolengo-api')
 
 const user = await Skolengo.fromConfigObject(config)
 
-user.getHomeworkAssignment(user.tokenSet.claims().sub, "123456").then(e => {
+user.getHomeworkAssignment(user.getTokenClaims().sub, "123456").then(e => {
     console.log(`Pour le ${new Date(e.dueDateTime).toLocaleString()} :`)
     console.log(`> ${e.title} (${e.subject.label})`)
     console.log(e.html)
@@ -621,6 +622,12 @@ Demande un renouvellement du jeu de jeton (tokenSet)
 | --- | --- | --- | --- |
 | triggerListener | <code>boolean</code> | <code>true</code> | Si oui, appeler la fonction onTokenRefresh |
 
+<a name="Skolengo+getTokenClaims"></a>
+
+### skolengo.getTokenClaims()
+Récupérer les données contenues dans le payload JWT du token ID
+
+**Kind**: instance method of [<code>Skolengo</code>](#Skolengo)  
 <a name="Skolengo.revokeToken"></a>
 
 ### Skolengo.revokeToken(oidClient, token)
