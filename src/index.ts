@@ -26,10 +26,6 @@ const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4N
 export class Skolengo {
   public readonly school: School
   public tokenSet: TokenSetParameters
-  /**
-   * Si refresh le token en cas de 401
-   */
-  public refreshTokens = true
   private readonly oidClient: Client | null
   private readonly config: SkolengoConfig
 
@@ -270,16 +266,12 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async fromConfigObject (config: AuthConfig, skolengoConfig?: Partial<SkolengoConfig>, withoutOidc = false): Promise<Skolengo> {
-    let oidClient
-
-    if (!withoutOidc) {
-      oidClient = await Skolengo.getOIDClient(config.school)
-    } else {
-      oidClient = null
+  public static async fromConfigObject (config: AuthConfig, skolengoConfig?: Partial<SkolengoConfig>): Promise<Skolengo> {
+    try {
+      return new Skolengo(await Skolengo.getOIDClient(config.school), config.school, config.tokenSet, skolengoConfig)
+    } catch (e) {
+      return new Skolengo(null, config.school, config.tokenSet, skolengoConfig)
     }
-
-    return new Skolengo(oidClient, config.school, config.tokenSet, skolengoConfig)
   }
 
   /**
@@ -1038,9 +1030,7 @@ export class Skolengo {
   public async refreshToken (triggerListener: boolean = true): Promise<TokenSetParameters> {
     const { TokenSet } = await import('openid-client')
 
-    if (this.oidClient === null) {
-      throw new Error('Cannot blabla')
-    }
+    if (this.oidClient === null) throw new Error('Impossible de rafraîchir le jeton sans la librairie openid-client.')
 
     const newTokenSet = await this.oidClient.refresh(new TokenSet(this.tokenSet))
 
@@ -1050,8 +1040,12 @@ export class Skolengo {
     return newTokenSet
   }
 
+  /**
+   * Récupérer les données contenues dans le payload JWT du token ID
+   */
   public getTokenClaims (): IdTokenClaims {
-    return JSON.parse(atob((this.tokenSet.id_token as string).split('.')[1]))
+    if (this.tokenSet.id_token === undefined) throw new TypeError('id_token not present in TokenSet')
+    return JSON.parse(atob((this.tokenSet.id_token).split('.')[1]))
   }
 
   /**
@@ -1096,7 +1090,7 @@ export class Skolengo {
       const error = e as AxiosError<any>
       const response = error.response
       if (response === undefined) throw error
-      if (response.status === 401 && this.refreshTokens) {
+      if (response.status === 401) {
         const newTokenSet = await this.refreshToken()
         return await this.config.httpClient.request<T, R, D>({
           ...axiosConfig,
