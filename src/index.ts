@@ -66,7 +66,8 @@ export class Skolengo {
    * })
    * ```
    * ```js
-   * const {Skolengo, TokenSet} = require('scolengo-api')
+   * const {Skolengo} = require('scolengo-api')
+   * const {TokenSet} = require('openid-client')
    *
    * Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
    *   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')
@@ -91,7 +92,7 @@ export class Skolengo {
    * ```
    * @param {Client} oidClient Un client OpenID Connect
    * @param {School} school Etablissement
-   * @param {TokenSet} tokenSet Jetons d'authentification OpenID Connect
+   * @param {TokenSetParameters} tokenSet Jetons d'authentification OpenID Connect
    * @param {SkolengoConfig} config Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...)
    */
   public constructor (oidClient: Client | null, school: School, tokenSet: TokenSetParameters, config?: Partial<SkolengoConfig>) {
@@ -1028,10 +1029,14 @@ export class Skolengo {
    * @param {boolean} triggerListener Si oui, appeler la fonction onTokenRefresh
    */
   public async refreshToken (triggerListener: boolean = true): Promise<TokenSetParameters> {
+    if (this.config.refreshToken !== undefined) {
+      this.tokenSet = await this.config.refreshToken(this.tokenSet)
+      return this.tokenSet
+    }
+
+    if (this.oidClient === null) throw new Error('Impossible de rafraîchir le jeton sans le client OpenID Connect.')
+
     const { TokenSet } = await import('openid-client')
-
-    if (this.oidClient === null) throw new Error('Impossible de rafraîchir le jeton sans la librairie openid-client.')
-
     const newTokenSet = await this.oidClient.refresh(new TokenSet(this.tokenSet))
 
     if (triggerListener) this.config.onTokenRefresh(newTokenSet)

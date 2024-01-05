@@ -103,7 +103,7 @@ Il est possible de s'authentifier en possédant au prélable des jetons OAuth 2.
 | --- | --- | --- |
 | oidClient | <code>Client</code> | Un client OpenID Connect |
 | school | <code>School</code> | Etablissement |
-| tokenSet | <code>TokenSet</code> | Jetons d'authentification OpenID Connect |
+| tokenSet | <code>TokenSetParameters</code> | Jetons d'authentification OpenID Connect |
 | config | <code>SkolengoConfig</code> | Configuration optionnelle (stockage du jeton renouvellé, client HTTP personnalisé, gestion des erreurs Pronote, ...) |
 
 **Example**  
@@ -141,7 +141,8 @@ Skolengo.fromConfigObject(config).then(async user => {
 })
 ```
 ```js
-const {Skolengo, TokenSet} = require('scolengo-api')
+const {Skolengo} = require('scolengo-api')
+const {TokenSet} = require('openid-client')
 
 Skolengo.searchSchool({ text: 'Lycée Louise Weiss' }).then(async schools => {
   if(!schools.length) throw new Error('Aucun établissement n\'a été trouvé.')

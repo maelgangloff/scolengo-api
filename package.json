@@ -29,7 +29,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src/ --ext .ts",
-    "test": "jest",
     "doc": "jsdoc2md --template docs/README.hbs -f dist/index.js > README.md"
   },
   "dependencies": {

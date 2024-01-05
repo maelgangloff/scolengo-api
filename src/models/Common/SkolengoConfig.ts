@@ -1,8 +1,9 @@
 import type { AxiosInstance } from 'axios'
-import type { TokenSet } from 'openid-client'
+import type { TokenSetParameters } from 'openid-client'
 
 export interface SkolengoConfig {
-  onTokenRefresh: (tokenSet: TokenSet) => void
+  onTokenRefresh: (tokenSet: TokenSetParameters) => void
+  refreshToken?: (tokenSet: TokenSetParameters) => Promise<TokenSetParameters>
   httpClient: AxiosInstance
   handlePronoteError: boolean
 }
