@@ -3,6 +3,7 @@ import axios from 'axios'
 import type { Client, IdTokenClaims, TokenSetParameters } from 'openid-client'
 import type { DocumentObject } from 'jsonapi-fractal'
 import { deserialize, serialize } from 'jsonapi-fractal'
+import { decode as atob } from 'base-64'
 import type { Stream } from 'node:stream'
 
 import type { AppCurrentConfig, BaseObject, User } from './models/Common'
@@ -20,8 +21,8 @@ import { SkolengoError } from './models/Errors'
 import type { SkolengoConfig } from './models/Common/SkolengoConfig'
 
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
-const OID_CLIENT_ID = Buffer.from('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0', 'base64').toString('ascii') // base64 du client ID de l'app mobile
-const OID_CLIENT_SECRET = Buffer.from('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm', 'base64').toString('ascii') // base64 du client Secret de l'app mobile
+const OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
+const OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
 
 export class Skolengo {
   public readonly school: School
