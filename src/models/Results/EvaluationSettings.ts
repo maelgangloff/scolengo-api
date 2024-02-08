@@ -11,7 +11,7 @@ export interface EvaluationSettings {
   skillsEnabled: boolean
   evaluationsDetailsAvailable: boolean
   periods: Period[]
-  skillsSettings: {
+  skillsSetting: {
     id: string
     skillAcquisitionLevels: Array<{
       label: string

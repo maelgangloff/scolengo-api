@@ -41,12 +41,13 @@ export interface User {
     id: string
     name: string
     timeZone: string
+    administrativeId: string
+    city: string
+    schoolAudience?: {
+      enabled: boolean
+      audienceId: string
+      projectId: string
+    }
     subscribedServices: Array<'MSG' | 'SKOAPP' | 'ABS' | 'CDT' | 'ART' | 'TAF' | 'EVAL' | 'COMC' | 'FACT' | 'REST' | string>
-  }
-  administrativeId?: string
-  schoolAudience?: {
-    enabled: boolean
-    audienceId: string
-    projectId: string
   }
 }
