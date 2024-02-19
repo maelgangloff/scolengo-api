@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: Scolengo API
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Maël
+    family-names: Gangloff
+    email: contact@maelgangloff.fr
+    orcid: 'https://orcid.org/0000-0002-7729-724X'
+identifiers:
+  - type: url
+    value: >-
+      https://github.com/maelgangloff/scolengo-api/releases/tag/3.0.2
+    description: Release v3.0.2 of scolengo-api
+repository-code: 'https://github.com/maelgangloff/scolengo-api'
+abstract: Unofficial Node.js API client of Skolengo EMS.
+keywords:
+  - EMS
+  - Skolengo
+  - API
+license: GPL-3.0-or-later
+version: 3.0.2
+date-released: '2024-02-08'
+license-url: 'https://github.com/maelgangloff/scolengo-api/blob/main/LICENSE'
