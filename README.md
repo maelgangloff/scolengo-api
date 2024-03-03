@@ -16,15 +16,17 @@ Pour utiliser cette librairie, il est nécessaire de s'authentifier auprès des 
 
 Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
 
-## Remarques importantes:
-- Il est clairement mentionné que cette librairie n'est pas officielle.
-- Ce module n'est pas une contrefaçon car il n'existe pas de module similaire édité officiellement.
-- Les utilisateurs ne peuvent accéder qu'à leurs propres données. Ils sont soumis au même processus d'authentification que celui implémenté dans l'application.
-- Les données des utilisateurs ne sont pas davantage exposées puisqu'un utilisateur ne peut accéder qu'à ses propres données. Personne n'a le contrôle sur cette limitation qui est inhérente au fonctionnement de l'API des serveurs de Skolengo.
-- Cette librairie ne se suffit pas à elle-même pour fonctionner. Il est nécessaire de l'importer dans un projet et l'utilisateur est le seul responsable de son code et des éventuelles conséquences.
-- Tout utilisateur de cette librairie a *a priori* lu l'entièreté du fichier de licence GPLv3 disponible publiquement [LICENSE](https://github.com/maelgangloff/scolengo-api/blob/master/LICENSE) ainsi que de ce présent fichier de présentation.
-- Tout utilisateur de cette librairie a *a priori* lu l'entièreté du code de ce projet avant toute utilisation.
-- Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus comme responsables de tout dommage potentiel.
+> [!WARNING]
+> ## Disclaimer
+> - Il est clairement mentionné que cette librairie n'est pas officiellement éditée par la société éditrice du logiciel *Skolengo*.
+> - Ce module n'est pas une contrefaçon car il n'existe pas de module similaire édité officiellement.
+> - Les utilisateurs ne peuvent accéder qu'à leurs propres données. Ils sont soumis au même processus d'authentification que celui implémenté dans l'application et imposé par le serveur API.
+> - Les données des utilisateurs ne sont pas davantage exposées puisqu'un utilisateur ne peut accéder qu'à ses propres données. Personne n'a le contrôle sur cette limitation qui est inhérente au fonctionnement de l'API des serveurs de Skolengo.
+> - Cette librairie ne se suffit pas à elle-même pour fonctionner. Il est nécessaire de l'importer dans un projet et l'utilisateur est le seul responsable de son code et des éventuelles conséquences.
+> - Tout utilisateur de cette librairie a *a priori* lu et approuvé l'entièreté du fichier de licence GPLv3 disponible publiquement [LICENSE](https://github.com/maelgangloff/scolengo-api/blob/master/LICENSE) ainsi que de ce présent fichier de présentation.
+> - Tout utilisateur de cette librairie a *a priori* lu et compris l'entièreté du code de ce projet avant toute utilisation.
+> - L'auteur de ce projet n'agit pas en tant qu'intermédiaire de traitement des données au sens du RGPD. Les utilisateurs sont responsables de leur propre conformité au RGPD lors de l'utilisation de cette librairie. Ils doivent s'assurer que leur utilisation de cette librairie est conforme aux exigences du RGPD et de toute autre législation applicable en matière de protection des données.
+> - Eu égard l'ensemble de ces remarques, les contributeurs et *a fortiori* l'auteur du projet ne peuvent être tenus responsables de tout dommage potentiel.
 
 ## Liste des ENT utilisant Skolengo :
 | Nom usuel de l'ENT           | Code ENT | URL OpenID Connect Discovery                               |
@@ -786,8 +788,9 @@ Skolengo.fromConfigObject(config).then(async user => {
 })
 ```
 
-## Liens utiles
-- [Wiki](https://github.com/maelgangloff/scolengo-api/wiki)
-- [Serveur Discord](https://discord.gg/9u69mxsFT6)
-- [JSON:API Specification](https://jsonapi.org/format)
-- [OpenID Connect Specification](https://openid.net/connect)
+> [!NOTE]
+> ## Liens utiles
+> - [Wiki](https://github.com/maelgangloff/scolengo-api/wiki)
+> - [Serveur Discord](https://discord.gg/9u69mxsFT6)
+> - [JSON:API Specification](https://jsonapi.org/format)
+> - [OpenID Connect Specification](https://openid.net/connect)
