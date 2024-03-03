@@ -310,7 +310,8 @@ export class Skolengo {
    *
    * Une pièce jointe peut être un fichier inclu dans un courriel, une actualité de l'établissement ou un bulletin périodique.
    *
-   * 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
+   * > [!CAUTION]
+   * > 🚨 ATTENTION: Dans cette requête, votre jeton est envoyé à l'URL du fichier. Assurez-vous que celle-ci provient bien de votre établissement.
    * @async
    * @example ```js
    * const {createWriteStream} = require('node:fs')
