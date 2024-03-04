@@ -5,3 +5,4 @@ export interface BaseObject<Type = string> {
 
 export type { AppCurrentConfig } from './CurrentConfig'
 export type { User } from './User'
+export type { Subject } from './Subject'

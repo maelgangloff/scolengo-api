@@ -1,12 +1,6 @@
-import type { User } from '../Common'
+import type { User, Subject } from '../Common'
 import type { HomeworkAssignment } from './HomeworkAssignment'
 import type { Attachment } from '../School'
-
-export interface Subject {
-  id: string
-  label: string
-  color: string
-}
 
 export interface Lesson {
   id: string

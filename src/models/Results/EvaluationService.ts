@@ -1,4 +1,4 @@
-import type { Subject } from './Subject'
+import type { Subject } from '../Common/Subject'
 import type { User } from '../Common'
 
 export interface EvaluationService {
