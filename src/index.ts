@@ -23,6 +23,14 @@ import type { SkolengoConfig } from './models/Common/SkolengoConfig'
 const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
 const OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
+const REDIRECTURI = 'skoapp-prod://sign-in-callback'
+
+export const SkolengoDefaultValues = {
+  BASE_URL,
+  OID_CLIENT_ID,
+  OID_CLIENT_SECRET,
+  REDIRECTURI
+}
 
 export class Skolengo {
   public readonly school: School
@@ -212,7 +220,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
+  public static async getOIDClient (school: School, redirectUri = REDIRECTURI): Promise<Client> {
     const { Issuer } = await import('openid-client')
 
     const skolengoIssuer = await Issuer.discover(school.emsOIDCWellKnownUrl)
