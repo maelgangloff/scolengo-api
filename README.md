@@ -71,7 +71,7 @@ Les valeurs actuellement exportées sont :</p>
 <ul>
 <li><code>SkolengoDefaultValues.BASE_URL</code> (<a href="https://api.skolengo.com/api/v1/bff-sko-app">https://api.skolengo.com/api/v1/bff-sko-app</a>) - URL de base de l&#39;API</li>
 <li><code>SkolengoDefaultValues.OID_CLIENT_ID</code> et <code>SkolengoDefaultValues.OID_CLIENT_SECRET</code> - &quot;Credentials&quot; utilisés par la connexion OIDC, utiles pour une implémentation personnalisée de l&#39;authentification</li>
-<li><code>SkolengoDefaultValues.REDIRECTURI</code> (skoapp-prod://sign-in-callback) <em>deeplink</em> utilisé par l&#39;application pour se connecté via le CAS/SSO de l&#39;ENT, réutilsié par le processsus d&#39;authentification</li>
+<li><code>SkolengoDefaultValues.REDIRECT_URI</code> (skoapp-prod://sign-in-callback) <em>deeplink</em> utilisé par l&#39;application pour se connecté via le CAS/SSO de l&#39;ENT, réutilsié par le processsus d&#39;authentification</li>
 </ul>
 </dd>
 </dl>
@@ -818,7 +818,7 @@ Objet de valeurs dite "de configuration" pour un usage via des librairies extern
 Les valeurs actuellement exportées sont :
 - `SkolengoDefaultValues.BASE_URL` (https://api.skolengo.com/api/v1/bff-sko-app) - URL de base de l'API
 - `SkolengoDefaultValues.OID_CLIENT_ID` et `SkolengoDefaultValues.OID_CLIENT_SECRET` - "Credentials" utilisés par la connexion OIDC, utiles pour une implémentation personnalisée de l'authentification
-- `SkolengoDefaultValues.REDIRECTURI` (skoapp-prod://sign-in-callback) *deeplink* utilisé par l'application pour se connecté via le CAS/SSO de l'ENT, réutilsié par le processsus d'authentification
+- `SkolengoDefaultValues.REDIRECT_URI` (skoapp-prod://sign-in-callback) *deeplink* utilisé par l'application pour se connecté via le CAS/SSO de l'ENT, réutilsié par le processsus d'authentification
 
 **Kind**: global variable  
 
