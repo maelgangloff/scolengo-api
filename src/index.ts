@@ -24,13 +24,21 @@ const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
 const OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
 const OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
 const REDIRECTURI = 'skoapp-prod://sign-in-callback'
+// ! Merci de mettre à jour ces valeurs ainsi que les réutilisations dans ce projet et dans les documentations de ce package en cas de changement
 
+/**
+  * Objet de valeurs dite "de configuration" pour un usage via des librairies externes
+  * Les valeurs actuellement exportées sont :
+  * - `SkolengoDefaultValues.BASE_URL` (https://api.skolengo.com/api/v1/bff-sko-app) - URL de base de l'API
+  * - `SkolengoDefaultValues.OID_CLIENT_ID` et `SkolengoDefaultValues.OID_CLIENT_SECRET` - "Credentials" utilisés par la connexion OIDC, utiles pour une implémentation personnalisée de l'authentification
+  * - `SkolengoDefaultValues.REDIRECTURI` (skoapp-prod://sign-in-callback) *deeplink* utilisé par l'application pour se connecté via le CAS/SSO de l'ENT, réutilsié par le processsus d'authentification
+  */
 export const SkolengoDefaultValues = {
   BASE_URL,
   OID_CLIENT_ID,
   OID_CLIENT_SECRET,
   REDIRECTURI
-}
+} as const
 
 export class Skolengo {
   public readonly school: School
@@ -220,7 +228,7 @@ export class Skolengo {
    * })
    * ```
    */
-  public static async getOIDClient (school: School, redirectUri = REDIRECTURI): Promise<Client> {
+  public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
     const { Issuer } = await import('openid-client')
 
     const skolengoIssuer = await Issuer.discover(school.emsOIDCWellKnownUrl)
