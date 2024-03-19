@@ -20,12 +20,14 @@ import type { SkolengoErrorBody } from './models/Errors'
 import { SkolengoError } from './models/Errors'
 import type { SkolengoConfig } from './models/Common/SkolengoConfig'
 
-const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
-const OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
-const OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
+export const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
+export const OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
+export const OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
+export const REDIRECT_URI = 'skoapp-prod://sign-in-callback'
 
 export class Skolengo {
   public readonly school: School
+
   public tokenSet: TokenSetParameters
   private readonly oidClient: Client | null
   private readonly config: SkolengoConfig
