@@ -20,14 +20,14 @@ import type { SkolengoErrorBody } from './models/Errors'
 import { SkolengoError } from './models/Errors'
 import type { SkolengoConfig } from './models/Common/SkolengoConfig'
 
-const BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
-const OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
-const OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
-const REDIRECT_URI = 'skoapp-prod://sign-in-callback'
-// ! Merci de mettre à jour ces valeurs ainsi que les réutilisations dans ce projet et dans les documentations de ce package en cas de changement
-
 export class Skolengo {
   public readonly school: School
+
+  public static readonly BASE_URL = 'https://api.skolengo.com/api/v1/bff-sko-app'
+  public static readonly OID_CLIENT_ID = atob('U2tvQXBwLlByb2QuMGQzNDkyMTctOWE0ZS00MWVjLTlhZjktZGY5ZTY5ZTA5NDk0') // base64 du client ID de l'app mobile
+  public static readonly OID_CLIENT_SECRET = atob('N2NiNGQ5YTgtMjU4MC00MDQxLTlhZTgtZDU4MDM4NjkxODNm') // base64 du client Secret de l'app mobile
+  public static readonly REDIRECT_URI = 'skoapp-prod://sign-in-callback'
+
   public tokenSet: TokenSetParameters
   private readonly oidClient: Client | null
   private readonly config: SkolengoConfig
@@ -103,7 +103,7 @@ export class Skolengo {
     this.school = school
     this.tokenSet = tokenSet
     this.config = {
-      httpClient: config?.httpClient ?? axios.create({ baseURL: BASE_URL }),
+      httpClient: config?.httpClient ?? axios.create({ baseURL: Skolengo.BASE_URL }),
       onTokenRefresh: config?.onTokenRefresh ?? (() => {}),
       handlePronoteError: config?.handlePronoteError ?? false
     }
@@ -134,7 +134,7 @@ export class Skolengo {
    */
   public static async getAppCurrentConfig (httpConfig?: AxiosRequestConfig): Promise<AppCurrentConfig> {
     return deserialize((await axios.request<DocumentObject>({
-      baseURL: BASE_URL,
+      baseURL: Skolengo.BASE_URL,
       url: '/sko-app-configs/current',
       method: 'get',
       responseType: 'json',
@@ -166,7 +166,7 @@ export class Skolengo {
    */
   public static async searchSchool (filter: SchoolFilter, limit = 10, offset = 0, httpConfig?: AxiosRequestConfig): Promise<School[]> {
     return deserialize((await axios.request<DocumentObject>({
-      baseURL: BASE_URL,
+      baseURL: Skolengo.BASE_URL,
       url: '/schools',
       method: 'get',
       responseType: 'json',
@@ -219,8 +219,8 @@ export class Skolengo {
 
     const skolengoIssuer = await Issuer.discover(school.emsOIDCWellKnownUrl)
     return new skolengoIssuer.Client({
-      client_id: OID_CLIENT_ID,
-      client_secret: OID_CLIENT_SECRET,
+      client_id: Skolengo.OID_CLIENT_ID,
+      client_secret: Skolengo.OID_CLIENT_SECRET,
       redirect_uris: [redirectUri],
       response_types: ['code']
     })
@@ -1122,17 +1122,3 @@ export class Skolengo {
     }
   }
 }
-
-/**
-  * Objet de valeurs dite "de configuration" pour un usage via des librairies externes
-  * Les valeurs actuellement exportées sont :
-  * - `SkolengoDefaultValues.BASE_URL` (https://api.skolengo.com/api/v1/bff-sko-app) - URL de base de l'API
-  * - `SkolengoDefaultValues.OID_CLIENT_ID` et `SkolengoDefaultValues.OID_CLIENT_SECRET` - "Credentials" utilisés par la connexion OIDC, utiles pour une implémentation personnalisée de l'authentification
-  * - `SkolengoDefaultValues.REDIRECT_URI` (skoapp-prod://sign-in-callback) *deeplink* utilisé par l'application pour se connecté via le CAS/SSO de l'ENT, réutilsié par le processsus d'authentification
-  */
-export const SkolengoDefaultValues = {
-  BASE_URL,
-  OID_CLIENT_ID,
-  OID_CLIENT_SECRET,
-  REDIRECT_URI
-} as const
