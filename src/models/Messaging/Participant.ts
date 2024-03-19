@@ -3,7 +3,7 @@ import type { TechnicalUser } from './TechnicalUser'
 
 export interface Participant {
   id: string
-  category: 'INITIATOR' | 'TO'
+  category: 'INITIATOR' | 'TO' | 'CC'
   additionalInfo: any
   label?: string
   fromGroup?: boolean
