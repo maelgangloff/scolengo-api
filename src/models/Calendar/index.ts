@@ -28,9 +28,9 @@ STATUS:${canceled ? 'CANCELLED' : 'CONFIRMED'}
 UID:${id}@kdecoleapi
 DTSTART:${convertDT(startDateTime)}
 DTEND:${convertDT(endDateTime)}
-SUMMARY:${title} (${location})
+SUMMARY:${title} ${location !== null ? `(${location})` : ''}
 DESCRIPTION:${subject.label} avec ${teachers.map(t => `${t.title ?? ''} ${t.firstName} ${t.lastName}`).join('; ')}
-LOCATION:${location}
+LOCATION:${location ?? ''}
 END:VEVENT`
   }
 

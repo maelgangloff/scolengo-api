@@ -7,11 +7,11 @@ export interface Lesson {
   startDateTime: string
   endDateTime: string
   title: string
-  location: string
+  location: string | null
   anyHomeworkToDoForTheLesson: boolean
   anyHomeworkToDoAfterTheLesson: boolean
   anyContent: boolean
-  locationComplement: string | null
+  locationComplement?: string | null
   canceled: boolean
   contents?: Array<{
     id: string
