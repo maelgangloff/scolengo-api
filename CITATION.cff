@@ -12,8 +12,8 @@ authors:
 identifiers:
   - type: url
     value: >-
-      https://github.com/maelgangloff/scolengo-api/releases/tag/3.0.2
-    description: Release v3.0.2 of scolengo-api
+      https://github.com/maelgangloff/scolengo-api/releases/tag/3.0.3
+    description: Release v3.0.3 of scolengo-api
 repository-code: 'https://github.com/maelgangloff/scolengo-api'
 abstract: Unofficial Node.js API client of Skolengo EMS.
 keywords:
