@@ -217,7 +217,7 @@ export class Skolengo {
   public static async getOIDClient (school: School, redirectUri = 'skoapp-prod://sign-in-callback'): Promise<Client> {
     const { Issuer } = await import('openid-client')
 
-    if (!school.emsOIDCWellKnownUrl) throw new TypeError('emsOIDCWellKnownUrl invalid')
+    if (school.emsOIDCWellKnownUrl == undefined || school.emsOIDCWellKnownUrl == null) throw new TypeError('emsOIDCWellKnownUrl invalid')
     const skolengoIssuer = await Issuer.discover(school.emsOIDCWellKnownUrl)
     return new skolengoIssuer.Client({
       client_id: OID_CLIENT_ID,
