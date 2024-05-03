@@ -63,4 +63,15 @@ describeIfLoggedIn('Test Skolengo API types - User logged in', () => {
 
     expect(result).toBe(true)
   })
+
+  it('should getSchoolInfos return an array of SchoolInfo type', async () => {
+    const type = 'SchoolInfo'
+    const response = await user.getSchoolInfos()
+    const ajv = new Ajv()
+    const schema = createGenerator({ ...ajvConfig, type }).createSchema(type)
+    for (const info of response.slice(0, Math.min(3, response.length))) {
+      const result = ajv.validate(schema, info)
+      expect(result).toBe(true)
+    }
+  })
 })
