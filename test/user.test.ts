@@ -35,6 +35,7 @@ describeAuthenticated('Test Skolengo API types - Authenticated user', () => {
   })
 
   it('should getUsersMailSettings return UsersMailSettings type', async () => {
+    if (!userPermissions.includes('READ_MESSAGES')) return
     const response = await user.getUsersMailSettings()
     expect(response).toMatchSchema('UsersMailSettings')
   })
