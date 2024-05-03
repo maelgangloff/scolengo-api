@@ -5,7 +5,7 @@ import { Skolengo } from '../src/index'
 import Ajv from 'ajv'
 
 const SKOLENGO_TOKENSET = process.env.SKOLENGO_TOKENSET
-const describeIfLoggedIn = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
+const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
 
 const ajv = new Ajv()
 
@@ -17,7 +17,7 @@ const ajvConfig: Config = {
 /**
  * Tests unitaires des endpoints qui nécessitent une authentification
  */
-describeIfLoggedIn('Test Skolengo API types - User logged in', () => {
+describeAuthenticated('Test Skolengo API types - User logged in', () => {
   let user: Skolengo
   let userPermissions: string[] = []
 

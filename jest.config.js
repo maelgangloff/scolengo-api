@@ -11,5 +11,6 @@ module.exports = {
   },
   transformIgnorePatterns: [
     "<rootDir>/node_modules/(?!ts-json-schema-generator)"
-  ]
+  ],
+  modulePathIgnorePatterns: ["<rootDir>/dist/"]
 };
