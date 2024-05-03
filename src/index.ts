@@ -226,7 +226,6 @@ export class Skolengo {
       response_types: ['code']
     })
   }
-  }
 
   /**
    * Créer un client Scolengo à partir d'un objet contenant les informations d'authentification.
