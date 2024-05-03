@@ -40,9 +40,9 @@ describeAuthenticated('Test Skolengo API types - Authenticated user', () => {
   })
 
   it('should getSchoolInfos return an array of SchoolInfo type', async () => {
-    const response = await Skolengo.searchSchool({ text: 'Lycée' }, 10)
-    for (const school of response) {
-      expect(school).toMatchSchema('School')
+    const response = await user.getSchoolInfos()
+    for (const info of response) {
+      expect(info).toMatchSchema('SchoolInfo')
     }
   })
 })
