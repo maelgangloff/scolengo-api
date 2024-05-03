@@ -6,7 +6,7 @@ export interface HomeworkAssignment {
   title: string | null
   html: string | null
   dueDateTime: string | null
-  dueDate: string | null
+  dueDate?: string | null
   done: boolean
   deliverWorkOnline: boolean
   onlineDeliveryUrl: null | string

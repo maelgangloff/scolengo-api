@@ -4,7 +4,7 @@ import type { Subject } from '../Common/Subject'
 
 export interface Evaluation {
   id: string
-  coefficient: number
+  coefficient: number | null
   average: number | null
   scale: number | null
   studentAverage: number | null

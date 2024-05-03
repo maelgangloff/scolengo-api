@@ -3,9 +3,9 @@ import type { AuthConfig } from '../src/models/Common/Auth'
 import type { Evaluation, EvaluationSettings } from '../src/models/Results'
 import type { Agenda, HomeworkAssignment } from '../src/models/Calendar'
 import type { AbsenceFile } from '../src/models/SchoolLife'
+import type { SchoolInfo } from '../src/models/School'
 import { Skolengo } from '../src/index'
 import './common'
-import type { SchoolInfo } from '../src/models/School'
 
 const SKOLENGO_TOKENSET = process.env.SKOLENGO_TOKENSET
 const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
@@ -81,7 +81,7 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type Attachment[]', async () => {
-      const response = await user.getPeriodicReportsFiles()
+      const response = await user.getPeriodicReportsFiles(undefined, 2)
       for (const attachment of response) expect(attachment).toMatchSchema('Attachment')
     })
   })

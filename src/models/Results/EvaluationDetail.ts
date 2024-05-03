@@ -7,7 +7,7 @@ export interface EvaluationDetail {
   title: string | null
   topic: string | null
   dateTime: string | null
-  coefficient: number
+  coefficient: number | null
   min: number | null
   max: number | null
   average: number | null
