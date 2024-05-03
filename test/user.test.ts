@@ -3,12 +3,12 @@ import { Skolengo } from '../src/index'
 import './common'
 
 const SKOLENGO_TOKENSET = process.env.SKOLENGO_TOKENSET
-const describeIfLoggedIn = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
+const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
 
 /**
  * Tests unitaires des endpoints qui nécessitent une authentification
  */
-describeIfLoggedIn('Test Skolengo API types - User logged in', () => {
+describeAuthenticated('Test Skolengo API types - User logged in', () => {
   let user: Skolengo
   let userPermissions: string[] = []
 

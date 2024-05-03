@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "strict": true,
+      "moduleResolution": "Node",
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "skipLibCheck": true
+    },
+    "exclude": [
+      "node_modules"
+    ],
+    "include": [
+      "test/"
+    ]
+  }
+  
