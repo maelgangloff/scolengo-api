@@ -7,7 +7,7 @@ gulpfile.js
 CODE-OF-CONDUCT.md
 .eslintignore
 .eslintrc
-tests
+test
 babel.config.js
 CONTRIBUTING.md
 openapi
