@@ -5,5 +5,5 @@ export interface Attachment {
   mimeTypeLabel: string | null
   size: number | null
   url: string
-  alternativeText: string
+  alternativeText: string | null
 }
