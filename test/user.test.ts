@@ -1,6 +1,7 @@
 import { describe, expect } from '@jest/globals'
 import type { Config } from 'ts-json-schema-generator'
 import { createGenerator } from 'ts-json-schema-generator'
+import { AuthConfig } from '../src/models/Common/Auth'
 import { Skolengo } from '../src/index'
 import Ajv from 'ajv'
 
@@ -22,7 +23,7 @@ describeIfLoggedIn('Test Skolengo API types - User logged in', () => {
   let userPermissions: string[] = []
 
   beforeAll(async () => {
-    user = await Skolengo.fromConfigObject(JSON.parse(SKOLENGO_TOKENSET as string), { handlePronoteError: true })
+    user = await Skolengo.fromConfigObject((JSON.parse(SKOLENGO_TOKENSET as string) as AuthConfig), { handlePronoteError: true })
     const userInfo = await user.getUserInfo()
     if (userInfo.permissions === undefined) throw new Error("Impossible de lister les habilitations de l'utilisateur.")
     userPermissions = userInfo.permissions.map(p => p.permittedOperations).flat()
