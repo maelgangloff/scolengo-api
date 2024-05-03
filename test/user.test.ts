@@ -52,4 +52,15 @@ describeAuthenticated('Test Skolengo API types - User logged in', () => {
       expect(result).toBe(true)
     }
   })
+
+  it('should getUsersMailSettings return UsersMailSettings type', async () => {
+    const type = 'UsersMailSettings'
+    const response = await user.getUsersMailSettings()
+    const schema = createGenerator({ ...ajvConfig, type }).createSchema(type)
+
+    const result = ajv.validate(schema, response)
+    if (!result) console.error(ajv.errors)
+
+    expect(result).toBe(true)
+  })
 })
