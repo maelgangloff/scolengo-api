@@ -52,7 +52,7 @@ describeIfLoggedIn('Test Skolengo API types - User logged in', () => {
       expect(result).toBe(true)
     }
   })
-  
+
   it('should getUsersMailSettings return UsersMailSettings type', async () => {
     const type = 'UsersMailSettings'
     const response = await user.getUsersMailSettings()
