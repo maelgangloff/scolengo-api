@@ -3,6 +3,7 @@ node_modules/
 src
 .github
 tsconfig.json
+tsconfig.test.json
 gulpfile.js
 CODE-OF-CONDUCT.md
 .eslintignore
