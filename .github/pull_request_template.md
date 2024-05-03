@@ -14,8 +14,8 @@
 - [ ] J'ai vérifié l'entièreté du code avant de le soumettre
 - [ ] J'ai mis à jour la documentation en lien avec mes commits
 - [ ] Mon code ne génère pas d'erreurs
-- [ ] J'ai ajouté les tests unitaires correspondants (dossier `tests`)
-- [ ] Les anciens et nouveaux tests unitaires sont validés en local
+- [ ] J'ai ajouté les tests d'intégration correspondants (dossier `tests`)
+- [ ] Les anciens et nouveaux tests d'intégration sont validés en local
 
 ### Note
 Avant de fusionner cette PR, elle devra recevoir l'approbation d'au moins une des personnes suivantes :
