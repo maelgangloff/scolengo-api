@@ -8,7 +8,7 @@ const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : descr
 /**
  * Tests unitaires des endpoints qui nécessitent une authentification
  */
-describeAuthenticated('Test Skolengo API types - User logged in', () => {
+describeAuthenticated('Test Skolengo API types - Authenticated user', () => {
   let user: Skolengo
   let userPermissions: string[] = []
 

@@ -15,16 +15,9 @@ const toMatchSchema: MatcherFunction<[type: string]> = (actual: any, type: strin
   const schema = createGenerator({ ...ajvConfig, type }).createSchema(type)
   const result = ajv.validate(schema, actual)
 
-  if (result) {
-    return {
-      message: () => `expected ${type} not to match schema: ${inspect(ajv.errors)}`,
-      pass: true
-    }
-  } else {
-    return {
-      message: () => `expected ${type} to match schema: ${inspect(ajv.errors)}`,
-      pass: false
-    }
+  return {
+    message: () => `expected ${type + (result ? ' not ' : ' ')}to match schema: ${inspect(ajv.errors)}`,
+    pass: result
   }
 }
 

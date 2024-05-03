@@ -5,7 +5,7 @@ import './common'
 /**
  * Tests unitaires des endpoints ne nécessitant pas d'authentification
  */
-describe('Test Skolengo API types - Anonymous', () => {
+describe('Test Skolengo API types - Public endpoints', () => {
   it('should getAppCurrentConfig return AppConfig type', async () => {
     const response = await Skolengo.getAppCurrentConfig()
 
