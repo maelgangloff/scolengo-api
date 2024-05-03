@@ -8,7 +8,7 @@ export interface HomeworkAssignment {
   dueDateTime: string | null
   dueDate?: string | null
   done: boolean
-  deliverWorkOnline: boolean
+  deliverWorkOnline?: boolean
   onlineDeliveryUrl: null | string
   subject?: Subject
   attachments?: Attachment[]
