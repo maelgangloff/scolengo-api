@@ -3,7 +3,7 @@ import { Skolengo } from '../src/index'
 import './common'
 
 /**
- * Tests unitaires des endpoints ne nécessitant pas d'authentification
+ * Tests d'intégration des endpoints ne nécessitant pas d'authentification
  */
 describe('Test Skolengo API types - Public endpoints', () => {
   it('should getAppCurrentConfig return AppConfig type', async () => {
@@ -13,7 +13,7 @@ describe('Test Skolengo API types - Public endpoints', () => {
   })
 
   it('should searchSchool return School type', async () => {
-    const response = await Skolengo.searchSchool({ text: 'Lycée' }, 10)
+    const response = await Skolengo.searchSchool({ text: 'Lycée' }, 50)
 
     for (const school of response) {
       expect(school).toMatchSchema('School')
