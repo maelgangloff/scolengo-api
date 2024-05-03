@@ -20,26 +20,23 @@ describeIfLoggedIn('Test Skolengo API types - User logged in', () => {
   })
 
   it('should getUserInfo return User type', async () => {
-    const type = 'User'
     const response = await user.getUserInfo()
 
-    expect(response).toMatchSchema(type)
+    expect(response).toMatchSchema('User')
   })
 
   it('should getEvaluationSettings return EvaluationSettings type', async () => {
     if (!userPermissions.includes('READ_EVALUATIONS')) return
-    const type = 'EvaluationSettings'
     const response = await user.getEvaluationSettings()
 
     for (const evaluationSettings of response) {
-      expect(evaluationSettings).toMatchSchema(type)
+      expect(evaluationSettings).toMatchSchema('EvaluationSettings')
     }
   })
 
   it('should getUsersMailSettings return UsersMailSettings type', async () => {
-    const type = 'UsersMailSettings'
     const response = await user.getUsersMailSettings()
 
-    expect(response).toMatchSchema(type)
+    expect(response).toMatchSchema('UsersMailSettings')
   })
 })
