@@ -4,7 +4,7 @@ import type { Config } from 'ts-json-schema-generator'
 import { createGenerator } from 'ts-json-schema-generator'
 import { inspect } from 'util'
 
-const ajv = new Ajv()
+const ajv = new Ajv({ allErrors: true })
 
 const ajvConfig: Config = {
   path: 'src/**/*.ts',
