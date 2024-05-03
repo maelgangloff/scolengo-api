@@ -3,7 +3,7 @@ import { Skolengo } from '../src/index'
 import './common'
 
 const SKOLENGO_TOKENSET = process.env.SKOLENGO_TOKENSET
-const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
+const describeAuthenticated = !!SKOLENGO_TOKENSET ? describe : describe.skip
 
 /**
  * Tests unitaires des endpoints qui nécessitent une authentification
