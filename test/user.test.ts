@@ -1,6 +1,5 @@
 import { describe, expect } from '@jest/globals'
-import { createGenerator } from 'ts-json-schema-generator'
-import { AuthConfig } from '../src/models/Common/Auth'
+import type { AuthConfig } from '../src/models/Common/Auth'
 import { Skolengo } from '../src/index'
 import './common'
 
