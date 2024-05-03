@@ -1,9 +1,9 @@
 export interface Attachment {
   id: string
-  name?: string
-  mimeType?: string
-  mimeTypeLabel?: string
-  size?: number
+  name: string | null
+  mimeType: string | null
+  mimeTypeLabel: string | null
+  size: number | null
   url: string
-  alternativeText?: string | null
+  alternativeText: string
 }
