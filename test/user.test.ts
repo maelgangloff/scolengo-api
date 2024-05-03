@@ -2,10 +2,10 @@ import { describe, expect } from '@jest/globals'
 import type { AuthConfig } from '../src/models/Common/Auth'
 import type { Evaluation, EvaluationSettings } from '../src/models/Results'
 import type { Agenda, HomeworkAssignment } from '../src/models/Calendar'
-import { AbsenceFile } from '../src/models/SchoolLife'
+import type { AbsenceFile } from '../src/models/SchoolLife'
 import { Skolengo } from '../src/index'
 import './common'
-import { SchoolInfo } from '../src/models/School'
+import type { SchoolInfo } from '../src/models/School'
 
 const SKOLENGO_TOKENSET = process.env.SKOLENGO_TOKENSET
 const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
@@ -27,7 +27,7 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
 
   it('should match type AbsenceReason[]', async () => {
     const reasons = await user.getAbsenceReasons()
-    for(const reason of reasons) expect(reason).toMatchSchema('AbsenceReason')
+    for (const reason of reasons) expect(reason).toMatchSchema('AbsenceReason')
   })
 
   /**
@@ -45,7 +45,7 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match the SchoolInfo', async () => {
-      for (const info of schoolInfoList.slice(0, 2)){
+      for (const info of schoolInfoList.slice(0, 2)) {
         const infoDetail = await user.getSchoolInfo(info.id)
         expect(infoDetail).toMatchSchema('SchoolInfo')
       }
@@ -82,7 +82,7 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
 
     it('should match type Attachment[]', async () => {
       const response = await user.getPeriodicReportsFiles()
-      for(const attachment of response) expect(attachment).toMatchSchema('Attachment')
+      for (const attachment of response) expect(attachment).toMatchSchema('Attachment')
     })
   })
 
@@ -128,11 +128,11 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type HomeWorkAssignment[]', () => {
-      for(const homework of homeworkList) expect(homework).toMatchSchema('HomeworkAssignment')
+      for (const homework of homeworkList) expect(homework).toMatchSchema('HomeworkAssignment')
     })
 
     it('should match type HomeWorkAssignment', async () => {
-      for(const homework of homeworkList) {
+      for (const homework of homeworkList) {
         const homeworkDetail = await user.getHomeworkAssignment(undefined, homework.id)
         expect(homeworkDetail).toMatchSchema('HomeworkAssignment')
       }
@@ -143,7 +143,6 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
    * Tests d'intégration du module d'absences
    */
   describe('Test of the ABS module', () => {
-
     let absenceFiles: AbsenceFile[]
 
     beforeAll(async () => {
@@ -151,11 +150,11 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type AbsenceFile[]', () => {
-      for(const file of absenceFiles) expect(file).toMatchSchema('AbsenceFile')
+      for (const file of absenceFiles) expect(file).toMatchSchema('AbsenceFile')
     })
 
     it('should match type AbsenceFile', async () => {
-      for(const file of absenceFiles) {
+      for (const file of absenceFiles) {
         const fileDetail = await user.getAbsenceFile(file.id)
         expect(fileDetail).toMatchSchema('AbsenceFile')
       }
