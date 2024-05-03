@@ -9,7 +9,7 @@ export interface HomeworkAssignment {
   dueDate?: string | null
   done: boolean
   deliverWorkOnline?: boolean
-  onlineDeliveryUrl: null | string
+  onlineDeliveryUrl?: null | string
   subject?: Subject
   attachments?: Attachment[]
   teacher?: User
