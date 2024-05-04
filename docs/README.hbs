@@ -18,8 +18,8 @@ Ce module est destiné à devenir le successeur de [kdecole-api](https://github.
 
 Pour participer et se tenir informé, **rejoins le serveur Discord: https://discord.gg/9u69mxsFT6**
 
+## Disclaimer
 > [!WARNING]
-> ## Disclaimer
 > - Il est clairement mentionné que cette librairie n'est pas officiellement éditée par la société éditrice du logiciel *Skolengo*.
 > - Ce module n'est pas une contrefaçon car il n'existe pas de module similaire édité officiellement.
 > - Les utilisateurs ne peuvent accéder qu'à leurs propres données. Ils sont soumis au même processus d'authentification que celui implémenté dans l'application et imposé par le serveur API.
