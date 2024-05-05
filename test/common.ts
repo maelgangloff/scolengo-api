@@ -1,5 +1,4 @@
 import type { MatcherFunction } from 'expect'
-import type { Schema } from 'ajv'
 import Ajv from 'ajv'
 import type { Config } from 'ts-json-schema-generator'
 import { createGenerator } from 'ts-json-schema-generator'
@@ -12,10 +11,10 @@ const ajvConfig: Config = {
   tsconfig: 'tsconfig.json'
 }
 
-export const createSchema = (type: string): Schema => createGenerator({ ...ajvConfig, type }).createSchema(type)
+const schemaGenerator = createGenerator({ ...ajvConfig, type: '*' })
 
-const toMatchSchema: MatcherFunction<[type: string, schema: Schema]> = (actual: any, type: string, schema: Schema) => {
-  const result = ajv.validate(schema, actual)
+const toMatchSchema: MatcherFunction<[type: string]> = (actual: any, type: string) => {
+  const result = ajv.validate(schemaGenerator.createSchema(type), actual)
 
   return {
     message: () => `expected ${type + (result ? ' not ' : ' ')}to match schema: ${inspect(ajv.errors)}`,
@@ -27,9 +26,9 @@ expect.extend({ toMatchSchema })
 
 declare module 'expect' {
   interface AsymmetricMatchers {
-    toMatchSchema: (type: string, schema: Schema) => void
+    toMatchSchema: (type: string) => void
   }
   interface Matchers<R> {
-    toMatchSchema: (type: string, schema: Schema) => R
+    toMatchSchema: (type: string) => R
   }
 }
