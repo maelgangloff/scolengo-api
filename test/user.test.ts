@@ -5,10 +5,12 @@ import type { Agenda, HomeworkAssignment } from '../src/models/Calendar'
 import type { AbsenceFile } from '../src/models/SchoolLife'
 import type { SchoolInfo } from '../src/models/School'
 import { Skolengo } from '../src/index'
-import './common'
+import { createSchema } from './common'
 
 const SKOLENGO_TOKENSET = process.env.SKOLENGO_TOKENSET
 const describeAuthenticated = SKOLENGO_TOKENSET !== undefined ? describe : describe.skip
+
+const schema = createSchema('*')
 
 /**
  * Tests d'intégration des endpoints qui nécessitent une authentification
@@ -22,12 +24,12 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
 
   it('should match type User', async () => {
     const response = await user.getUserInfo()
-    expect(response).toMatchSchema('User')
+    expect(response).toMatchSchema('User', schema)
   })
 
   it('should match type AbsenceReason[]', async () => {
     const reasons = await user.getAbsenceReasons()
-    for (const reason of reasons) expect(reason).toMatchSchema('AbsenceReason')
+    for (const reason of reasons) expect(reason).toMatchSchema('AbsenceReason', schema)
   })
 
   /**
@@ -41,13 +43,13 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type SchoolInfo[]', () => {
-      for (const info of schoolInfoList) expect(info).toMatchSchema('SchoolInfo')
+      for (const info of schoolInfoList) expect(info).toMatchSchema('SchoolInfo', schema)
     })
 
     it('should match the SchoolInfo', async () => {
       for (const info of schoolInfoList.slice(0, 2)) {
         const infoDetail = await user.getSchoolInfo(info.id)
-        expect(infoDetail).toMatchSchema('SchoolInfo')
+        expect(infoDetail).toMatchSchema('SchoolInfo', schema)
       }
     })
   })
@@ -66,23 +68,23 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type EvaluationSettings', () => {
-      for (const evaluationSettings of evaluationSettingsList) expect(evaluationSettings).toMatchSchema('EvaluationSettings')
+      for (const evaluationSettings of evaluationSettingsList) expect(evaluationSettings).toMatchSchema('EvaluationSettings', schema)
     })
 
     it('should match type Evaluation[]', () => {
-      for (const evaluation of evaluationList) expect(evaluation).toMatchSchema('Evaluation')
+      for (const evaluation of evaluationList) expect(evaluation).toMatchSchema('Evaluation', schema)
     })
 
     it('should match type EvaluationDetail[]', async () => {
       for (const evaluation of evaluationList) {
         const evaluationDetail = await user.getEvaluationDetail(undefined, evaluation.evaluations[0].id)
-        expect(evaluationDetail).toMatchSchema('EvaluationDetail')
+        expect(evaluationDetail).toMatchSchema('EvaluationDetail', schema)
       }
     })
 
     it('should match type Attachment[]', async () => {
       const response = await user.getPeriodicReportsFiles(undefined, 2)
-      for (const attachment of response) expect(attachment).toMatchSchema('Attachment')
+      for (const attachment of response) expect(attachment).toMatchSchema('Attachment', schema)
     })
   })
 
@@ -92,7 +94,7 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
   describe('Test of the MSG module', () => {
     it('should match type UsersMailSettings', async () => {
       const response = await user.getUsersMailSettings()
-      expect(response).toMatchSchema('UsersMailSettings')
+      expect(response).toMatchSchema('UsersMailSettings', schema)
     })
   })
 
@@ -111,30 +113,30 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type Agenda[]', () => {
-      for (const agenda of agendaList) expect(agenda).toMatchSchema('Agenda')
+      for (const agenda of agendaList) expect(agenda).toMatchSchema('Agenda', schema)
     })
 
     it('should match type Lesson[]', () => {
       for (const lesson of agendaList[0].lessons) {
-        expect(lesson).toMatchSchema('Lesson')
+        expect(lesson).toMatchSchema('Lesson', schema)
       }
     })
 
     it('should match type Lesson', async () => {
       for (const lesson of agendaList[0].lessons) {
         const lessonDetail = await user.getLesson(undefined, lesson.id)
-        expect(lessonDetail).toMatchSchema('Lesson')
+        expect(lessonDetail).toMatchSchema('Lesson', schema)
       }
     })
 
     it('should match type HomeWorkAssignment[]', () => {
-      for (const homework of homeworkList) expect(homework).toMatchSchema('HomeworkAssignment')
+      for (const homework of homeworkList) expect(homework).toMatchSchema('HomeworkAssignment', schema)
     })
 
     it('should match type HomeWorkAssignment', async () => {
       for (const homework of homeworkList) {
         const homeworkDetail = await user.getHomeworkAssignment(undefined, homework.id)
-        expect(homeworkDetail).toMatchSchema('HomeworkAssignment')
+        expect(homeworkDetail).toMatchSchema('HomeworkAssignment', schema)
       }
     })
   })
@@ -150,13 +152,13 @@ describeAuthenticated('Test of the Skolengo API types - Authenticated user', () 
     })
 
     it('should match type AbsenceFile[]', () => {
-      for (const file of absenceFiles) expect(file).toMatchSchema('AbsenceFile')
+      for (const file of absenceFiles) expect(file).toMatchSchema('AbsenceFile', schema)
     })
 
     it('should match type AbsenceFile', async () => {
       for (const file of absenceFiles) {
         const fileDetail = await user.getAbsenceFile(file.id)
-        expect(fileDetail).toMatchSchema('AbsenceFile')
+        expect(fileDetail).toMatchSchema('AbsenceFile', schema)
       }
     })
   })
