@@ -5,7 +5,7 @@ export interface SkolengoErrorBody {
   status: string
   /**
    * Identifiant du type d'erreur
-   * 
+   *
    * Exemple :
    * - PRONOTE_RESOURCES_NOT_READY
    */

@@ -1,5 +1,5 @@
 import type { AxiosInstance } from 'axios'
-import type { TokenSet, TokenSetParameters } from 'openid-client'
+import type { TokenSetParameters } from 'openid-client'
 
 export interface SkolengoConfig {
   /**
@@ -9,7 +9,7 @@ export interface SkolengoConfig {
   onTokenRefresh: (tokenSet: TokenSetParameters) => void
   /**
    * Callback à appeller pour rafraîchir le TokenSet
-   * @param {TokenSet} tokenSet Ancien TokenSet 
+   * @param {TokenSet} tokenSet Ancien TokenSet
    * @returns {TokenSet} Nouveau TokenSet
    */
   refreshToken?: (tokenSet: TokenSetParameters) => Promise<TokenSetParameters>

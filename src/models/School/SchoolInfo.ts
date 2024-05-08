@@ -1,7 +1,7 @@
 import type { Attachment } from './Attachment'
 import type { User } from '../Common'
 import type { School } from './School'
-import { TechnicalUser } from '../Messaging'
+import type { TechnicalUser } from '../Messaging'
 
 export interface SchoolInfo {
   /**
