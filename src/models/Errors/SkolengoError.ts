@@ -1,6 +1,18 @@
 export interface SkolengoErrorBody {
+  /**
+   * Code de status de l'erreur
+   */
   status: string
-  title: string // Exemples : PRONOTE_RESOURCES_NOT_READY
+  /**
+   * Identifiant du type d'erreur
+   * 
+   * Exemple :
+   * - PRONOTE_RESOURCES_NOT_READY
+   */
+  title: string
+  /**
+   * Détails de l'erreur
+   */
   detail: string
 }
 
