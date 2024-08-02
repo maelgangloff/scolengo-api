@@ -1,8 +1,14 @@
+export type ErrorCode = 'BLOCKED_ACCOUNT' | 'SKO_APP_NOT_SUBSCRIBED' | 'SUSPENDED_ACCOUNT' | 'null' | string
+
 export interface SkolengoErrorBody {
   /**
    * Code de status de l'erreur
    */
   status: string
+  /**
+   * Code d'erreur
+   */
+  code: ErrorCode
   /**
    * Identifiant du type d'erreur
    *
@@ -18,6 +24,7 @@ export interface SkolengoErrorBody {
 
 export class SkolengoError extends Error implements SkolengoErrorBody {
   public readonly status: string
+  public readonly code: ErrorCode
   public readonly detail: string
   public readonly title: string
 
@@ -27,6 +34,7 @@ export class SkolengoError extends Error implements SkolengoErrorBody {
     this.title = error.title
 
     this.status = error.status
+    this.code = error.code
     this.detail = error.detail
     Error.captureStackTrace(this, this.constructor)
   }
