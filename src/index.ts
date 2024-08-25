@@ -105,6 +105,7 @@ export class Skolengo {
     this.config = {
       httpClient: config?.httpClient ?? axios.create({ baseURL: BASE_URL }),
       onTokenRefresh: config?.onTokenRefresh ?? (() => {}),
+      refreshToken: config?.refreshToken,
       handlePronoteError: config?.handlePronoteError ?? false
     }
   }
