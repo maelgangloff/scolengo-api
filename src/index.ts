@@ -1057,7 +1057,9 @@ export class Skolengo {
    */
   public getTokenClaims (): IdTokenClaims {
     if (this.tokenSet.id_token === undefined) throw new TypeError('id_token not present in TokenSet')
-    return JSON.parse(atob((this.tokenSet.id_token).split('.')?.at(1)?.replace(/-/g, '+').replace(/_/g, '/') ?? ''))
+    const dataPart = this.tokenSet.id_token.split('.')?.at(1)?.replace(/-/g, '+').replace(/_/g, '/')
+    if (dataPart === undefined || dataPart.trim().length === 0) throw new TypeError('Invalid id_token')
+    return JSON.parse(atob(dataPart))
   }
 
   /**
